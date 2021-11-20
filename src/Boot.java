@@ -50,7 +50,6 @@ public class Boot {
 						classReader.accept(classNode, ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
 						classNodes.add(classNode);
 						if(classNode.name.equals("client")){
-							System.out.println("GameShell : "+classNode.superName);
 							for (MethodNode mn : classNode.methods) {
 								if (mn.name.equals("init")) {
 									List<AbstractInsnNode> pattern = Assembly.find(mn,
