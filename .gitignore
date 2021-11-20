@@ -12,7 +12,6 @@
 .bin/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
@@ -34,3 +33,5 @@ bin/org/objectweb/asm/tree/package.html
 bin/org/objectweb/asm/util/package.html
 bin/org/objectweb/asm/xml/asm-xml.dtd
 bin/org/objectweb/asm/xml/package.html
+injected.jar
+runescape.jar
