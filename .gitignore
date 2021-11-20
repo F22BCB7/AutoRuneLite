@@ -9,6 +9,7 @@
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
+.bin/
 
 # Package Files #
 *.jar
@@ -21,3 +22,15 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+.classpath
+.project
+.settings/org.eclipse.jdt.core.prefs
+bin/org/objectweb/asm/attrs/package.html
+bin/org/objectweb/asm/commons/package.html
+bin/org/objectweb/asm/package.html
+bin/org/objectweb/asm/signature/package.html
+bin/org/objectweb/asm/tree/analysis/package.html
+bin/org/objectweb/asm/tree/package.html
+bin/org/objectweb/asm/util/package.html
+bin/org/objectweb/asm/xml/asm-xml.dtd
+bin/org/objectweb/asm/xml/package.html
