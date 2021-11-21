@@ -37,7 +37,7 @@ public class RSWidget extends Interactable{
 	public boolean isDisplayed(){
 		Widget w = getInternal();
 		if(w!=null){
-			return w.displayCycle()+3>=((Client)Data.clientInstance).gameCycle();
+			return w.isDisplayed();
 		}
 		return false;
 	}
