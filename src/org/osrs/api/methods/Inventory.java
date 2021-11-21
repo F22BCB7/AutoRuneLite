@@ -5,19 +5,14 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import org.osrs.api.objects.InventoryItem;
+import org.osrs.api.objects.RSInterface;
 import org.osrs.api.objects.RSWidget;
 import org.osrs.api.objects.WidgetItem;
 import org.osrs.api.wrappers.Client;
 import org.osrs.util.Data;
 
 public class Inventory extends MethodDefinition{
-	private final int INVENTORY_ITEM_CONTAINER_PARENT = 149;
-	private final int INVENTORY_ITEM_CONTAINER_CHILD = 0;
-	private final int BANK_INVENTORY_INTERFACE_PARENT = 15;
-	private final int BANK_INVENTORY_INTERFACE_CHILD = 3;
-	private final int INVENTORY_INTERFACE_RESIZE_MODE_PARENT = 164;
-	private final int INVENTORY_INTERFACE_RESIZE_MODE_CHILD = 73;
-
+	private RSWidget inventoryWidget = null;
 	//TODO use ItemContainer instead of widgets - itemContainer.bucket[30].next.ids[equipIndex]
 	public Inventory(MethodContext context){
 		super(context);
@@ -50,26 +45,14 @@ public class Inventory extends MethodDefinition{
 	 */
 	public int getCount(){
 		int count = 0;
-		RSWidget inventory = methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-		if(methods.bank.isOpen()){
-			inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			if(inventory!=null){
-				for(RSWidget child : inventory.getChildren()){
-					if(child!=null){
-						if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-							count++;
-						}
+		RSWidget inventory = getInventoryWidget();
+		if(inventory!=null){
+			for(RSWidget child : inventory.getChildren()){
+				if(child!=null){
+					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
+						count++;
 					}
 				}
-			}
-			return count;
-		}
-		if (inventory == null) return count;
-		int[] ids = inventory.getInternal().itemIDs();
-		if (ids == null) return count;
-		for (int i = 0; i < ids.length; i++) {
-			if(ids[i]-1!=-1){
-				count++;
 			}
 		}
 		return count;
@@ -82,26 +65,14 @@ public class Inventory extends MethodDefinition{
 	 */
 	public int getCount(int id){
 		int count = 0;
-		RSWidget inventory = methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-		if(methods.bank.isOpen()){
-			inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			if(inventory!=null){
-				for(RSWidget child : inventory.getChildren()){
-					if(child!=null){
-						if(child.getInternal().itemID()==id && child.getInternal().itemID()!=6512){
-							count++;
-						}
+		RSWidget inventory = getInventoryWidget();
+		if(inventory!=null){
+			for(RSWidget child : inventory.getChildren()){
+				if(child!=null){
+					if(child.getInternal().itemID()==id && child.getInternal().itemID()!=6512){
+						count++;
 					}
 				}
-			}
-			return count;
-		}
-		if (inventory == null) return count;
-		int[] ids = inventory.getInternal().itemIDs();
-		if (ids == null) return count;
-		for (int i = 0; i < ids.length; i++) {
-			if(ids[i]-1!=-1 && ids[i]-1==id){
-				count++;
 			}
 		}
 		return count;
@@ -114,34 +85,17 @@ public class Inventory extends MethodDefinition{
 	 */
 	public int getCount(int...itemIDs){
 		int count = 0;
-		RSWidget inventory = methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-		if(methods.bank.isOpen()){
-			inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			if(inventory!=null){
-				for(RSWidget child : inventory.getChildren()){
-					if(child!=null){
-						if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-							for(int id : itemIDs){
-								if(child.getInternal().itemID()==id){
-									count++;
-									break;
-								}
+		RSWidget inventory = getInventoryWidget();
+		if(inventory!=null){
+			for(RSWidget child : inventory.getChildren()){
+				if(child!=null){
+					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
+						for(int id : itemIDs){
+							if(child.getInternal().itemID()==id){
+								count++;
+								break;
 							}
 						}
-					}
-				}
-			}
-			return count;
-		}
-		if (inventory == null) return count;
-		int[] ids = inventory.getInternal().itemIDs();
-		if (ids == null) return count;
-		for (int i = 0; i < ids.length; i++) {
-			if(ids[i]-1!=-1){
-				for(int id : itemIDs){
-					if(ids[i]-1==id){
-						count++;
-						break;
 					}
 				}
 			}
@@ -156,42 +110,22 @@ public class Inventory extends MethodDefinition{
 	 */
 	public int getCountExcept(int... itemIDs) {
 		int count = 0;
-		RSWidget inventory = methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-		if(methods.bank.isOpen()){
-			inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			if(inventory!=null){
-				for(RSWidget child : inventory.getChildren()){
-					if(child!=null){
-						if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-							boolean flag=false;
-							for(int id : itemIDs){
-								if(child.getInternal().itemID()==id){
-									flag=true;
-									break;
-								}
+		RSWidget inventory = getInventoryWidget();
+		if(inventory!=null){
+			for(RSWidget child : inventory.getChildren()){
+				if(child!=null){
+					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
+						boolean flag=false;
+						for(int id : itemIDs){
+							if(child.getInternal().itemID()==id){
+								flag=true;
+								break;
 							}
-							if(!flag)
-								count++;
 						}
+						if(!flag)
+							count++;
 					}
 				}
-			}
-			return count;
-		}
-		if (inventory == null) return count;
-		int[] ids = inventory.getInternal().itemIDs();
-		if (ids == null) return count;
-		for (int i = 0; i < ids.length; i++) {
-			if(ids[i]-1!=-1){
-				boolean flag=false;
-				for(int id : itemIDs){
-					if(ids[i]-1==id){
-						flag=true;
-						break;
-					}
-				}
-				if(!flag)
-					count++;
 			}
 		}
 		return count;
@@ -203,27 +137,14 @@ public class Inventory extends MethodDefinition{
 	 * @return itemCount
 	 */
 	public int getStackSize(int id){
-		RSWidget inventory = methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-		if(methods.bank.isOpen()){
-			inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			if(inventory!=null){
-				for(RSWidget child : inventory.getChildren()){
-					if(child!=null){
-						if(child.getInternal().itemID()==id){
-							return child.getInternal().itemQuantity();
-						}
+		RSWidget inventory = getInventoryWidget();
+		if(inventory!=null){
+			for(RSWidget child : inventory.getChildren()){
+				if(child!=null){
+					if(child.getInternal().itemID()==id){
+						return child.getInternal().itemQuantity();
 					}
 				}
-			}
-			return 0;
-		}
-		if (inventory == null) return 0;
-		int[] ids = inventory.getInternal().itemIDs();
-		int[] stacks = inventory.getInternal().itemQuantities();
-		if (ids == null || stacks == null) return 0;
-		for (int i = 0; i < ids.length; i++) {
-			if(ids[i]-1!=-1 && ids[i]-1==id){
-				return stacks[i];
 			}
 		}
 		return 0;
@@ -235,26 +156,14 @@ public class Inventory extends MethodDefinition{
 	 * @return inventoryIndex
 	 */
 	public int getIndex(int itemID) {
-		RSWidget inventory = methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-		if(methods.bank.isOpen()){
-			inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			if(inventory!=null){
-				for(RSWidget child : inventory.getChildren()){
-					if(child!=null){
-						if(child.getInternal().itemID()==itemID){
-							return child.getIndex();
-						}
+		RSWidget inventory = getInventoryWidget();
+		if(inventory!=null){
+			for(RSWidget child : inventory.getChildren()){
+				if(child!=null){
+					if(child.getInternal().itemID()==itemID){
+						return child.getIndex();
 					}
 				}
-			}
-			return 0;
-		}
-		if (inventory == null) return -1;
-		int[] ids = inventory.getInternal().itemIDs();
-		if (ids == null) return -1;
-		for (int i = 0; i < ids.length; i++) {
-			if(ids[i]-1!=-1 && ids[i]-1==itemID){
-				return i;
 			}
 		}
 		return -1;
@@ -275,27 +184,14 @@ public class Inventory extends MethodDefinition{
 	 * @return item
 	 */
 	public InventoryItem getItemAtIndex(int index){
-		RSWidget inventory = methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-		if(methods.bank.isOpen()){
-			inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			if(inventory!=null){
-				for(RSWidget child : inventory.getChildren()){
-					if(child!=null){
-						if(child.getIndex()==index && child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-							return new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
-						}
+		RSWidget inventory = getInventoryWidget();
+		if(inventory!=null){
+			for(RSWidget child : inventory.getChildren()){
+				if(child!=null){
+					if(child.getIndex()==index && child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
+						return new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
 					}
 				}
-			}
-			return null;
-		}
-		if (inventory == null) return null;
-		int[] ids = inventory.getInternal().itemIDs();
-		int[] stacks = inventory.getInternal().itemQuantities();
-		if (ids == null || stacks == null) return null;
-		for (int i = 0; i < ids.length; i++) {
-			if(ids[i]-1!=-1 && index==i){
-				return new InventoryItem(ids[i]-1, stacks[i], i);
 			}
 		}
 		return null;
@@ -306,27 +202,14 @@ public class Inventory extends MethodDefinition{
 	 * @return item
 	 */
 	public InventoryItem getItem(int id){
-		RSWidget inventory = methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-		if(methods.bank.isOpen()){
-			inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			if(inventory!=null){
-				for(RSWidget child : inventory.getChildren()){
-					if(child!=null){
-						if(child.getInternal().itemID()==id){
-							return new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
-						}
+		RSWidget inventory = getInventoryWidget();
+		if(inventory!=null){
+			for(RSWidget child : inventory.getChildren()){
+				if(child!=null){
+					if(child.getInternal().itemID()==id){
+						return new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
 					}
 				}
-			}
-			return null;
-		}
-		if (inventory == null) return null;
-		int[] ids = inventory.getInternal().itemIDs();
-		int[] stacks = inventory.getInternal().itemQuantities();
-		if (ids == null || stacks == null) return null;
-		for (int i = 0; i < ids.length; i++) {
-			if(ids[i]-1!=-1 && ids[i]-1==id){
-				return new InventoryItem(ids[i]-1, stacks[i], i);
 			}
 		}
 		return null;
@@ -338,33 +221,17 @@ public class Inventory extends MethodDefinition{
 	 * @return item
 	 */
 	public InventoryItem getItem(int...itemIDs){
-		RSWidget inventory = methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-		if(methods.bank.isOpen()){
-			inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			if(inventory!=null){
-				for(RSWidget child : inventory.getChildren()){
-					if(child!=null){
-						if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-							for(int id : itemIDs){
-								if(child.getInternal().itemID()==id){
-									return new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
-								}
+		RSWidget inventory = getInventoryWidget();
+		if(inventory!=null){
+			for(RSWidget child : inventory.getChildren()){
+				if(child!=null){
+					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
+						for(int id : itemIDs){
+							if(child.getInternal().itemID()==id){
+								return new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
 							}
 						}
 					}
-				}
-			}
-			return null;
-		}
-		if (inventory == null) return null;
-		int[] ids = inventory.getInternal().itemIDs();
-		int[] stacks = inventory.getInternal().itemQuantities();
-		if (ids == null || stacks == null) return null;
-		for (int i = 0; i < ids.length; i++) {
-			if(ids[i]-1!=-1){
-				for(int id : itemIDs){
-					if(ids[i]-1==id)
-						return new InventoryItem(ids[i]-1, stacks[i], i);
 				}
 			}
 		}
@@ -376,31 +243,16 @@ public class Inventory extends MethodDefinition{
 	 * @return item
 	 */
 	public InventoryItem getItem(String name){
-		RSWidget inventory = methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-		if(methods.bank.isOpen()){
-			inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			if(inventory!=null){
-				for(RSWidget child : inventory.getChildren()){
-					if(child!=null){
-						if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-							InventoryItem item = new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
-							if(name.equals(item.getName()))
-								return item;
-						}
+		RSWidget inventory = getInventoryWidget();
+		if(inventory!=null){
+			for(RSWidget child : inventory.getChildren()){
+				if(child!=null){
+					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
+						InventoryItem item = new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
+						if(name.equals(item.getName()))
+							return item;
 					}
 				}
-			}
-			return null;
-		}
-		if (inventory == null) return null;
-		int[] ids = inventory.getInternal().itemIDs();
-		int[] stacks = inventory.getInternal().itemQuantities();
-		if (ids == null || stacks == null) return null;
-		for (int i = 0; i < ids.length; i++) {
-			if(ids[i]-1!=-1){
-				InventoryItem item = new InventoryItem(ids[i]-1, stacks[i], i);
-				if(name.equals(item.getName()))
-					return item;
 			}
 		}
 		return null;
@@ -412,31 +264,16 @@ public class Inventory extends MethodDefinition{
 	 * @return itemID
 	 */
 	public int getItemID(String name){
-		RSWidget inventory = methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-		if(methods.bank.isOpen()){
-			inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			if(inventory!=null){
-				for(RSWidget child : inventory.getChildren()){
-					if(child!=null){
-						if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-							InventoryItem item = new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
-							if(name.equals(item.getName()))
-								return item.getID();
-						}
+		RSWidget inventory = getInventoryWidget();
+		if(inventory!=null){
+			for(RSWidget child : inventory.getChildren()){
+				if(child!=null){
+					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
+						InventoryItem item = new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
+						if(name.equals(item.getName()))
+							return item.getID();
 					}
 				}
-			}
-			return -1;
-		}
-		if (inventory == null) return -1;
-		int[] ids = inventory.getInternal().itemIDs();
-		int[] stacks = inventory.getInternal().itemQuantities();
-		if (ids == null || stacks == null) return -1;
-		for (int i = 0; i < ids.length; i++) {
-			if(ids[i]-1!=-1){
-				InventoryItem item = new InventoryItem(ids[i]-1, stacks[i], i);
-				if(name.equals(item.getName()))
-					return ids[i]-1;
 			}
 		}
 		return -1;
@@ -447,7 +284,7 @@ public class Inventory extends MethodDefinition{
 	 */
 	public boolean isDisplayed() {
 		if(methods.bank.isOpen()){
-			RSWidget inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
+			RSWidget inventory = getInventoryWidget();
 			if(inventory!=null){
 				return true;
 			}
@@ -468,30 +305,15 @@ public class Inventory extends MethodDefinition{
 	 */
 	public InventoryItem[] getItems() {
 		ArrayList<InventoryItem> items = new ArrayList<InventoryItem>();
-		RSWidget inventory = methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-		if(methods.bank.isOpen()){
-			inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			if(inventory!=null){
-				for(RSWidget child : inventory.getChildren()){
-					if(child!=null){
-						if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-							items.add(new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex()));
-						}
+		RSWidget inventory = getInventoryWidget();
+		if(inventory!=null){
+			for(RSWidget child : inventory.getChildren()){
+				if(child!=null){
+					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
+						items.add(new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex()));
 					}
 				}
 			}
-			return items.toArray(new InventoryItem[]{});
-		}
-		if (inventory == null) return new InventoryItem[]{};
-		int[] ids = inventory.getInternal().itemIDs();
-		int[] stacks = inventory.getInternal().itemQuantities();
-		if (ids == null || stacks == null) return null;
-		for (int i = 0; i < ids.length; i++) {
-			InventoryItem item = null;
-			if(ids[i]-1!=-1){
-				item = new InventoryItem(ids[i]-1, stacks[i], i);
-			}
-			items.add(item);
 		}
 		return items.toArray(new InventoryItem[]{});
 	}
@@ -504,33 +326,17 @@ public class Inventory extends MethodDefinition{
 	 */
 	public InventoryItem[] getItems(int...itemIDs){
 		ArrayList<InventoryItem> items = new ArrayList<InventoryItem>();
-		RSWidget inventory = methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-		if(methods.bank.isOpen()){
-			inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			if(inventory!=null){
-				for(RSWidget child : inventory.getChildren()){
-					if(child!=null){
-						if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-							for(int id : itemIDs){
-								if(child.getInternal().itemID()==id){
-									items.add(new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex()));
-								}
+		RSWidget inventory = getInventoryWidget();
+		if(inventory!=null){
+			for(RSWidget child : inventory.getChildren()){
+				if(child!=null){
+					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
+						for(int id : itemIDs){
+							if(child.getInternal().itemID()==id){
+								items.add(new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex()));
 							}
 						}
 					}
-				}
-			}
-			return items.toArray(new InventoryItem[]{});
-		}
-		if (inventory == null) return null;
-		int[] ids = inventory.getInternal().itemIDs();
-		int[] stacks = inventory.getInternal().itemQuantities();
-		if (ids == null || stacks == null) return null;
-		for (int i = 0; i < ids.length; i++) {
-			if(ids[i]-1!=-1){
-				for(int id : itemIDs){
-					if(ids[i]-1==id)
-						items.add(new InventoryItem(ids[i]-1, stacks[i], i));
 				}
 			}
 		}
@@ -544,43 +350,22 @@ public class Inventory extends MethodDefinition{
 	 */
 	public InventoryItem[] getItemsExcluding(int...itemIDs){
 		ArrayList<InventoryItem> items = new ArrayList<InventoryItem>();
-		RSWidget inventory = methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-		if(methods.bank.isOpen()){
-			inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			if(inventory!=null){
-				for(RSWidget child : inventory.getChildren()){
-					if(child!=null){
-						if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-							boolean flag=false;
-							for(int id : itemIDs){
-								if(child.getInternal().itemID()==id){
-									flag=true;
-									break;
-								}
+		RSWidget inventory = getInventoryWidget();
+		if(inventory!=null){
+			for(RSWidget child : inventory.getChildren()){
+				if(child!=null){
+					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
+						boolean flag=false;
+						for(int id : itemIDs){
+							if(child.getInternal().itemID()==id){
+								flag=true;
+								break;
 							}
-							if(!flag)
-								items.add(new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex()));
 						}
+						if(!flag)
+							items.add(new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex()));
 					}
 				}
-			}
-			return items.toArray(new InventoryItem[]{});
-		}
-		if (inventory == null) return new InventoryItem[]{};
-		int[] ids = inventory.getInternal().itemIDs();
-		int[] stacks = inventory.getInternal().itemQuantities();
-		if (ids == null || stacks == null) return new InventoryItem[]{};
-		for (int i = 0; i < ids.length; i++) {
-			if(ids[i]-1!=-1){
-				boolean flag=false;
-				for(int id : itemIDs){
-					if(ids[i]-1==id){
-						flag=true;
-						break;
-					}
-				}
-				if(!flag)
-					items.add(new InventoryItem(ids[i]-1, stacks[i], i));
 			}
 		}
 		return items.toArray(new InventoryItem[]{});
@@ -595,39 +380,21 @@ public class Inventory extends MethodDefinition{
 	 * @return the next item
 	 */
 	public InventoryItem getNextItem(InventoryItem ignore, int...itemIDs){
-		RSWidget inventory = methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-		if(methods.bank.isOpen()){
-			inventory = methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			if(inventory!=null){
-				for(RSWidget child : inventory.getChildren()){
-					if(child!=null && child.getIndex()!=ignore.getIndex()){
-						if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-							boolean flag=false;
-							for(int id : itemIDs){
-								if(child.getInternal().itemID()==id){
-									flag=true;
-									break;
-								}
+		RSWidget inventory = getInventoryWidget();
+		if(inventory!=null){
+			for(RSWidget child : inventory.getChildren()){
+				if(child!=null && child.getIndex()!=ignore.getIndex()){
+					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
+						boolean flag=false;
+						for(int id : itemIDs){
+							if(child.getInternal().itemID()==id){
+								flag=true;
+								break;
 							}
-							if(!flag)
-								return new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
 						}
+						if(!flag)
+							return new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
 					}
-				}
-			}
-			return null;
-		}
-		if (inventory == null) return null;
-		int[] ids = inventory.getInternal().itemIDs();
-		int[] stacks = inventory.getInternal().itemQuantities();
-		if (ids == null || stacks == null) return null;
-		for (int i = 0; i < ids.length; i++) {
-			if(i==ignore.getIndex())
-				continue;
-			if(ids[i]-1!=-1){
-				for(int id : itemIDs){
-					if(ids[i]-1==id)
-						return new InventoryItem(ids[i]-1, stacks[i], i);
 				}
 			}
 		}
@@ -668,28 +435,26 @@ public class Inventory extends MethodDefinition{
 		return ((Client)Data.clientInstance).itemSelectionState()==1;
 	}
 	public RSWidget getInventoryWidget(){
-		if(((Client)Data.clientInstance).resizeMode()){
-			if(methods.bank.isOpen())
-				return methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-			return methods.widgets.getChild(INVENTORY_INTERFACE_RESIZE_MODE_PARENT, INVENTORY_INTERFACE_RESIZE_MODE_CHILD);
+		if(inventoryWidget!=null)
+			return inventoryWidget;
+		findInventoryLoop:for(RSInterface i : methods.widgets.getAll()){
+			if(i!=null){
+				for(RSWidget ic : i.getChildren()){
+					if(ic!=null){
+						if(ic.type()==2){
+							inventoryWidget = ic;
+							break findInventoryLoop;
+						}
+					}
+				}
+			}
 		}
-		return methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
+		return inventoryWidget;
 	}
 	public int getWidgetID(){
 		RSWidget widget = getInventoryWidget();
 		if(widget!=null)
-			return widget.getID();
-		return -1;
-	}
-	public RSWidget getInventoryContainer(){
-		if(methods.bank.isOpen())
-			return methods.widgets.getChild(BANK_INVENTORY_INTERFACE_PARENT, BANK_INVENTORY_INTERFACE_CHILD);
-		return methods.widgets.getChild(INVENTORY_ITEM_CONTAINER_PARENT, INVENTORY_ITEM_CONTAINER_CHILD);
-	}
-	public int getContainerID(){
-		RSWidget container = getInventoryContainer();
-		if(container!=null)
-			return container.getID();
+			return widget.id();
 		return -1;
 	}
 	public Rectangle getBounds(){

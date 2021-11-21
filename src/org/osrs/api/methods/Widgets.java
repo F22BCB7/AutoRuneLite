@@ -115,9 +115,9 @@ public class Widgets extends MethodDefinition{
 		Point scrollToCenter = scrollTo.getCenterPoint();
 		int areaY = scrollbarChildren[4].getAbsoluteY();//Top scroll button
 		RSWidget scrollBarArea = scrollbarChildren[0];
-		int areaHeight = scrollBarArea.getHeight();
+		int areaHeight = scrollBarArea.height();
 		int contentHeight = scrollableArea.getInternal().scrollHeight();
-		int pos = (int) ((float) scrollBarArea.getInternal().scrollHeight() / contentHeight * (scrollTo.getRelativeY()));
+		int pos = (int) ((float) scrollBarArea.getInternal().scrollHeight() / contentHeight * (scrollTo.relativeY()));
 		if (pos < 0){
 			pos = 0;
 		} 

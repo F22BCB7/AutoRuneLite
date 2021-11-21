@@ -5,6 +5,7 @@ import java.applet.AppletContext;
 import java.applet.AppletStub;
 import java.applet.AudioClip;
 import java.awt.BorderLayout;
+import java.awt.CheckboxMenuItem;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Menu;
@@ -35,6 +36,7 @@ import javax.swing.filechooser.FileFilter;
 import org.osrs.api.methods.MethodContext;
 import org.osrs.api.wrappers.Canvas;
 import org.osrs.api.wrappers.Client;
+import org.osrs.debug.WidgetDebug;
 import org.osrs.script.ScriptDef;
 import org.osrs.util.Data;
 import com.github.joonasvali.naturalmouse.api.MouseMotionFactory;
@@ -48,6 +50,8 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
 	private Menu fileMenu;
 	private MenuItem startScriptOption;
 	private MenuItem pauseScriptOption;
+	private Menu debugMenu;
+	public CheckboxMenuItem widgetDebuggerOption;
 	public AppletFrame(Applet applet, PageParser parser){
 		long start = System.currentTimeMillis();
 		System.out.println("\n[ - Applet Loader - ]");
@@ -60,6 +64,7 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
 		setTitle("Old School Runescape Game");
 
 		menuBar = new MenuBar();
+		
 		fileMenu = new Menu("File");
 		startScriptOption = new MenuItem("Start Script");
 		startScriptOption.addActionListener(new java.awt.event.ActionListener() {
@@ -77,6 +82,25 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
         });
 		fileMenu.add(pauseScriptOption);
 		menuBar.add(fileMenu);
+		
+		debugMenu = new Menu("Debug");
+		widgetDebuggerOption = new CheckboxMenuItem("Widgets");
+		widgetDebuggerOption.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            	WidgetDebug widgetDebugger = ((org.osrs.api.wrappers.Canvas)((Client)Data.clientInstance).canvas()).getWidgetDebugFrame();
+                if(widgetDebuggerOption.getState()){
+                	if(widgetDebugger!=null && !widgetDebugger.debugger.isVisible())
+                		widgetDebugger.debugger.setVisible(true);
+                }
+                else{
+                	if(widgetDebugger!=null && widgetDebugger.debugger.isVisible())
+                		widgetDebugger.debugger.setVisible(false);
+                }
+            }
+        });
+		debugMenu.add(widgetDebuggerOption);
+		menuBar.add(debugMenu);
+		
 		setMenuBar(menuBar);
 		
 		add(applet, BorderLayout.CENTER);

@@ -109,21 +109,15 @@ public class RSWidget extends Interactable{
 	public int getIndex(){
 		return index;
 	}
-	public int getID(){
-		Widget internal = getInternal();
-		if(internal!=null)
-			return internal.id();
-		return -1;
-	}
 	public int getContainerIndex(){
-		int id = getID();
+		int id = id();
 		if(id!=-1){
 			return id >> 16;
 		}
 		return -1;
 	}
 	public int getWidgetIndex(){
-		int id = getID();
+		int id = id();
 		if(id!=-1){
 			return id & 0xFFFF;
 		}
@@ -151,30 +145,10 @@ public class RSWidget extends Interactable{
 	public RSWidget getParentWidget(){
 		return parentWidget;
 	}
-	public int getHeight(){
-		Widget w = getInternal();
-		if(w!=null){
-			return w.height();
-		}
-		return -1;
-	}
-	public int getWidth(){
-		Widget w = getInternal();
-		if(w!=null){
-			return w.width();
-		}
-		return -1;
-	}
-	public Point getAbsolutePosition(){
-		return new Point(getAbsoluteX(), getAbsoluteY());
-	}
 	public int getParentID(){
-		Widget w = getInternal();
-		if(w!=null){
-			int id = w.parentID();
-			if(id!=-1)
-				return id;
-		}
+		int id = parentID();
+		if(id!=-1)
+			return id;
 		HashTable table = ((Client)Data.clientInstance).componentTable();
 		if(table!=null){
 			for(Node node : table.buckets()){
@@ -196,13 +170,6 @@ public class RSWidget extends Interactable{
 		}
 		return -1;
 	}
-	public int getBoundsIndex(){
-		Widget w = getInternal();
-		if(w!=null){
-			return w.boundsIndex();
-		}
-		return -1;
-	}
 	public int getAbsoluteX(){
 		int x = 0;
 		int parentID = getParentID();
@@ -210,30 +177,16 @@ public class RSWidget extends Interactable{
 			int containerIndex = getParentID() >> 16;
 			int widgetIndex = getParentID() & 0xFFFF;
 			RSWidget parent = methods.widgets.getChild(containerIndex, widgetIndex);
-			x = parent.getAbsoluteX() - getScrollX();
+			x = parent.getAbsoluteX() - scrollX();
 		} else {
 			int posX[] = ((Client)Data.clientInstance).widgetPositionsX();
-			int bi = getBoundsIndex();
+			int bi = boundsIndex();
 			if (bi != -1 && bi < posX.length) {
 				return posX[bi];
 			}
 		}
-		x += getRelativeX();
+		x += relativeX();
 		return x;
-	}
-	public int getRelativeX(){
-		Widget w = getInternal();
-		if(w!=null){
-			return w.relativeX();
-		}
-		return -1;
-	}
-	public int getScrollX(){
-		Widget w = getInternal();
-		if(w!=null){
-			return w.scrollX();
-		}
-		return -1;
 	}
 	public int getAbsoluteY(){
 		int y = 0;
@@ -242,37 +195,26 @@ public class RSWidget extends Interactable{
 			int index1 = getParentID() >> 16;
 			int index2 = getParentID() & 0xFFFF;
 			RSWidget parent = methods.widgets.getChild(index1, index2);
-			y = parent.getAbsoluteY() - getScrollY();
+			y = parent.getAbsoluteY() - scrollY();
 		} else {
 			int posY[] = ((Client)Data.clientInstance).widgetPositionsY();
-			int bi = getBoundsIndex();
+			int bi = boundsIndex();
 			if (bi != -1 && bi < posY.length) {
 				return posY[bi];
 			}
 		}
-		y += getRelativeY();
+		y += relativeY();
 		return y;
 	}
-	public int getRelativeY(){
-		Widget w = getInternal();
-		if(w!=null){
-			return w.relativeY();
-		}
-		return -1;
-	}
-	public int getScrollY(){
-		Widget w = getInternal();
-		if(w!=null){
-			return w.scrollY();
-		}
-		return -1;
+	public Point getAbsolutePosition(){
+		return new Point(getAbsoluteX(), getAbsoluteY());
 	}
 	public Rectangle getBounds(){
-		return new Rectangle(getAbsoluteX(), getAbsoluteY(), getWidth(), getHeight());
+		return new Rectangle(getAbsoluteX(), getAbsoluteY(), width(), height());
 	}
 	@Override
 	public Point getCenterPoint(){
-		return new Point(this.getAbsoluteX()+(this.getWidth()/2), this.getAbsoluteY()+(this.getHeight()/2));
+		return new Point(this.getAbsoluteX()+(this.width()/2), this.getAbsoluteY()+(this.height()/2));
 	}
 	@Override
 	public Point getRandomPoint() {
@@ -294,5 +236,693 @@ public class RSWidget extends Interactable{
 				}
 			}
 		}
+	}
+	
+	
+	public boolean hasScript(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.hasScript();
+		}
+		return false;
+	}
+	public int id(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.id();
+		}
+		return -1;
+	}
+	public int index(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.index();
+		}
+		return -1;
+	}
+	public int menuType(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.menuType();
+		}
+		return -1;
+	}
+	public int contentType(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.contentType();
+		}
+		return -1;
+	}
+	public int dynamicX(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.dynamicX();
+		}
+		return -1;
+	}
+	public int dynamicY(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.dynamicY();
+		}
+		return -1;
+	}
+	public int dynamicWidth(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.dynamicWidth();
+		}
+		return -1;
+	}
+	public int dynamicHeight(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.dynamicHeight();
+		}
+		return -1;
+	}
+	public int originalX(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.originalX();
+		}
+		return -1;
+	}
+	public int originalY(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.originalY();
+		}
+		return -1;
+	}
+	public int originalWidth(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.originalWidth();
+		}
+		return -1;
+	}
+	public int originalHeight(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.originalHeight();
+		}
+		return -1;
+	}
+	public int relativeX(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.relativeX();
+		}
+		return -1;
+	}
+	public int relativeY(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.relativeY();
+		}
+		return -1;
+	}
+	public int width(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.width();
+		}
+		return -1;
+	}
+	public int height(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.height();
+		}
+		return -1;
+	}
+	public int oldWidth(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.oldWidth();
+		}
+		return -1;
+	}
+	public int oldHeight(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.oldHeight();
+		}
+		return -1;
+	}
+	public int parentID(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.parentID();
+		}
+		return -1;
+	}
+	public boolean isHidden(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.isHidden();
+		}
+		return false;
+	}
+	public int scrollX(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.scrollX();
+		}
+		return -1;
+	}
+	public int scrollY(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.scrollY();
+		}
+		return -1;
+	}
+	public int scrollWidth(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.scrollWidth();
+		}
+		return -1;
+	}
+	public int scrollHeight(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.scrollHeight();
+		}
+		return -1;
+	}
+	public int disabledColor(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.disabledColor();
+		}
+		return -1;
+	}
+	public int enabledColor(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.enabledColor();
+		}
+		return -1;
+	}
+	public int disabledHoverColor(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.disabledHoverColor();
+		}
+		return -1;
+	}
+	public int enabledHoverColor(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.enabledHoverColor();
+		}
+		return -1;
+	}
+	public boolean filled(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.filled();
+		}
+		return false;
+	}
+	public int alpha(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.alpha();
+		}
+		return -1;
+	}
+	public int lineWidth(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.lineWidth();
+		}
+		return -1;
+	}
+	public int spriteID(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.spriteID();
+		}
+		return -1;
+	}
+	public int enabledSpriteID(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.enabledSpriteID();
+		}
+		return -1;
+	}
+	public int textureID(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.textureID();
+		}
+		return -1;
+	}
+	public boolean spriteTiling(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.spriteTiling();
+		}
+		return false;
+	}
+	public int borderThickness(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.borderThickness();
+		}
+		return -1;
+	}
+	public int shadowColor(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.shadowColor();
+		}
+		return -1;
+	}
+	public int disabledMediaType(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.disabledMediaType();
+		}
+		return -1;
+	}
+	public int disabledMediaID(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.disabledMediaID();
+		}
+		return -1;
+	}
+	public int enabledMediaType(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.enabledMediaType();
+		}
+		return -1;
+	}
+	public int enabledMediaID(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.enabledMediaID();
+		}
+		return -1;
+	}
+	public int disabledAnimationID(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.disabledAnimationID();
+		}
+		return -1;
+	}
+	public int enabledAnimationID(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.enabledAnimationID();
+		}
+		return -1;
+	}
+	public int modelOffsetX(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.modelOffsetX();
+		}
+		return -1;
+	}
+	public int modelOffsetY(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.modelOffsetY();
+		}
+		return -1;
+	}
+	public int rotationX(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.rotationX();
+		}
+		return -1;
+	}
+	public int rotationZ(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.rotationZ();
+		}
+		return -1;
+	}
+	public int rotationY(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.rotationY();
+		}
+		return -1;
+	}
+	public int modelZoom(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.modelZoom();
+		}
+		return -1;
+	}
+	public boolean renderAtPoint(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.renderAtPoint();
+		}
+		return false;
+	}
+	public int fontID(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.fontID();
+		}
+		return -1;
+	}
+	public String disabledText(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.disabledText();
+		}
+		return null;
+	}
+	public String enabledText(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.enabledText();
+		}
+		return null;
+	}
+	public int horizontalMargin(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.horizontalMargin();
+		}
+		return -1;
+	}
+	public int verticalMargin(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.verticalMargin();
+		}
+		return -1;
+	}
+	public boolean textShadowed(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.textShadowed();
+		}
+		return false;
+	}
+	public int paddingX(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.paddingX();
+		}
+		return -1;
+	}
+	public int paddingY(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.paddingY();
+		}
+		return -1;
+	}
+	public int clickMask(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.clickMask();
+		}
+		return -1;
+	}
+	public String opbase(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.opbase();
+		}
+		return null;
+	}
+	public Widget dragParent(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.dragParent();
+		}
+		return null;
+	}
+	public int dragDeadZone(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.dragDeadZone();
+		}
+		return -1;
+	}
+	public int dragDeadTime(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.dragDeadTime();
+		}
+		return -1;
+	}
+	public boolean dragRenderBehavior(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.dragRenderBehavior();
+		}
+		return false;
+	}
+	public String targetVerb(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.targetVerb();
+		}
+		return null;
+	}
+	public boolean hasListener(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.hasListener();
+		}
+		return false;
+	}
+	public String spellName(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.spellName();
+		}
+		return null;
+	}
+	public String tooltip(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.tooltip();
+		}
+		return null;
+	}
+	public int itemID(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.itemID();
+		}
+		return -1;
+	}
+	public int itemQuantity(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.itemQuantity();
+		}
+		return -1;
+	}
+	public int currentFrameIndex(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.currentFrameIndex();
+		}
+		return -1;
+	}
+	public int currentFrameLength(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.currentFrameLength();
+		}
+		return -1;
+	}
+	public boolean hovering(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.hovering();
+		}
+		return false;
+	}
+	public boolean isClickDown(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.isClickDown();
+		}
+		return false;
+	}
+	public int visibleCycle(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.visibleCycle();
+		}
+		return -1;
+	}
+	public int pendingVarbitCount(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.pendingVarbitCount();
+		}
+		return -1;
+	}
+	public int changedSkillsCount(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.changedSkillsCount();
+		}
+		return -1;
+	}
+	public int boundsIndex(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.boundsIndex();
+		}
+		return -1;
+	}
+	public int displayCycle(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.displayCycle();
+		}
+		return -1;
+	}
+	public boolean noClickThrough(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.noClickThrough();
+		}
+		return false;
+	}
+	public boolean noScrollThrough(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.noScrollThrough();
+		}
+		return false;
+	}
+	public boolean flippedVertically(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.flippedVertically();
+		}
+		return false;
+	}
+	public boolean flippedHorizontally(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.flippedHorizontally();
+		}
+		return false;
+	}
+	public String[] actions(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.actions();
+		}
+		return null;
+	}
+	public int[] itemIDs(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.itemIDs();
+		}
+		return null;
+	}
+	public int[] itemQuantities(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.itemQuantities();
+		}
+		return null;
+	}
+	public int childModelRotationHash(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.childModelRotationHash();
+		}
+		return -1;
+	}
+	public int itemStackType(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.itemStackType();
+		}
+		return -1;
+	}
+	public int defaultMargin(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.defaultMargin();
+		}
+		return -1;
+	}
+	public int[] spriteIDs(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.spriteIDs();
+		}
+		return null;
+	}
+	public int[] ySprites(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.ySprites();
+		}
+		return null;
+	}
+	public int[] xSprites(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.xSprites();
+		}
+		return null;
+	}
+	public int type(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.type();
+		}
+		return -1;
+	}
+	public int[] widgetVarps(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.widgetVarps();
+		}
+		return null;
+	}
+	public String[] configActions(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.configActions();
+		}
+		return null;
+	}
+	public int[][] scriptOpcodes(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.scriptOpcodes();
+		}
+		return null;
+	}
+	public int[] tableActions(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.tableActions();
+		}
+		return null;
 	}
 }

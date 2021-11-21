@@ -1,6 +1,7 @@
 package org.osrs.util;
 
 import org.osrs.input.InputManager;
+import org.osrs.loader.AppletFrame;
 import org.osrs.loader.Modscript;
 
 public class Data {
@@ -9,4 +10,5 @@ public class Data {
 	public static Object clientInstance;
 	public static InputManager inputManager;
 	public static Object currentScript;
+	public static AppletFrame clientFrame;
 }

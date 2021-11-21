@@ -51,13 +51,13 @@ public class Tab extends Interactable{
 	public int getWidgetID(){
 		RSWidget widget = getWidget();
 		if(widget!=null)
-			return widget.getID();
+			return widget.id();
 		return -1;
 	}
 	public Rectangle getBounds(){
 		RSWidget widget = getWidget();
 		if(widget!=null){
-			return new Rectangle(widget.getAbsoluteX(), widget.getAbsoluteY(), widget.getWidth(), widget.getHeight());
+			return new Rectangle(widget.getAbsoluteX(), widget.getAbsoluteY(), widget.width(), widget.height());
 		}
 		return new Rectangle(-1, -1, 0, 0);
 	}

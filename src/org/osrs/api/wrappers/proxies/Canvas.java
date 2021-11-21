@@ -1,5 +1,6 @@
 package org.osrs.api.wrappers.proxies;
 
+import org.osrs.debug.WidgetDebug;
 import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BField;
 import org.osrs.injection.bytescript.BFunction;
@@ -45,10 +46,24 @@ public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Can
 				((org.osrs.script.listeners.PaintListener)Data.currentScript).paint(g);
 			}
 		}
+		WidgetDebug widgets = getWidgetDebugFrame();
+		if(widgets!=null){
+			if(widgets.debugger.isVisible())
+				widgets.paint(g);
+		}
 		
 		Client.clientInstance.mouseListener().paint(g);
 		
 		super.getGraphics().drawImage(gameImage, 0, 0, null);
 		return g;
+	}
+	@BVar
+	public WidgetDebug widgetDebug;
+	@BFunction
+	@Override
+	public WidgetDebug getWidgetDebugFrame(){
+		if(widgetDebug==null)
+			widgetDebug = new WidgetDebug(Client.clientInstance.getMethodContext());
+		return widgetDebug;
 	}
 }

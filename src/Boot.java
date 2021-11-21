@@ -99,8 +99,8 @@ public class Boot {
 							Client clientInstance =  ((org.osrs.api.wrappers.Client)instance);
 							clientInstance.setMethodContext(context);
 							SwingUtilities.invokeLater(() -> {
-								AppletFrame frame = new AppletFrame((Applet)instance, parser);
-								frame.setVisible(true);
+								Data.clientFrame = new AppletFrame((Applet)instance, parser);
+								Data.clientFrame.setVisible(true);
 							});
 							Data.inputManager = new InputManager(clientInstance);
 						}
