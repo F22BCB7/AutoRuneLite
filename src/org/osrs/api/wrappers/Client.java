@@ -30,6 +30,7 @@ public interface Client extends GameShell{
 	public int[] widgetWidths();
 	public int[] widgetHeights();
 	public HashTable componentTable();
+	public int widgetVisibleCycle();
 	
 	public int cameraX();
 	public int cameraZ();

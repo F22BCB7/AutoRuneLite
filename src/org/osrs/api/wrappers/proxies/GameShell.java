@@ -3,6 +3,7 @@ package org.osrs.api.wrappers.proxies;
 import java.applet.Applet;
 import java.awt.Canvas;
 import java.awt.event.FocusEvent;
+import java.util.HashMap;
 
 import org.osrs.api.wrappers.MouseWheelListener;
 import org.osrs.injection.bytescript.BClass;
@@ -35,45 +36,81 @@ public class GameShell extends Applet implements org.osrs.api.wrappers.GameShell
 
 	@BMethod(name="processEngine")
 	public void _processEngine(int a){}
+	@BMethod(name="processEngine")
+	public void _processEngine(byte a){}
+	@BMethod(name="processEngine")
+	public void _processEngine(short a){}
 	@BDetour
-	public void processEngine(int a){
-		_processEngine(a);
+	public void processEngine(int a){invoke_processEngine();}
+	@BDetour
+	public void processEngine(byte a){invoke_processEngine();}
+	@BDetour
+	public void processEngine(short a){invoke_processEngine();}
+	@BFunction
+	public void invoke_processEngine(){
+		HashMap<Integer, Integer> widgetDisplayedTicks = new HashMap<Integer, Integer>();
+		HashMap<Integer, Integer> widgetVisibleTicks = new HashMap<Integer, Integer>();
+		org.osrs.api.wrappers.Widget[][] allWidgets = Client.clientInstance.widgets();
+		if(allWidgets!=null){
+			for(org.osrs.api.wrappers.Widget[] widgets : allWidgets){
+				if(widgets!=null){
+					for(org.osrs.api.wrappers.Widget widget : widgets){
+						if(widget!=null){
+							widgetVisibleTicks.put(widget.hashCode(), widget.visibleCycle());
+							widgetDisplayedTicks.put(widget.hashCode(), widget.displayCycle());
+							org.osrs.api.wrappers.Widget[] children = widget.children();
+							if(children!=null){
+								for(org.osrs.api.wrappers.Widget child : children){
+									if(child!=null){
+										widgetVisibleTicks.put(child.hashCode(), child.visibleCycle());
+										widgetDisplayedTicks.put(child.hashCode(), child.displayCycle());
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		Object predicate = Client.clientInstance.getMethodPredicate("GameShell", "processEngine", "(?)V", false);
+		if(predicate instanceof Integer)
+			_processEngine((int)predicate);
+		if(predicate instanceof Byte)
+			_processEngine((byte)predicate);
+		if(predicate instanceof Short)
+			_processEngine((short)predicate);
+
+		if(allWidgets!=null){
+			for(org.osrs.api.wrappers.Widget[] widgets : allWidgets){
+				if(widgets!=null){
+					for(org.osrs.api.wrappers.Widget widget : widgets){
+						if(widget!=null){
+							Object oldTick = widgetVisibleTicks.get(widget.hashCode());
+							widget.setVisible(oldTick==null || (int)oldTick!=widget.visibleCycle());
+							oldTick = widgetDisplayedTicks.get(widget.hashCode());
+							widget.setDisplayed(oldTick==null || (int)oldTick!=widget.displayCycle());
+							org.osrs.api.wrappers.Widget[] children = widget.children();
+							if(children!=null){
+								for(org.osrs.api.wrappers.Widget child : children){
+									if(child!=null){
+										oldTick = widgetVisibleTicks.get(child.hashCode());
+										child.setVisible(oldTick==null || (int)oldTick!=child.visibleCycle());
+										oldTick = widgetDisplayedTicks.get(child.hashCode());
+										child.setDisplayed(oldTick==null || (int)oldTick!=child.displayCycle());
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	
 		if(Data.currentScript!=null){
 			if(Data.currentScript instanceof org.osrs.script.listeners.CycleListener){
 				((org.osrs.script.listeners.CycleListener)Data.currentScript).gameCycle();
 			}
 		}
-	}
-	@BMethod(name="processEngine")
-	public void _processEngine(byte a){}
-	@BDetour
-	public void processEngine(byte a){
-		_processEngine(a);
-	}
-	@BMethod(name="processEngine")
-	public void _processEngine(short a){}
-	@BDetour
-	public void processEngine(short a){
-		_processEngine(a);
-	}
-	
-
-	@BMethod(name="processGraphics")
-	public void _processGraphics(int a){}
-	@BDetour
-	public void processGraphics(int a){
-		_processGraphics(a);
-	}
-	@BMethod(name="processGraphics")
-	public void _processGraphics(byte a){}
-	@BDetour
-	public void processGraphics(byte a){
-		_processGraphics(a);
-	}
-	@BMethod(name="processGraphics")
-	public void _processGraphics(short a){}
-	@BDetour
-	public void processGraphics(short a){
-		_processGraphics(a);
 	}
 }

@@ -1,7 +1,5 @@
 package org.osrs.api.wrappers.proxies;
 
-import java.util.ArrayList;
-
 import org.osrs.api.methods.MethodContext;
 import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BDetour;
@@ -134,6 +132,11 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.HashTable componentTable(){return componentTable;}
+	@BField
+	public static int widgetVisibleCycle;
+	@BGetter
+	@Override
+	public int widgetVisibleCycle(){return widgetVisibleCycle;}
 	
 	@BField
 	public static int cameraX;
@@ -362,13 +365,15 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	public static void _addChatMessage(int a, String b, String c, String d, short e){}
 	@BDetour
 	public static void addChatMessage(int a, String b, String c, String d, int e){
-		_addChatMessage(a, b, c, d, e);
-		if(Data.currentScript!=null){
-			if(Data.currentScript instanceof org.osrs.script.listeners.MessageListener){
-				org.osrs.script.events.MessageEvent event = new org.osrs.script.events.MessageEvent(a, c, b, d);
-				((org.osrs.script.listeners.MessageListener)Data.currentScript).messageReceived(event);
-			}
-		}
+		clientInstance.invoke_addChatMessage(a, b, c, d);
+	}
+	@BDetour
+	public static void addChatMessage(int a, String b, String c, String d, byte e){
+		clientInstance.invoke_addChatMessage(a, b, c, d);
+	}
+	@BDetour
+	public static void addChatMessage(int a, String b, String c, String d, short e){
+		clientInstance.invoke_addChatMessage(a, b, c, d);
 	}
 	@BFunction
 	@Override
@@ -380,5 +385,11 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 			_addChatMessage(a, b, c, d, (byte)predicate);
 		if(predicate instanceof Short)
 			_addChatMessage(a, b, c, d, (short)predicate);
+		if(Data.currentScript!=null){
+			if(Data.currentScript instanceof org.osrs.script.listeners.MessageListener){
+				org.osrs.script.events.MessageEvent event = new org.osrs.script.events.MessageEvent(a, c, b, d);
+				((org.osrs.script.listeners.MessageListener)Data.currentScript).messageReceived(event);
+			}
+		}
 	}
 }

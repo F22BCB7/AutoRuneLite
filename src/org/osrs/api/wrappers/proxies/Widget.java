@@ -20,6 +20,15 @@ public class Widget extends Node implements org.osrs.api.wrappers.Widget{
 	@BFunction
 	@Override
 	public void setVisible(boolean flag){isVisible=flag;}
+
+	@BVar
+	public boolean isDisplayed;
+	@BFunction
+	@Override
+	public boolean isDisplayed(){return isDisplayed;}
+	@BFunction
+	@Override
+	public void setDisplayed(boolean flag){isDisplayed=flag;}
 	
 	@BField
 	public boolean hasScript;

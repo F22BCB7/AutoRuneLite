@@ -135,4 +135,6 @@ public interface Widget extends Node{
 	
 	public boolean isVisible();
 	public void setVisible(boolean flag);
+	public boolean isDisplayed();
+	public void setDisplayed(boolean flag);
 }
