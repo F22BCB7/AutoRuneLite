@@ -2,6 +2,7 @@ package org.osrs.api.wrappers;
 
 import java.awt.Component;
 
+import org.osrs.debug.InventoryDebug;
 import org.osrs.debug.WidgetDebug;
 
 public interface Canvas{
@@ -9,5 +10,4 @@ public interface Canvas{
 
 	public Component component();
 
-	public WidgetDebug getWidgetDebugFrame();
 }

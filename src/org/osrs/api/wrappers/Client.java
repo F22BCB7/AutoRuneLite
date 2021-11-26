@@ -3,6 +3,8 @@ package org.osrs.api.wrappers;
 import java.util.ArrayList;
 
 import org.osrs.api.methods.MethodContext;
+import org.osrs.debug.InventoryDebug;
+import org.osrs.debug.WidgetDebug;
 
 public interface Client extends GameShell{
 	public void setMethodContext(MethodContext context);
@@ -12,6 +14,9 @@ public interface Client extends GameShell{
 	public long getLongGetterMultiplier(String owner, String name, boolean isStatic);
 	public long getLongSetterMultiplier(String owner, String name, boolean isStatic);
 	public Object getMethodPredicate(String owner, String name, String desc, boolean isStatic);
+	
+	public WidgetDebug getWidgetDebug();
+	public InventoryDebug getInventoryDebug();
 
 	public Client clientInstance();
 	
@@ -31,6 +36,7 @@ public interface Client extends GameShell{
 	public int[] widgetHeights();
 	public HashTable componentTable();
 	public int widgetVisibleCycle();
+	public HashTable itemContainers();
 	
 	public int cameraX();
 	public int cameraZ();

@@ -1,6 +1,8 @@
 package org.osrs.api.wrappers.proxies;
 
 import org.osrs.api.methods.MethodContext;
+import org.osrs.debug.InventoryDebug;
+import org.osrs.debug.WidgetDebug;
 import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BDetour;
 import org.osrs.injection.bytescript.BField;
@@ -61,7 +63,25 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 			return (long)multi;
 		return 1;
 	}
-	
+
+	@BVar
+	public WidgetDebug widgetDebug;
+	@BFunction
+	@Override
+	public WidgetDebug getWidgetDebug(){
+		if(widgetDebug==null)
+			widgetDebug = new WidgetDebug(Client.clientInstance.getMethodContext());
+		return widgetDebug;
+	}
+	@BVar
+	public InventoryDebug inventoryDebug;
+	@BFunction
+	@Override
+	public InventoryDebug getInventoryDebug(){
+		if(inventoryDebug==null)
+			inventoryDebug = new InventoryDebug(Client.clientInstance.getMethodContext());
+		return inventoryDebug;
+	}
 
 	@BField
 	public static org.osrs.api.wrappers.Client clientInstance;
@@ -137,6 +157,11 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@BGetter
 	@Override
 	public int widgetVisibleCycle(){return widgetVisibleCycle;}
+	@BField
+	public static org.osrs.api.wrappers.HashTable itemContainers;
+	@BGetter
+	@Override
+	public org.osrs.api.wrappers.HashTable itemContainers(){return itemContainers;}
 	
 	@BField
 	public static int cameraX;

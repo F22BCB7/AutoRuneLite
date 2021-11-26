@@ -2,7 +2,6 @@ package org.osrs.api.wrappers.proxies;
 
 import java.applet.Applet;
 import java.awt.Canvas;
-import java.awt.event.FocusEvent;
 import java.util.HashMap;
 
 import org.osrs.api.wrappers.MouseWheelListener;
@@ -11,9 +10,7 @@ import org.osrs.injection.bytescript.BDetour;
 import org.osrs.injection.bytescript.BField;
 import org.osrs.injection.bytescript.BFunction;
 import org.osrs.injection.bytescript.BGetter;
-import org.osrs.injection.bytescript.BGetterDetour;
 import org.osrs.injection.bytescript.BMethod;
-import org.osrs.injection.bytescript.BSetterDetour;
 import org.osrs.util.Data;
 
 @BClass(name = "GameShell")
@@ -48,7 +45,6 @@ public class GameShell extends Applet implements org.osrs.api.wrappers.GameShell
 	public void processEngine(short a){invoke_processEngine();}
 	@BFunction
 	public void invoke_processEngine(){
-		HashMap<Integer, Integer> widgetDisplayedTicks = new HashMap<Integer, Integer>();
 		HashMap<Integer, Integer> widgetVisibleTicks = new HashMap<Integer, Integer>();
 		org.osrs.api.wrappers.Widget[][] allWidgets = Client.clientInstance.widgets();
 		if(allWidgets!=null){
@@ -57,13 +53,11 @@ public class GameShell extends Applet implements org.osrs.api.wrappers.GameShell
 					for(org.osrs.api.wrappers.Widget widget : widgets){
 						if(widget!=null){
 							widgetVisibleTicks.put(widget.hashCode(), widget.visibleCycle());
-							widgetDisplayedTicks.put(widget.hashCode(), widget.displayCycle());
 							org.osrs.api.wrappers.Widget[] children = widget.children();
 							if(children!=null){
 								for(org.osrs.api.wrappers.Widget child : children){
 									if(child!=null){
 										widgetVisibleTicks.put(child.hashCode(), child.visibleCycle());
-										widgetDisplayedTicks.put(child.hashCode(), child.displayCycle());
 									}
 								}
 							}
@@ -88,16 +82,12 @@ public class GameShell extends Applet implements org.osrs.api.wrappers.GameShell
 						if(widget!=null){
 							Object oldTick = widgetVisibleTicks.get(widget.hashCode());
 							widget.setVisible(oldTick==null || (int)oldTick!=widget.visibleCycle());
-							oldTick = widgetDisplayedTicks.get(widget.hashCode());
-							widget.setDisplayed(oldTick==null || (int)oldTick!=widget.displayCycle());
 							org.osrs.api.wrappers.Widget[] children = widget.children();
 							if(children!=null){
 								for(org.osrs.api.wrappers.Widget child : children){
 									if(child!=null){
 										oldTick = widgetVisibleTicks.get(child.hashCode());
 										child.setVisible(oldTick==null || (int)oldTick!=child.visibleCycle());
-										oldTick = widgetDisplayedTicks.get(child.hashCode());
-										child.setDisplayed(oldTick==null || (int)oldTick!=child.displayCycle());
 									}
 								}
 							}
@@ -106,6 +96,7 @@ public class GameShell extends Applet implements org.osrs.api.wrappers.GameShell
 				}
 			}
 		}
+		Client.clientInstance.getMethodContext().inventory.updateInventoryItems();
 	
 		if(Data.currentScript!=null){
 			if(Data.currentScript instanceof org.osrs.script.listeners.CycleListener){

@@ -18,11 +18,21 @@ public class InventoryItem extends Interactable{
 		this.inventoryIndex = index;
 		this.definition = getDefinition();
 	}
+	public void updateInfo(int id, int stack){
+		this.id=id;
+		this.stacksize=stack;
+		if(id==-1)
+			definition=null;
+		else
+			definition=getDefinition();
+	}
 	/**
 	 * Returns the Items definition
 	 * @return itemDefinition
 	 */
 	public ItemDefinition getDefinition() {
+		if(id==-1)
+			return null;
 		if(definition!=null)
 			return definition;
 		definition = ((Client)Data.clientInstance).invoke_getItemDefinition(id);

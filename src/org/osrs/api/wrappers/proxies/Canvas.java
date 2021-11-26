@@ -1,5 +1,6 @@
 package org.osrs.api.wrappers.proxies;
 
+import org.osrs.debug.InventoryDebug;
 import org.osrs.debug.WidgetDebug;
 import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BField;
@@ -11,6 +12,7 @@ import org.osrs.util.Data;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 @BClass(name="Canvas")
 public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Canvas{
@@ -40,30 +42,53 @@ public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Can
 		int y=15;
 		g.drawString("AutoRuneLite v0.1", 15, y);
 		y+=15;
-		
+
+		int gameCycle = Client.clientInstance.gameCycle();
+		org.osrs.api.wrappers.Widget[][] allWidgets = Client.clientInstance.widgets();
+		if(allWidgets!=null){
+			for(org.osrs.api.wrappers.Widget[] widgets : allWidgets){
+				if(widgets!=null){
+					for(org.osrs.api.wrappers.Widget widget : widgets){
+						if(widget!=null){
+							widget.setDisplayed(widget.displayCycle()>=gameCycle);
+							org.osrs.api.wrappers.Widget[] children = widget.children();
+							if(children!=null){
+								for(org.osrs.api.wrappers.Widget child : children){
+									if(child!=null){
+										child.setDisplayed(child.displayCycle()>=gameCycle);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if(Client.clientInstance.getMethodContext()!=null){
+			WidgetDebug widgets = Client.clientInstance.getWidgetDebug();
+			if(widgets!=null){
+				if(widgets.debugger.isVisible())
+					widgets.paint(g);
+				else{
+					g.drawString("Widget debugger not visible.", 15, y);
+					y+=15;
+				}				
+			}
+			
+			InventoryDebug inventory = Client.clientInstance.getInventoryDebug();
+			if(inventory!=null){
+				inventory.paint(g);
+			}
+		}
 		if(Data.currentScript!=null){
 			if(Data.currentScript instanceof org.osrs.script.listeners.PaintListener){
 				((org.osrs.script.listeners.PaintListener)Data.currentScript).paint(g);
 			}
-		}
-		WidgetDebug widgets = getWidgetDebugFrame();
-		if(widgets!=null){
-			if(widgets.debugger.isVisible())
-				widgets.paint(g);
 		}
 		
 		Client.clientInstance.mouseListener().paint(g);
 		
 		super.getGraphics().drawImage(gameImage, 0, 0, null);
 		return g;
-	}
-	@BVar
-	public WidgetDebug widgetDebug;
-	@BFunction
-	@Override
-	public WidgetDebug getWidgetDebugFrame(){
-		if(widgetDebug==null)
-			widgetDebug = new WidgetDebug(Client.clientInstance.getMethodContext());
-		return widgetDebug;
 	}
 }

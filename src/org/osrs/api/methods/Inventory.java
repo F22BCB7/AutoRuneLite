@@ -3,6 +3,7 @@ package org.osrs.api.methods;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.osrs.api.objects.InventoryItem;
 import org.osrs.api.objects.RSInterface;
@@ -13,9 +14,34 @@ import org.osrs.util.Data;
 
 public class Inventory extends MethodDefinition{
 	private RSWidget inventoryWidget = null;
+	private InventoryItem[] inventoryItems = null;
 	//TODO use ItemContainer instead of widgets - itemContainer.bucket[30].next.ids[equipIndex]
 	public Inventory(MethodContext context){
 		super(context);
+	}
+	/**
+	 * Called after a gameCycle has passed, and will
+	 * pre-cache the items. Not for use in scripts.
+	 */
+	public void updateInventoryItems(){
+		if(inventoryItems==null)
+			inventoryItems = new InventoryItem[28];
+		RSWidget inventory = getInventoryItemsWidget();
+		int[] ids = new int[28];
+		int[] counts = new int[28];
+		if(inventory!=null){
+			ids = inventory.itemIDs();
+			counts = inventory.itemQuantities();
+		}
+		else{
+			Arrays.fill(ids, -1);
+			Arrays.fill(counts, 0);
+		}
+		for(int i=0;i<28;++i){
+			if(inventoryItems[i]==null)
+				inventoryItems[i] = new InventoryItem(-1, 0, i);
+			inventoryItems[i].updateInfo(ids[i], counts[i]);
+		}
 	}
 	/**
 	 * Checks the inventory to see if it contains an item
@@ -45,13 +71,10 @@ public class Inventory extends MethodDefinition{
 	 */
 	public int getCount(){
 		int count = 0;
-		RSWidget inventory = getInventoryWidget();
-		if(inventory!=null){
-			for(RSWidget child : inventory.getChildren()){
-				if(child!=null){
-					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-						count++;
-					}
+		if(inventoryItems!=null){
+			for(InventoryItem item : inventoryItems){
+				if(item!=null && item.getID()!=-1 && item.getID()!=6512){
+					count++;
 				}
 			}
 		}
@@ -65,13 +88,10 @@ public class Inventory extends MethodDefinition{
 	 */
 	public int getCount(int id){
 		int count = 0;
-		RSWidget inventory = getInventoryWidget();
-		if(inventory!=null){
-			for(RSWidget child : inventory.getChildren()){
-				if(child!=null){
-					if(child.getInternal().itemID()==id && child.getInternal().itemID()!=6512){
-						count++;
-					}
+		if(inventoryItems!=null){
+			for(InventoryItem item : inventoryItems){
+				if(item!=null && item.getID()==id && item.getID()!=6512){
+					count++;
 				}
 			}
 		}
@@ -85,16 +105,13 @@ public class Inventory extends MethodDefinition{
 	 */
 	public int getCount(int...itemIDs){
 		int count = 0;
-		RSWidget inventory = getInventoryWidget();
-		if(inventory!=null){
-			for(RSWidget child : inventory.getChildren()){
-				if(child!=null){
-					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-						for(int id : itemIDs){
-							if(child.getInternal().itemID()==id){
-								count++;
-								break;
-							}
+		if(inventoryItems!=null){
+			for(InventoryItem item : inventoryItems){
+				if(item!=null && item.getID()!=-1 && item.getID()!=6512){
+					for(int id : itemIDs){
+						if(item.getID()==id){
+							count++;
+							break;
 						}
 					}
 				}
@@ -110,21 +127,18 @@ public class Inventory extends MethodDefinition{
 	 */
 	public int getCountExcept(int... itemIDs) {
 		int count = 0;
-		RSWidget inventory = getInventoryWidget();
-		if(inventory!=null){
-			for(RSWidget child : inventory.getChildren()){
-				if(child!=null){
-					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-						boolean flag=false;
-						for(int id : itemIDs){
-							if(child.getInternal().itemID()==id){
-								flag=true;
-								break;
-							}
+		if(inventoryItems!=null){
+			for(InventoryItem item : inventoryItems){
+				if(item!=null && item.getID()!=-1 && item.getID()!=6512){
+					boolean flag=false;
+					for(int id : itemIDs){
+						if(item.getID()==id){
+							flag=true;
+							break;
 						}
-						if(!flag)
-							count++;
 					}
+					if(!flag)
+						count++;
 				}
 			}
 		}
@@ -137,13 +151,10 @@ public class Inventory extends MethodDefinition{
 	 * @return itemCount
 	 */
 	public int getStackSize(int id){
-		RSWidget inventory = getInventoryWidget();
-		if(inventory!=null){
-			for(RSWidget child : inventory.getChildren()){
-				if(child!=null){
-					if(child.getInternal().itemID()==id){
-						return child.getInternal().itemQuantity();
-					}
+		if(inventoryItems!=null){
+			for(InventoryItem item : inventoryItems){
+				if(item!=null && item.getID()==id && item.getID()!=6512){
+					return item.getStackSize();
 				}
 			}
 		}
@@ -156,13 +167,10 @@ public class Inventory extends MethodDefinition{
 	 * @return inventoryIndex
 	 */
 	public int getIndex(int itemID) {
-		RSWidget inventory = getInventoryWidget();
-		if(inventory!=null){
-			for(RSWidget child : inventory.getChildren()){
-				if(child!=null){
-					if(child.getInternal().itemID()==itemID){
-						return child.getIndex();
-					}
+		if(inventoryItems!=null){
+			for(InventoryItem item : inventoryItems){
+				if(item!=null && item.getID()==itemID && item.getID()!=6512){
+					return item.getIndex();
 				}
 			}
 		}
@@ -184,16 +192,8 @@ public class Inventory extends MethodDefinition{
 	 * @return item
 	 */
 	public InventoryItem getItemAtIndex(int index){
-		RSWidget inventory = getInventoryWidget();
-		if(inventory!=null){
-			for(RSWidget child : inventory.getChildren()){
-				if(child!=null){
-					if(child.getIndex()==index && child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-						return new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
-					}
-				}
-			}
-		}
+		if(inventoryItems!=null && index<inventoryItems.length)
+			return inventoryItems[index];
 		return null;
 	}
 	/**
@@ -202,13 +202,10 @@ public class Inventory extends MethodDefinition{
 	 * @return item
 	 */
 	public InventoryItem getItem(int id){
-		RSWidget inventory = getInventoryWidget();
-		if(inventory!=null){
-			for(RSWidget child : inventory.getChildren()){
-				if(child!=null){
-					if(child.getInternal().itemID()==id){
-						return new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
-					}
+		if(inventoryItems!=null){
+			for(InventoryItem item : inventoryItems){
+				if(item!=null && item.getID()==id){
+					return item;
 				}
 			}
 		}
@@ -221,16 +218,11 @@ public class Inventory extends MethodDefinition{
 	 * @return item
 	 */
 	public InventoryItem getItem(int...itemIDs){
-		RSWidget inventory = getInventoryWidget();
-		if(inventory!=null){
-			for(RSWidget child : inventory.getChildren()){
-				if(child!=null){
-					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-						for(int id : itemIDs){
-							if(child.getInternal().itemID()==id){
-								return new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
-							}
-						}
+		if(inventoryItems!=null){
+			for(InventoryItem item : inventoryItems){
+				for(int id : itemIDs){
+					if(item.getID()==id){
+						return item;
 					}
 				}
 			}
@@ -243,16 +235,10 @@ public class Inventory extends MethodDefinition{
 	 * @return item
 	 */
 	public InventoryItem getItem(String name){
-		RSWidget inventory = getInventoryWidget();
-		if(inventory!=null){
-			for(RSWidget child : inventory.getChildren()){
-				if(child!=null){
-					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-						InventoryItem item = new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
-						if(name.equals(item.getName()))
-							return item;
-					}
-				}
+		if(inventoryItems!=null){
+			for(InventoryItem item : inventoryItems){
+				if(item.getName().equals(name))
+					return item;
 			}
 		}
 		return null;
@@ -264,16 +250,10 @@ public class Inventory extends MethodDefinition{
 	 * @return itemID
 	 */
 	public int getItemID(String name){
-		RSWidget inventory = getInventoryWidget();
-		if(inventory!=null){
-			for(RSWidget child : inventory.getChildren()){
-				if(child!=null){
-					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-						InventoryItem item = new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
-						if(name.equals(item.getName()))
-							return item.getID();
-					}
-				}
+		if(inventoryItems!=null){
+			for(InventoryItem item : inventoryItems){
+				if(item.getName().equals(name))
+					return item.getID();
 			}
 		}
 		return -1;
@@ -283,39 +263,24 @@ public class Inventory extends MethodDefinition{
 	 * @return true if displayed
 	 */
 	public boolean isDisplayed() {
-		if(methods.bank.isOpen()){
-			RSWidget inventory = getInventoryWidget();
-			if(inventory!=null){
-				return true;
-			}
+		RSWidget inventory = getInventoryItemsWidget();
+		if(inventory!=null){
+			return inventory.isDisplayed();
 		}
-		else{
-			RSWidget widget = getInventoryWidget();
-			if(widget!=null){
-				if(((Client)Data.clientInstance).resizeMode()){
-					return !widget.getInternal().isHidden();
-				}
-			}
-		}
-		return methods.tabs.inventory.isSelected();
+		return false;
 	}
 	/**
 	 * Grabs all the inventory items.
 	 * @return all inventory items.
 	 */
 	public InventoryItem[] getItems() {
-		ArrayList<InventoryItem> items = new ArrayList<InventoryItem>();
-		RSWidget inventory = getInventoryWidget();
-		if(inventory!=null){
-			for(RSWidget child : inventory.getChildren()){
-				if(child!=null){
-					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-						items.add(new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex()));
-					}
-				}
+		if(inventoryItems==null){
+			inventoryItems = new InventoryItem[28];
+			for(int i=0;i<28;++i){
+				inventoryItems[i] = new InventoryItem(-1, 0, i);
 			}
 		}
-		return items.toArray(new InventoryItem[]{});
+		return inventoryItems;
 	}
 	/**
 	 * Returns all inventory items with the given id(s).
@@ -326,16 +291,11 @@ public class Inventory extends MethodDefinition{
 	 */
 	public InventoryItem[] getItems(int...itemIDs){
 		ArrayList<InventoryItem> items = new ArrayList<InventoryItem>();
-		RSWidget inventory = getInventoryWidget();
-		if(inventory!=null){
-			for(RSWidget child : inventory.getChildren()){
-				if(child!=null){
-					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-						for(int id : itemIDs){
-							if(child.getInternal().itemID()==id){
-								items.add(new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex()));
-							}
-						}
+		if(inventoryItems!=null){
+			for(InventoryItem item : inventoryItems){
+				for(int id : itemIDs){
+					if(item.getID()==id){
+						items.add(item);
 					}
 				}
 			}
@@ -350,21 +310,18 @@ public class Inventory extends MethodDefinition{
 	 */
 	public InventoryItem[] getItemsExcluding(int...itemIDs){
 		ArrayList<InventoryItem> items = new ArrayList<InventoryItem>();
-		RSWidget inventory = getInventoryWidget();
-		if(inventory!=null){
-			for(RSWidget child : inventory.getChildren()){
-				if(child!=null){
-					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-						boolean flag=false;
-						for(int id : itemIDs){
-							if(child.getInternal().itemID()==id){
-								flag=true;
-								break;
-							}
+		if(inventoryItems!=null){
+			for(InventoryItem item : inventoryItems){
+				if(item!=null && item.getID()!=-1 && item.getID()!=6512){
+					boolean flag=false;
+					for(int id : itemIDs){
+						if(item.getID()==id){
+							flag=true;
+							break;
 						}
-						if(!flag)
-							items.add(new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex()));
 					}
+					if(!flag)
+						items.add(item);
 				}
 			}
 		}
@@ -380,20 +337,13 @@ public class Inventory extends MethodDefinition{
 	 * @return the next item
 	 */
 	public InventoryItem getNextItem(InventoryItem ignore, int...itemIDs){
-		RSWidget inventory = getInventoryWidget();
-		if(inventory!=null){
-			for(RSWidget child : inventory.getChildren()){
-				if(child!=null && child.getIndex()!=ignore.getIndex()){
-					if(child.getInternal().itemID()!=-1 && child.getInternal().itemID()!=6512){
-						boolean flag=false;
-						for(int id : itemIDs){
-							if(child.getInternal().itemID()==id){
-								flag=true;
-								break;
-							}
-						}
-						if(!flag)
-							return new InventoryItem(child.getInternal().itemID(), child.getInternal().itemQuantity(), child.getIndex());
+		if(inventoryItems!=null){
+			for(InventoryItem item : inventoryItems){
+				if(item.getIndex()==ignore.getIndex())
+					continue;
+				for(int id : itemIDs){
+					if(item.getID()==id){
+						return item;
 					}
 				}
 			}
@@ -434,7 +384,7 @@ public class Inventory extends MethodDefinition{
 	public boolean hasSelectedItem(){
 		return ((Client)Data.clientInstance).itemSelectionState()==1;
 	}
-	public RSWidget getInventoryWidget(){
+	public RSWidget getInventoryItemsWidget(){
 		if(inventoryWidget!=null)
 			return inventoryWidget;
 		findInventoryLoop:for(RSInterface i : methods.widgets.getAll()){
@@ -452,18 +402,16 @@ public class Inventory extends MethodDefinition{
 		return inventoryWidget;
 	}
 	public int getWidgetID(){
-		RSWidget widget = getInventoryWidget();
+		RSWidget widget = getInventoryItemsWidget();
 		if(widget!=null)
 			return widget.id();
 		return -1;
 	}
 	public Rectangle getBounds(){
-		RSWidget widget = getInventoryWidget();
+		RSWidget widget = getInventoryItemsWidget();
 		if(widget!=null){
 			Point loc = widget.getAbsolutePosition();
-			if(((Client)Data.clientInstance).resizeMode())
-				return new Rectangle(loc.x+20, loc.y+14, 42*4, 36*7);
-			return new Rectangle(loc.x+20, loc.y+14, 42*4, 36*7);
+			return new Rectangle(loc.x, loc.y, 42*4, 36*7);
 		}
 		return new Rectangle(-1, -1, -1, -1);
 	}

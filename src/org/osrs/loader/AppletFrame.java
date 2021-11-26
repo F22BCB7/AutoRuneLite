@@ -51,7 +51,8 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
 	private MenuItem startScriptOption;
 	private MenuItem pauseScriptOption;
 	private Menu debugMenu;
-	public CheckboxMenuItem widgetDebuggerOption;
+	public CheckboxMenuItem inventoryDebugOption;
+	public CheckboxMenuItem widgetDebugOption;
 	public AppletFrame(Applet applet, PageParser parser){
 		long start = System.currentTimeMillis();
 		System.out.println("\n[ - Applet Loader - ]");
@@ -84,11 +85,13 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
 		menuBar.add(fileMenu);
 		
 		debugMenu = new Menu("Debug");
-		widgetDebuggerOption = new CheckboxMenuItem("Widgets");
-		widgetDebuggerOption.addItemListener(new java.awt.event.ItemListener() {
+		inventoryDebugOption = new CheckboxMenuItem("Inventory");
+		debugMenu.add(inventoryDebugOption);
+		widgetDebugOption = new CheckboxMenuItem("Widgets");
+		widgetDebugOption.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-            	WidgetDebug widgetDebugger = ((org.osrs.api.wrappers.Canvas)((Client)Data.clientInstance).canvas()).getWidgetDebugFrame();
-                if(widgetDebuggerOption.getState()){
+            	WidgetDebug widgetDebugger = ((Client)Data.clientInstance).getWidgetDebug();
+                if(widgetDebugOption.getState()){
                 	if(widgetDebugger!=null && !widgetDebugger.debugger.isVisible())
                 		widgetDebugger.debugger.setVisible(true);
                 }
@@ -98,7 +101,7 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
                 }
             }
         });
-		debugMenu.add(widgetDebuggerOption);
+		debugMenu.add(widgetDebugOption);
 		menuBar.add(debugMenu);
 		
 		setMenuBar(menuBar);
