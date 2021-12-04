@@ -1,5 +1,6 @@
 package org.osrs.api.objects;
 import org.osrs.api.wrappers.Client;
+import org.osrs.api.wrappers.Tile;
 import org.osrs.util.Data;
 
 import java.awt.Point;
@@ -11,17 +12,26 @@ public class RSTile extends Interactable implements Comparable<RSTile> {
 	public int x;
 	public int y;
 	public int plane;
-
+	public int height=-1;
+	private Tile tile;
 	public RSTile(int x, int y) {
 		methods = ((Client)Data.clientInstance).getMethodContext();
 		this.x = x;
+		if(this.x<104)
+			this.x+=methods.game.mapBaseX();
 		this.y = y;
+		if(this.y<104)
+			this.y+=methods.game.mapBaseY();
 		this.plane = 0;
 	}
 	public RSTile(int x, int y, int plane) {
 		methods = ((Client)Data.clientInstance).getMethodContext();
 		this.x = x;
+		if(this.x<104)
+			this.x+=methods.game.mapBaseX();
 		this.y = y;
+		if(this.y<104)
+			this.y+=methods.game.mapBaseY();
 		this.plane = plane;
 	}
 
@@ -34,7 +44,20 @@ public class RSTile extends Interactable implements Comparable<RSTile> {
 	public int getPlane() {
 		return plane;
 	}
-
+	public int getHeight(){
+		int[][][] heights = methods.game.tileHeights();
+		if(heights!=null){
+			int localX = getLocalX();
+			int localY = getLocalY();
+			if(localX<0 || localY<0)
+				return 0;
+			if(heights.length>=plane && heights[plane].length>=localX && heights[plane][localX].length>=localY){
+				height = heights[plane][getLocalX()][getLocalY()];
+				return height;
+			}
+		}
+		return 0;
+	}
 	public int getLocalX(){
 		if(Data.clientInstance!=null){
 			return this.x - ((Client)Data.clientInstance).mapBaseX();
@@ -47,7 +70,26 @@ public class RSTile extends Interactable implements Comparable<RSTile> {
 		}
 		return -1;
 	}
-
+	public Tile getInternal(){
+		int localX = getLocalX();
+		int localY = getLocalY();
+		if(localX>=0 && localX<=104 &&
+				localY>=0 && localY<=104){
+			Tile[][][] tiles = methods.game.region().tiles();
+			if(tiles!=null && tiles.length>plane){
+				Tile[][] map = tiles[plane];
+				if(map!=null && map.length>localX){
+					Tile[] row = map[localX];
+					if(row!=null && row.length>localY){
+						tile = row[localY];
+						return tile;
+					}
+				}
+			}
+		}
+		tile = null;
+		return null;
+	}
 	@Override
 	public int hashCode() {
 		return plane << 30 | y << 15 | x;
@@ -72,37 +114,51 @@ public class RSTile extends Interactable implements Comparable<RSTile> {
 	public String toString() {
 		return "(" + x + ", " + y + ", " + plane + ")";
 	}
-	public Polygon getPolygon(){
-		Polygon p = new Polygon();
-		Point center = methods.calculations.locationToScreen(x, y, plane);
-		Point n = methods.calculations.locationToScreen(x, y+1, plane);
-		Point s = methods.calculations.locationToScreen(x, y-1, plane);
-		Point e = methods.calculations.locationToScreen(x+1, y, plane);
-		Point w = methods.calculations.locationToScreen(x-1, y, plane);
-		p.addPoint((center.x+n.x+w.x)/3, (center.y+n.y+w.y)/3);
-		p.addPoint((center.x+s.x+w.x)/3, (center.y+s.y+w.y)/3);
-		p.addPoint((center.x+s.x+e.x)/3, (center.y+s.y+e.y)/3);
-		p.addPoint((center.x+n.x+e.x)/3, (center.y+n.y+e.y)/3);
-		return p;
+	public Point getCenterPoint(){
+		Tile internal = getInternal();
+		if(internal!=null){
+			return internal.getCenterPoint();
+		}
+		return new Point(-1, -1);
+	}
+	public Polygon getBounds(){
+		Tile internal = getInternal();
+		if(internal!=null){
+			return internal.getBounds();
+		}
+		return new Polygon();
+	}
+	public Point[] projectVertices(){
+		Tile internal = getInternal();
+		if(internal!=null){
+			return internal.projectVertices();
+		}
+		return new Point[]{};
+	}
+	public Polygon[] getWireframe(){
+		Tile internal = getInternal();
+		if(internal!=null){
+			return internal.getWireframe();
+		}
+		return new Polygon[]{};
 	}
 	@Override
-	public Point getCenterPoint() {
-		return methods.calculations.locationToScreen(x, y, plane);
+	public boolean isHovering() {
+		Tile internal = getInternal();
+		if(internal!=null){
+			return internal.isHovering();
+		}
+		return false;
 	}
 	@Override
 	public Point getRandomPoint() {
-		Polygon pl = getPolygon();
+		Polygon[] p = getWireframe();
+		if(p.length<1)
+			return new Point(-1, -1);
+		Polygon pl = p[methods.calculations.random(p.length)];
 		Rectangle r = pl.getBounds();
 		if(r.width<1 || r.height<1)
 			return new Point(r.x, r.y);
 		return new Point(r.x+(methods.calculations.random(r.width)), r.y+(methods.calculations.random(r.height)));
-	}
-	@Override
-	public boolean isHovering() {
-		Polygon pl = getPolygon();
-		if(pl!=null){
-			return pl.contains(methods.mouse.getLocation());
-		}
-		return false;
 	}
 }

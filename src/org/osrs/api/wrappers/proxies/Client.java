@@ -2,6 +2,7 @@ package org.osrs.api.wrappers.proxies;
 
 import org.osrs.api.methods.MethodContext;
 import org.osrs.debug.InventoryDebug;
+import org.osrs.debug.TileDebug;
 import org.osrs.debug.WidgetDebug;
 import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BDetour;
@@ -81,6 +82,15 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 		if(inventoryDebug==null)
 			inventoryDebug = new InventoryDebug(Client.clientInstance.getMethodContext());
 		return inventoryDebug;
+	}
+	@BVar
+	public TileDebug tileDebug;
+	@BFunction
+	@Override
+	public TileDebug getTileDebug(){
+		if(tileDebug==null)
+			tileDebug = new TileDebug(Client.clientInstance.getMethodContext());
+		return tileDebug;
 	}
 
 	@BField
@@ -342,7 +352,12 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@BGetter
 	@Override
 	public int runEnergy(){return runEnergy;}
-	
+
+	@BField
+	public static org.osrs.api.wrappers.Deque drawnTileDeque;
+	@BGetter
+	@Override
+	public org.osrs.api.wrappers.Deque drawnTileDeque(){return drawnTileDeque;}
 
 	@BMethod(name="getItemDefinition")
 	public static org.osrs.api.wrappers.ItemDefinition _getItemDefinition(int a, int b){return null;}

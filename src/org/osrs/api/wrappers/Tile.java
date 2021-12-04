@@ -1,5 +1,11 @@
 package org.osrs.api.wrappers;
 
+import java.awt.Point;
+import java.awt.Polygon;
+
+import org.osrs.api.objects.RSModel;
+import org.osrs.api.objects.RSTile;
+
 public interface Tile extends Node{
 	public int physicalPlane();
 	public int x();
@@ -24,4 +30,12 @@ public interface Tile extends Node{
 	public int wallCullOppositeDirection();
 	public FloorDecoration floor();
 	public Tile bridge();
+	
+	//Custom model st00f
+	public void createBoundsHeights();
+	public Point getCenterPoint();
+	public Polygon getBounds();
+	public Point[] projectVertices();
+	public Polygon[] getWireframe();
+	public boolean isHovering();
 }

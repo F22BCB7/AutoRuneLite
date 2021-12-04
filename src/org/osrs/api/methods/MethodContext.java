@@ -8,6 +8,7 @@ public class MethodContext {
 	public Camera camera;
 	public Equipment equipment;
 	public Game game;
+	public GrandExchange grandExchange;
 	public GroundItems groundItems;
 	public Inventory inventory;
 	public Keyboard keyboard;
@@ -34,6 +35,7 @@ public class MethodContext {
 		camera = new Camera(this);
 		equipment = new Equipment(this);
 		game = new Game(this);
+		grandExchange = new GrandExchange(this);
 		groundItems = new GroundItems(this);
 		inventory = new Inventory(this);
 		keyboard = new Keyboard(this);

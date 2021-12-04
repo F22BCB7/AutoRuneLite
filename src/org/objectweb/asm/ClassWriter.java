@@ -27,6 +27,8 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 package org.objectweb.asm;
 
+import org.objectweb.asm.tree.ClassNode;
+
 /**
  * A {@link ClassVisitor} that generates a corresponding ClassFile structure, as defined in the Java
  * Virtual Machine Specification (JVMS). It can be used alone, to generate a Java class "from
@@ -1013,17 +1015,21 @@ public class ClassWriter extends ClassVisitor {
   protected String getCommonSuperClass(final String type1, final String type2) {
     ClassLoader classLoader = getClassLoader();
     Class<?> class1;
+
     try {
       class1 = Class.forName(type1.replace('/', '.'), false, classLoader);
     } catch (ClassNotFoundException e) {
       throw new TypeNotPresentException(type1, e);
     }
+
     Class<?> class2;
+
     try {
       class2 = Class.forName(type2.replace('/', '.'), false, classLoader);
     } catch (ClassNotFoundException e) {
       throw new TypeNotPresentException(type2, e);
     }
+
     if (class1.isAssignableFrom(class2)) {
       return type1;
     }

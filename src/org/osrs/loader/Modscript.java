@@ -32,6 +32,7 @@ import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TypeInsnNode;
 import org.osrs.api.wrappers.proxies.GameShell;
 import org.osrs.injection.ClassHook;
 import org.osrs.injection.ClassResolver;
@@ -155,10 +156,10 @@ public class Modscript {
 			System.out.println("Compiling mods...");
 			Package pack = GameShell.class.getPackage();
 			URL root = GameShell.class.getClassLoader().getResource(pack.getName().replace(".", "/"));
-			
+
 			//Load proxy classes to be injected into client
 			ArrayList<ClassNode> proxyClasses = new ArrayList<ClassNode>();
-			
+
 			if(root.toString().startsWith("jar:file:")){//Loading via jar
 				JarFile jar = new JarFile(root.toString().substring(10, root.toString().indexOf("!")));
 				Enumeration<?> en = jar.entries();
@@ -189,18 +190,18 @@ public class Modscript {
 			else{//Loading via IDE
 				// Filter .class files.
 				File[] files = new File(root.toURI()).listFiles(new FilenameFilter() {
-				    public boolean accept(File dir, String name) {
-				        return name.endsWith(".class");
-				    }
+					public boolean accept(File dir, String name) {
+						return name.endsWith(".class");
+					}
 				});
 				System.out.println("Loaded "+files.length+" file mods...");
 				for (File file : new File(root.getFile()).listFiles(new FilenameFilter(){public boolean accept(File dir, String name){return name.endsWith(".class");}})) {
 					try{
-					    InputStream in = new FileInputStream(file);
-					    ClassNode cn = new ClassNode();
-					    ClassReader reader = new ClassReader(in);
-					    reader.accept(cn, ClassReader.EXPAND_FRAMES);
-					    proxyClasses.add(cn);
+						InputStream in = new FileInputStream(file);
+						ClassNode cn = new ClassNode();
+						ClassReader reader = new ClassReader(in);
+						reader.accept(cn, ClassReader.EXPAND_FRAMES);
+						proxyClasses.add(cn);
 					}
 					catch(Exception e){
 						e.printStackTrace();
@@ -211,7 +212,7 @@ public class Modscript {
 			ArrayList<String> injected = new ArrayList<String>();
 			int resolvedInsn=0; 
 			int lastPercentage=0;
-			
+
 			HashMap<String, ClassHook> classMapping = new HashMap<String, ClassHook>();
 			HashMap<String, FieldHook> fieldMapping = new HashMap<String, FieldHook>();
 			HashMap<String, MethodHook> methodMapping = new HashMap<String, MethodHook>();
@@ -226,7 +227,7 @@ public class Modscript {
 			HashMap<String, String> targetGetterDetours = new HashMap<String, String>();
 			HashMap<String, MethodNode> fieldSetterDetours = new HashMap<String, MethodNode>();
 			HashMap<String, String> targetSetterDetours = new HashMap<String, String>();
-			
+
 			for(ClassNode proxyClass : proxyClasses){
 				String sourceName = proxyClass.name;
 				if(hasAnnotation(proxyClass, "Lorg/osrs/injection/bytescript/BClass;")){
@@ -244,7 +245,7 @@ public class Modscript {
 					//is custom class to be added
 					customClasses.add(proxyClass);
 				}
-				
+
 				for(FieldNode proxyField : proxyClass.fields){
 					if(hasAnnotation(proxyField, "Lorg/osrs/injection/bytescript/BField;")){
 						//is field mapping to hook
@@ -265,7 +266,7 @@ public class Modscript {
 						customFields.put(proxyField, sourceName);
 					}
 				}
-				
+
 				for(MethodNode proxyMethod : proxyClass.methods){
 					if(hasAnnotation(proxyMethod, "Lorg/osrs/injection/bytescript/BMethod;")){
 						//is method mapping to hook
@@ -278,7 +279,7 @@ public class Modscript {
 							methodMapping.put(owner+"."+name+desc, mh);
 						}
 						else{
-							//System.out.println("Failed to load BMethod : "+owner+"."+name+desc+" "+isStatic);
+							System.out.println("Failed to load BMethod : "+owner+"."+name+desc+" "+isStatic);
 						}
 					}
 					else if(hasAnnotation(proxyMethod, "Lorg/osrs/injection/bytescript/BFunction;")){
@@ -293,12 +294,14 @@ public class Modscript {
 						String desc = proxyMethod.desc;
 						String obfDesc = resolver.getObfuscatedDesc(desc);
 						MethodHook mh = resolver.getMethodHook(owner, name, desc, isStatic);
+						proxyMethod.desc = obfDesc;
 						if(mh!=null && mh.desc.equals(obfDesc)){//prevent duplicates from different predicates
 							methodDetours.put(mh.owner+"."+mh.obfuscatedName+mh.desc, proxyMethod);
 							methodDetourHooks.put(mh.owner+"."+mh.obfuscatedName+mh.desc, mh);
+							//System.out.println("Loaded BMethodDetour : "+owner+"."+name+desc+" "+obfDesc+" "+isStatic);
 						}
 						else{
-							//System.out.println("Failed to load BMethodDetour : "+owner+"."+name+desc+" "+obfDesc+" "+isStatic);
+							System.out.println("Failed to load BMethodDetour : "+owner+"."+name+desc+" "+obfDesc+" "+isStatic);
 						}
 					}
 					else if(hasAnnotation(proxyMethod, "Lorg/osrs/injection/bytescript/BGetter;")){
@@ -400,7 +403,7 @@ public class Modscript {
 							clone.name = newName;
 						else
 							clone.name = oldName;
-						String oldDesc = fin.desc.replace("org/osrs/api/wrappers/proxies/", "");
+						String oldDesc = fin.desc;
 						String newDesc = oldDesc.startsWith("L")?resolver.getObfuscatedType(oldDesc):oldDesc;
 						if(newDesc!=null && !newDesc.equals("null"))
 							clone.desc = newDesc;
@@ -432,7 +435,7 @@ public class Modscript {
 							else
 								clone.owner = min.owner;
 						}
-						String newDesc = resolver.getObfuscatedDesc(oldDesc);
+						String newDesc = resolver.getObfuscatedMethodDesc(oldOwner, oldName.replace("_", ""), oldDesc, (insn.getOpcode()==Opcodes.INVOKESTATIC));
 						if(newDesc!=null && !newDesc.equals("null"))
 							clone.desc = newDesc;
 						else
@@ -585,6 +588,7 @@ public class Modscript {
 						String oldOwner = min.owner.replace("org/osrs/api/wrappers/proxies/", "");
 						String oldName = min.name;
 						String oldDesc = min.desc;
+						MethodHook mh = resolver.getMethodHook(oldOwner, oldName.replace("_", ""), oldDesc, methodDetour.isStatic());
 						String newOwner = resolver.getObfuscatedMethodOwner(oldOwner, oldName.replace("_", ""), oldDesc, (insn.getOpcode()==Opcodes.INVOKESTATIC));
 						if(newOwner!=null && !newOwner.equals("null"))
 							clone.owner = newOwner;
@@ -760,7 +764,7 @@ public class Modscript {
 					}
 				}
 			}
-			
+
 			System.out.println("Modifying client bytecode... please wait...");
 			int subclassed=0;
 			int currClass=0;
@@ -785,20 +789,20 @@ public class Modscript {
 					//System.out.println("Added interface : "+cn.name+" : "+Arrays.toString(cn.interfaces.toArray()));
 				}
 				for(MethodNode mn : cn.methods){
-					if(isBytescript(mn) || mn.name.equals("<init>") || mn.name.equals("<clinit>"))
-						continue;
+					if(!(isBytescript(mn) || mn.name.equals("<init>") || mn.name.equals("<clinit>")))
 					for(AbstractInsnNode insn : mn.instructions.toArray()){
-						if(insn instanceof MethodInsnNode){
+						if(insn instanceof MethodInsnNode &&
+								insn.getOpcode()!=Opcodes.INVOKESPECIAL){
 							MethodInsnNode min = (MethodInsnNode)insn;
-							MethodInsnNode clone = (MethodInsnNode)min.clone(null);
 							String owner = min.owner;
 							String name = min.name;
 							String desc = min.desc;
+							MethodInsnNode clone = new MethodInsnNode(min.getOpcode(), owner, name, desc);
 							if(owner.startsWith("org/bouncycastle/") || owner.startsWith("java/") || owner.startsWith("javax/") || owner.startsWith("netscape/"))
 								continue;
 							MethodNode detour = methodDetours.get(min.owner+"."+min.name+min.desc);
 							MethodHook detourHook = methodDetourHooks.get(min.owner+"."+min.name+min.desc);
-							
+
 							String newOwner = owner;
 							String newName = name;
 							String newDesc = desc;
@@ -926,9 +930,8 @@ public class Modscript {
 			System.out.println("Injected "+addedSetterDetours+"/"+fieldSetterDetours.size()+" field set detours.");
 			System.out.println("Injected "+addedDetours+"/"+methodDetours.size()+" method detours.");
 			System.out.println("Resolved "+resolvedInsn+" instructions.");
-			
-			//TODO remove for release
-			dumpClasses("injected.jar", classNodes.toArray(new ClassNode[]{}));
+
+			dumpClasses("injected.jar", classNodes);
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -1050,24 +1053,109 @@ public class Modscript {
 		}
 		return args.toArray(new String[]{});
 	}
-	private static void dumpClasses(final String jarName, final ClassNode[] classes) {
+	private void dumpClasses(final String jarName, ArrayList<ClassNode> classes) {
 		try {
+			//First output the bytecode to a jar, so that the ASM ClassLoader properly 
+			//will load Class<?> instances when computing frames.
 			final File file = new File(jarName);
 			final JarOutputStream out = new JarOutputStream(new FileOutputStream(file));
-			for (final ClassNode node : classes) {
+			for (int i=0;i<classes.size();i++){
+				ClassNode node = classes.get(i);
+				if(node==null)
+					continue;
 				final JarEntry entry = new JarEntry(node.name + ".class");
 				out.putNextEntry(entry);
-				final ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-				//System.out.println(node.name);
+				final ClassRebuilder writer = new ClassRebuilder(ClassWriter.COMPUTE_FRAMES);
+				writer.setClient(classes.toArray(new ClassNode[]{}));
 				node.accept(writer);
-				out.write(writer.toByteArray());
+				byte[] bytes = writer.toByteArray();
+				out.write(bytes);
+
+				ClassNode newNode = new ClassNode();
+				ClassReader reader = new ClassReader(bytes);
+				reader.accept(newNode, ClassReader.EXPAND_FRAMES);
+				classes.set(i, newNode);
 			}
 			out.close();
+
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * This is part of a fix for those pesky little stackmap frame verify errors.
+	 * Rebuilding the frames requires ASM to load the classes, but we
+	 * dont want that, we want our modified classes to be loaded if possible.
+	 * @author Marneus901
+	 */
+	private class ClassRebuilder extends ClassWriter{
+		private ClassNode[] classes=null;
+		public ClassRebuilder(int flags) {
+			super(flags);
+		}
+		public ClassRebuilder(final ClassReader classReader, final int flags) {
+			super(classReader, flags);
+		}
+		public void setClient(ClassNode[] nodes){
+			classes = nodes;
+		}
+		public ClassNode getClassNode(String name){
+			if(classes!=null){
+				for(ClassNode cn : classes){
+					if(cn.name.equals(name))
+						return cn;
+				}
+			}
+			return null;
+		}
+		@Override
+		protected String getCommonSuperClass(String type1, String type2) {
+			//System.out.println("Finding common super for "+type1+":"+type2);
+			ClassNode type1Node = getClassNode(type1);
+			ClassNode type2Node = getClassNode(type2);
+			ClassNode lastType1Super = null;
+			ClassNode lastType2Super = null;
+			if(type1Node!=null || type2Node!=null){
+				ArrayList<String> type1Supers = new ArrayList<String>();
+				ClassNode superNode = null;
+				if(type1Node!=null){
+					superNode = getClassNode(type1Node.name);
+					while(superNode!=null){
+						type1Supers.add(superNode.name);
+						ClassNode parent = getClassNode(superNode.superName);
+						if(parent==null){
+							lastType1Super = superNode;
+							break;
+						}
+						superNode = parent;
+					}
+				}
+				if(type2Node!=null){
+					superNode = getClassNode(type2Node.name);
+					while(superNode!=null){
+						if(type1Supers.contains(superNode.name))
+							return superNode.name;
+						ClassNode parent = getClassNode(superNode.superName);
+						if(parent==null){
+							lastType2Super = superNode;
+							break;
+						}
+						superNode = parent;
+					}
+				}
+				String str1 = lastType1Super!=null?lastType1Super.superName:type1;
+				String str2 = lastType2Super!=null?lastType2Super.superName:type2;
+				if(str1.equals(str2))
+					return str1;
+				if(str1.equals("java/lang/Object") || str2.equals("java/lang/Object"))
+					return "java/lang/Object";
+				type1=str1;
+				type2=str2;
+				//System.out.println("Checking : "+type1+":"+type2+" -> "+(lastType1Super!=null?lastType1Super.superName:type1)+":"+(lastType2Super!=null?lastType2Super.superName:type2));
+			}
+			return super.getCommonSuperClass(type1, type2);
+		}
+	}
 	public Object getMethodPredicate(String owner, String name, String wildcardDesc, boolean isStatic){
 		MethodHook mh = resolver.getMethodHook(owner, name, wildcardDesc, isStatic);
 		Object predicate = -1;
@@ -1088,7 +1176,7 @@ public class Modscript {
 		FieldHook fh = resolver.getFieldHook(owner, name, isStatic);
 		if(fh!=null)
 			return fh.dataType.equals("I")?(int)fh.multiplier:(long)fh.multiplier;
-		return 1;
+			return 1;
 	}
 	public Object getSetterMultiplier(String owner, String name, boolean isStatic){
 		FieldHook fh = resolver.getFieldHook(owner, name, isStatic);
@@ -1096,17 +1184,17 @@ public class Modscript {
 			if(fh.dataType.equals("I")){
 				int odd = (int)fh.multiplier;
 				int i = (3 * odd) ^ 2;
-			    i *= 2 - odd * i;
-			    i *= 2 - odd * i;
-			    return (i * (2 - odd * i));
+				i *= 2 - odd * i;
+				i *= 2 - odd * i;
+				return (i * (2 - odd * i));
 			}
 			else if(fh.dataType.equals("J")){
 				long odd = (long)fh.multiplier;
-			    long l = (3L * odd) ^ 2L;
-			    l *= 2L - odd * l;
-			    l *= 2L - odd * l;
-			    l *= 2L - odd * l;
-			    return (l * (2L - odd * l));
+				long l = (3L * odd) ^ 2L;
+				l *= 2L - odd * l;
+				l *= 2L - odd * l;
+				l *= 2L - odd * l;
+				return (l * (2L - odd * l));
 			}
 		}
 		return 1;

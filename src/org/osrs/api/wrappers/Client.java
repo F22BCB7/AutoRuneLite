@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.osrs.api.methods.MethodContext;
 import org.osrs.debug.InventoryDebug;
+import org.osrs.debug.TileDebug;
 import org.osrs.debug.WidgetDebug;
 
 public interface Client extends GameShell{
@@ -17,6 +18,7 @@ public interface Client extends GameShell{
 	
 	public WidgetDebug getWidgetDebug();
 	public InventoryDebug getInventoryDebug();
+	public TileDebug getTileDebug();
 
 	public Client clientInstance();
 	
@@ -80,9 +82,12 @@ public interface Client extends GameShell{
 	public int destinationX();
 	public int destinationY();
 	public int runEnergy();
+
+	public Deque drawnTileDeque();
 	
 	public ItemDefinition invoke_getItemDefinition(int a);
 	public ObjectDefinition invoke_getObjectDefinition(int a);
 	public void invoke_addChatMessage(int a, String b, String c, String d);
+	
 	
 }

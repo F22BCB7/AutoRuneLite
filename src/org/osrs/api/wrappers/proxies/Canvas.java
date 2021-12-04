@@ -1,6 +1,7 @@
 package org.osrs.api.wrappers.proxies;
 
 import org.osrs.debug.InventoryDebug;
+import org.osrs.debug.TileDebug;
 import org.osrs.debug.WidgetDebug;
 import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BField;
@@ -12,7 +13,6 @@ import org.osrs.util.Data;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
 
 @BClass(name="Canvas")
 public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Canvas{
@@ -39,9 +39,7 @@ public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Can
 		
 		Graphics g = gameImage.getGraphics();
 		g.setColor(Color.ORANGE);
-		int y=15;
-		g.drawString("AutoRuneLite v0.1", 15, y);
-		y+=15;
+		g.drawString("AutoRuneLite v0.1", 15, 15);
 
 		int gameCycle = Client.clientInstance.gameCycle();
 		org.osrs.api.wrappers.Widget[][] allWidgets = Client.clientInstance.widgets();
@@ -69,15 +67,17 @@ public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Can
 			if(widgets!=null){
 				if(widgets.debugger.isVisible())
 					widgets.paint(g);
-				else{
-					g.drawString("Widget debugger not visible.", 15, y);
-					y+=15;
-				}				
 			}
-			
+
+			g.setColor(Color.ORANGE);
 			InventoryDebug inventory = Client.clientInstance.getInventoryDebug();
 			if(inventory!=null){
 				inventory.paint(g);
+			}
+
+			TileDebug tile = Client.clientInstance.getTileDebug();
+			if(tile!=null){
+				tile.paint(g);
 			}
 		}
 		if(Data.currentScript!=null){

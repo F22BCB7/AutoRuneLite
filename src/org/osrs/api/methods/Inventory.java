@@ -24,23 +24,30 @@ public class Inventory extends MethodDefinition{
 	 * pre-cache the items. Not for use in scripts.
 	 */
 	public void updateInventoryItems(){
-		if(inventoryItems==null)
-			inventoryItems = new InventoryItem[28];
-		RSWidget inventory = getInventoryItemsWidget();
-		int[] ids = new int[28];
-		int[] counts = new int[28];
-		if(inventory!=null){
-			ids = inventory.itemIDs();
-			counts = inventory.itemQuantities();
+		try{
+			if(inventoryItems==null)
+				inventoryItems = new InventoryItem[28];
+			RSWidget inventory = getInventoryItemsWidget();
+			int[] ids = new int[28];
+			int[] counts = new int[28];
+			if(inventory!=null){
+				ids = inventory.itemIDs();
+				counts = inventory.itemQuantities();
+			}
+			else{
+				Arrays.fill(ids, -1);
+				Arrays.fill(counts, 0);
+			}
+			for(int i=0;i<28;++i){
+				if(inventoryItems[i]==null)
+					inventoryItems[i] = new InventoryItem(-1, 0, i);
+				inventoryItems[i].updateInfo(ids[i], counts[i]);
+			}
 		}
-		else{
-			Arrays.fill(ids, -1);
-			Arrays.fill(counts, 0);
-		}
-		for(int i=0;i<28;++i){
-			if(inventoryItems[i]==null)
-				inventoryItems[i] = new InventoryItem(-1, 0, i);
-			inventoryItems[i].updateInfo(ids[i], counts[i]);
+		catch(NullPointerException e){
+			//Can be thrown even with null checks; 
+			//e.g. widget changes (opening bank/g.e) mid-processing (like painting InventoryDebug)
+			//Nothing IS wrong, so we ignore it, and it updates next cycle. Fuck you try-catch haters :)
 		}
 	}
 	/**
@@ -265,7 +272,8 @@ public class Inventory extends MethodDefinition{
 	public boolean isDisplayed() {
 		RSWidget inventory = getInventoryItemsWidget();
 		if(inventory!=null){
-			return inventory.isDisplayed();
+			return inventory.isDisplayed() || 
+					methods.bank.isOpen();
 		}
 		return false;
 	}
@@ -385,6 +393,9 @@ public class Inventory extends MethodDefinition{
 		return ((Client)Data.clientInstance).itemSelectionState()==1;
 	}
 	public RSWidget getInventoryItemsWidget(){
+		if(methods.grandExchange.isGEInventoryOpen()){
+			return methods.grandExchange.getInventoryWidget();
+		}
 		if(inventoryWidget!=null)
 			return inventoryWidget;
 		findInventoryLoop:for(RSInterface i : methods.widgets.getAll()){

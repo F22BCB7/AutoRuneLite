@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.osrs.api.objects.RSTile;
 import org.osrs.api.wrappers.Client;
+import org.osrs.api.wrappers.Tile;
 
 public class Region extends MethodDefinition{
 	public Region(MethodContext context){
@@ -12,6 +13,15 @@ public class Region extends MethodDefinition{
 	}
 	public int[][][] getTileHeights(){
 		return ((Client)methods.botInstance).tileHeights();
+	}
+	public RSTile getHoveringTile(){
+		org.osrs.api.wrappers.Region region = methods.game.region();
+		if(region!=null){
+			Tile tile = region.getHoveringTile();
+			if(tile!=null)
+				return new RSTile(tile.x(), tile.y(), tile.renderPlane());
+		}
+		return null;
 	}
 	public void clickMap(RSTile tile){
 		if(methods.calculations.onMap(tile)){

@@ -74,6 +74,18 @@ public class InventoryItem extends Interactable{
 		return getBounds().getLocation();
 	}
 	public Rectangle getBounds(){
+		if(methods.grandExchange.isGEInventoryOpen()){
+			RSWidget parent = methods.grandExchange.getInventoryWidget();
+			if(parent!=null){
+				RSWidget[] children = parent.getChildren();
+				if(children.length==28){
+					RSWidget child = children[inventoryIndex];
+					if(child!=null)
+						return child.getBounds();
+				}
+			}
+			return new Rectangle(-1, -1, -1, -1);
+		}
 		if(((Client)Data.clientInstance).resizeMode()){
 			Rectangle r = methods.inventory.getBounds();
 			int startX = r.x;

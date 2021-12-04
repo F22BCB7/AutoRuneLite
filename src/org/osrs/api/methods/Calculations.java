@@ -3,6 +3,7 @@ package org.osrs.api.methods;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import org.osrs.api.objects.RSInterface;
 import org.osrs.api.objects.RSPlayer;
 import org.osrs.api.objects.RSTile;
 import org.osrs.api.objects.RSWidget;
@@ -13,6 +14,8 @@ public class Calculations extends MethodDefinition{
 	public static final int[] SIN_TABLE = new int[2048];
 	public static final int[] COS_TABLE = new int[2048];
 	public static Rectangle GAME_SCREEN_BOUNDS;
+	private RSWidget resizeMode_HUD = null;
+	private Rectangle fixedMode_Bounds = new Rectangle(4, 4, 512, 334);
 	public Calculations(MethodContext context){
 		super(context);
 	}
@@ -172,13 +175,20 @@ public class Calculations extends MethodDefinition{
 	public Point locationToScreen(RSTile t) {
 		return locationToScreen(t.getX(), t.getY(), t.getPlane(), 0);
 	}
+	public Rectangle getGameScreenBounds(){
+		return methods.game.client().canvas().getBounds();
+	}
+	public boolean onGameScreen(RSTile tile){
+		Point center = methods.calculations.locationToScreen(tile);
+		return onGameScreen(center);
+	}
 	/**
 	 * Checks to see if a given point is within the game screen bounds.
 	 * @param point
 	 * @return boolean
 	 */
 	public boolean onGameScreen(Point p) {
-		return GAME_SCREEN_BOUNDS.contains(p);
+		return methods.game.client().canvas().contains(p);
 	}
 	public boolean onMap(RSTile tile){
 		if(distanceTo(tile)>20)
@@ -190,6 +200,27 @@ public class Calculations extends MethodDefinition{
 		int baseY = resize?(r.y+(r.height/2)):(r.y);
 		return !p.equals(new Point(-1, -1)) && distance(baseX, p.x, baseY, p.y)<75;
 	}	
+	public Rectangle getViewportBounds(){
+		if(((Client)Data.clientInstance).resizeMode()){
+			if(resizeMode_HUD==null){
+				findHUDLoop:for(RSInterface i : methods.widgets.getAll()){
+					if(i!=null){
+						for(RSWidget ic : i.getChildren()){
+							if(ic!=null){
+								if(ic.boundsIndex()==4){
+									resizeMode_HUD = ic;
+									break findHUDLoop;
+								}
+							}
+						}
+					}
+				}
+			}
+			if(resizeMode_HUD!=null)
+				return resizeMode_HUD.getBounds();
+		}
+		return fixedMode_Bounds;
+	}
 	/**
 	 * Checks to see if a given point is within the viewport bounds;
 	 * the viewport is the window that displays the world/objects/players;
@@ -198,18 +229,7 @@ public class Calculations extends MethodDefinition{
 	 * @return boolean
 	 */
 	public boolean onViewport(Point p){
-		RSWidget viewport = null;
-		boolean resize = ((Client)Data.clientInstance).resizeMode();
-		if(resize){
-			viewport = methods.widgets.getChild(164, 8);
-		}
-		else{
-			viewport = methods.widgets.getChild(163, 0);
-		}
-		if(viewport!=null && viewport.getBounds().contains(p)){
-			return true;
-		}
-		return false;
+		return getViewportBounds().contains(p);
 	}
 	public boolean onViewport(int screenX, int screenY){
 		return onViewport(new Point(screenX, screenY));
@@ -239,6 +259,7 @@ public class Calculations extends MethodDefinition{
 			int curvexcos = Calculations.COS_TABLE[((Client)Data.clientInstance).cameraYaw()];
 			int curveysin = Calculations.SIN_TABLE[((Client)Data.clientInstance).cameraPitch()];
 			int curveycos = Calculations.COS_TABLE[((Client)Data.clientInstance).cameraPitch()];
+			
 			int calculation = curvexsin * (int) Y + (int) X * curvexcos >> 16;
 			Y = -(curvexsin * (int) X) + (int) Y * curvexcos >> 16;
 			X = calculation;
@@ -262,7 +283,18 @@ public class Calculations extends MethodDefinition{
 	 * @return height
 	 */
 	public int tileHeight(RSTile t) {
-		return tileHeight(t.getX(), t.getY(), t.getPlane());
+		return tileHeight(t.getLocalX(), t.getLocalY(), t.getPlane());
+	}
+	public int tileHeight(int x, int y, int plane) {
+		int[][][] heights = methods.game.tileHeights();
+		if(heights!=null){
+			if(x<0 || y<0 || x>=104 || y>=104)
+				return 0;
+			if(heights.length>=plane && heights[plane].length>=x && heights[plane][x].length>=y){
+				return heights[plane][x][y];
+			}
+		}
+		return 0;
 	}
 	/**
 	 * Uses RSTile coordinates to pull an RSTiles' height
@@ -273,20 +305,7 @@ public class Calculations extends MethodDefinition{
 	 * @return height
 	 */
 	public int tileHeight(double x, double y, int plane) {
-		int[][][] ground = ((Client)Data.clientInstance).tileHeights();
-		int zidx = plane;
-		int x1 = ((int)x) >> 7;
-			int y1 = ((int)y) >> 7;
-			int x2 = ((int)x) & 0x7F;
-			int y2 = ((int)y) & 0x7F;
-			if ((x1 < 0) || (y1 < 0) || (x1 > 103) || (y1 > 103)) {
-				return 0;
-			}
-			if(zidx<3 && (((Client)Data.clientInstance).sceneRenderRules()[1][x1][y1] & 0x2) == 0x2)
-				zidx++;
-			int i = ground[zidx][(x1 + 1)][y1] * x2 + ground[zidx][x1][y1] * (128 - x2) >> 7;
-			int j = ground[zidx][(x1 + 1)][(y1 + 1)] * x2 + ground[zidx][x1][(y1 + 1)] * (128 - x2) >> 7;
-			return j * y2 + (128 - y2) * i >> 7;
+		return tileHeight(((int) x) >> 7, ((int) y) >> 7, plane);
 	}
 	/**
 	 * Converts RSTile coordinates to a 2D screen-space location

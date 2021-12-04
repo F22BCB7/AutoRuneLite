@@ -46,6 +46,29 @@ public class RSClassLoader extends ClassLoader{
 			e.printStackTrace();
 		}
 	}
+	public RSClassLoader(File file, ClassNode[] classes, String codebase){
+		super(RSClassLoader.class.getClassLoader());
+		System.out.println("Initialized ClassLoader!");
+		directoryPath = file.getPath().substring(0, file.getPath().lastIndexOf("\\")+1);
+		try {
+			CodeSource codeSource = new CodeSource(new URL(codebase), (CodeSigner[]) null);
+			domain = new ProtectionDomain(codeSource, getPermissions());
+		} catch (@SuppressWarnings("unused") Exception e) {
+			domain = new ProtectionDomain(null, getPermissions());
+		}
+		try {
+			for(ClassNode cn : classes){
+				ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+	    		cn.accept(writer);
+	    		cn.visitEnd();
+	    		byte[] data = writer.toByteArray();
+	    		classBytes.put(cn.name+".class", data);
+	    		//System.out.println("Loaded : "+cn.name+" "+data.length);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	private Permissions getPermissions() {
 		final Permissions ps = new Permissions();
 		ps.add(new AWTPermission("accessEventQueue"));
