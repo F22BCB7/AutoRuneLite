@@ -18,23 +18,23 @@ import java.util.ArrayList;
 @BClass(name="Tile")
 public class Tile extends Node implements org.osrs.api.wrappers.Tile{	
 	@BVar
-	private int tileModelSize = 64;	
+	private int tileModelSize;	
 	@BVar
 	private MethodContext methods;	
 	@BVar
-	public int[] verticesX = new int[]{0, tileModelSize, -tileModelSize, tileModelSize, -tileModelSize};	
+	public int[] verticesX;	
 	@BVar
-	public int[] verticesY = new int[]{0, 0, 0, 0, 0};	
+	public int[] verticesY;	
 	@BVar
-	public int[] verticesZ = new int[]{0, -tileModelSize, -tileModelSize, tileModelSize, tileModelSize};	
+	public int[] verticesZ;	
 	@BVar
-	public int[] trianglePoints1 = new int[]{1, 3, 4, 2};	
+	public int[] trianglePoints1;	
 	@BVar
-	public int[] trianglePoints2 = new int[]{3, 4, 2, 1};	
+	public int[] trianglePoints2;	
 	@BVar
-	public int[] trianglePoints3 = new int[]{0, 0, 0, 0};	
+	public int[] trianglePoints3;	
 	@BVar
-	public int[] boundsPoints = new int[]{4, 3, 1, 2, 4};	
+	public int[] boundsPoints;	
 	@BVar
 	public int height;
 	@BVar
