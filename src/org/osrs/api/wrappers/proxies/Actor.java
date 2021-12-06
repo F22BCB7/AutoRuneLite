@@ -323,6 +323,11 @@ public class Actor extends RenderableNode implements org.osrs.api.wrappers.Actor
 	@BGetter
 	@Override
 	public int heightOffset(){return heightOffset;}
+	@BField
+	public int overridingCombatLevel;
+	@BGetter
+	@Override
+	public int overridingCombatLevel(){return overridingCombatLevel;}
 	
 	@BVar
 	public org.osrs.api.objects.RSModel cachedModel;

@@ -64,6 +64,7 @@ public interface Actor extends RenderableNode{
 	public int cycle();
 	public boolean rights();
 	public int heightOffset();
+	public int overridingCombatLevel();
 	
 	public RSModel getCachedModel();
 	public void setCachedModel(RSModel model);

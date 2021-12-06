@@ -59,7 +59,16 @@ public class ModscriptReader {
 					String name = readString();
 					String refactoredName = readString();
 					String desc = readString();
-					Object predicate = readInt();
+					Object predicate=null;
+					if(desc.contains("I)")){
+						predicate = readInt();
+					}
+					else if(desc.contains("B)")){
+						predicate = (byte)readInt();
+					}
+					else if(desc.contains("S)")){
+						predicate = (short)readInt();
+					}
 					//System.out.println("Method Hook : "+lastClass.obfuscatedName+"."+name+desc+"->"+refactoredName+" "+predicate);
 					lastClass.methodHooks.add(new MethodHook(lastClass.obfuscatedName, name, refactoredName, desc, predicate));
 					methods++;

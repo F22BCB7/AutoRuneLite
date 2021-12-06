@@ -359,6 +359,12 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@Override
 	public org.osrs.api.wrappers.Deque drawnTileDeque(){return drawnTileDeque;}
 
+	@BField
+	public static org.osrs.api.wrappers.RuneScriptVM runescriptVM;
+	@BGetter
+	@Override
+	public org.osrs.api.wrappers.RuneScriptVM runescriptVM(){return runescriptVM;}
+	
 	@BMethod(name="getItemDefinition")
 	public static org.osrs.api.wrappers.ItemDefinition _getItemDefinition(int a, int b){return null;}
 	@BMethod(name="getItemDefinition")
