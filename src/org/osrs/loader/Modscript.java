@@ -404,7 +404,7 @@ public class Modscript {
 						else
 							clone.name = oldName;
 						String oldDesc = fin.desc;
-						String newDesc = oldDesc.startsWith("L")?resolver.getObfuscatedType(oldDesc):oldDesc;
+						String newDesc = oldDesc.startsWith("L")?resolver.getObfuscatedFieldDesc(oldOwner, oldName, (insn.getOpcode()==Opcodes.GETSTATIC||insn.getOpcode()==Opcodes.PUTSTATIC)):oldDesc;
 						if(newDesc!=null && !newDesc.equals("null"))
 							clone.desc = newDesc;
 						else
@@ -450,6 +450,19 @@ public class Modscript {
 						customMethod.instructions.set(insn, clone);
 						resolvedInsn++;
 						//System.out.println("Resolved MethodInsn : "+oldOwner+"."+oldName+" "+oldDesc+" : "+clone.owner+"."+clone.name+" "+clone.desc);
+					}
+					else if(insn instanceof TypeInsnNode){
+						TypeInsnNode type = (TypeInsnNode)insn;
+						TypeInsnNode clone = (TypeInsnNode)type.clone(null);
+						String oldDesc = type.desc;
+						String newDesc = resolver.getObfuscatedClassName(oldDesc.replace("org/osrs/api/wrappers/proxies/", ""));
+						System.out.println("Type resolving : "+oldDesc+" -> "+newDesc);
+						if(newDesc!=null && !newDesc.equals("null"))
+							clone.desc = newDesc;
+						else
+							clone.desc = oldDesc;
+						customMethod.instructions.set(insn, clone);
+						resolvedInsn++;
 					}
 				}
 				for(ClassNode cn : classNodes){
@@ -615,6 +628,19 @@ public class Modscript {
 						methodDetour.instructions.set(insn, clone);
 						resolvedInsn++;
 						//System.out.println("Resolved MethodInsn : "+oldOwner+"."+oldName+" "+oldDesc+" : "+clone.owner+"."+clone.name+" "+clone.desc);
+					}
+					else if(insn instanceof TypeInsnNode){
+						TypeInsnNode type = (TypeInsnNode)insn;
+						TypeInsnNode clone = (TypeInsnNode)type.clone(null);
+						String oldDesc = type.desc;
+						String newDesc = resolver.getObfuscatedClassName(oldDesc.replace("org/osrs/api/wrappers/proxies/", ""));
+						System.out.println("Type resolving : "+oldDesc+" -> "+newDesc);
+						if(newDesc!=null && !newDesc.equals("null"))
+							clone.desc = newDesc;
+						else
+							clone.desc = oldDesc;
+						methodDetour.instructions.set(insn, clone);
+						resolvedInsn++;
 					}
 				}
 				for(ClassNode cn : classNodes){
@@ -1159,7 +1185,7 @@ public class Modscript {
 	public Object getMethodPredicate(String owner, String name, String wildcardDesc, boolean isStatic){
 		MethodHook mh = resolver.getMethodHook(owner, name, wildcardDesc, isStatic);
 		Object predicate = -1;
-		if(mh!=null){
+		/*if(mh!=null){
 			if(mh.desc.contains("I)")){
 				predicate = (int)mh.predicate;
 			}
@@ -1169,8 +1195,8 @@ public class Modscript {
 			else if(mh.desc.contains("S)")){
 				predicate = (short)mh.predicate;
 			}
-		}
-		return predicate;
+		}*/
+		return mh.predicate;
 	}
 	public Object getGetterMultiplier(String owner, String name, boolean isStatic){
 		FieldHook fh = resolver.getFieldHook(owner, name, isStatic);

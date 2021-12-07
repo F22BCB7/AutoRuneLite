@@ -90,4 +90,6 @@ public interface Client extends GameShell{
 	public ItemDefinition invoke_getItemDefinition(int a);
 	public ObjectDefinition invoke_getObjectDefinition(int a);
 	public void invoke_addChatMessage(int a, String b, String c, String d);
+	public void runScriptEvent(Object[] args);
+	public void invoke_fireScriptEvent(ScriptEvent a);
 }

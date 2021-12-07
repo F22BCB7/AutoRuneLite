@@ -4,6 +4,7 @@ import org.osrs.api.methods.MethodContext;
 import org.osrs.debug.InventoryDebug;
 import org.osrs.debug.TileDebug;
 import org.osrs.debug.WidgetDebug;
+import org.osrs.injection.MethodHook;
 import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BDetour;
 import org.osrs.injection.bytescript.BField;
@@ -412,14 +413,32 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@BDetour
 	public static void addChatMessage(int a, String b, String c, String d, int e){
 		clientInstance.invoke_addChatMessage(a, b, c, d);
+		if(Data.currentScript!=null){
+			if(Data.currentScript instanceof org.osrs.script.listeners.MessageListener){
+				org.osrs.script.events.MessageEvent event = new org.osrs.script.events.MessageEvent(a, c, b, d);
+				((org.osrs.script.listeners.MessageListener)Data.currentScript).messageReceived(event);
+			}
+		}
 	}
 	@BDetour
 	public static void addChatMessage(int a, String b, String c, String d, byte e){
 		clientInstance.invoke_addChatMessage(a, b, c, d);
+		if(Data.currentScript!=null){
+			if(Data.currentScript instanceof org.osrs.script.listeners.MessageListener){
+				org.osrs.script.events.MessageEvent event = new org.osrs.script.events.MessageEvent(a, c, b, d);
+				((org.osrs.script.listeners.MessageListener)Data.currentScript).messageReceived(event);
+			}
+		}
 	}
 	@BDetour
 	public static void addChatMessage(int a, String b, String c, String d, short e){
 		clientInstance.invoke_addChatMessage(a, b, c, d);
+		if(Data.currentScript!=null){
+			if(Data.currentScript instanceof org.osrs.script.listeners.MessageListener){
+				org.osrs.script.events.MessageEvent event = new org.osrs.script.events.MessageEvent(a, c, b, d);
+				((org.osrs.script.listeners.MessageListener)Data.currentScript).messageReceived(event);
+			}
+		}
 	}
 	@BFunction
 	@Override
@@ -431,11 +450,56 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 			_addChatMessage(a, b, c, d, (byte)predicate);
 		if(predicate instanceof Short)
 			_addChatMessage(a, b, c, d, (short)predicate);
+	}
+	@BMethod(name="fireScriptEvent")
+	public static void _fireScriptEvent(org.osrs.api.wrappers.ScriptEvent a, int b){}
+	@BMethod(name="fireScriptEvent")
+	public static void _fireScriptEvent(org.osrs.api.wrappers.ScriptEvent a, byte b){}
+	@BMethod(name="fireScriptEvent")
+	public static void _fireScriptEvent(org.osrs.api.wrappers.ScriptEvent a, short b){}
+	@BDetour
+	public static void fireScriptEvent(org.osrs.api.wrappers.ScriptEvent a, int b){
+		clientInstance.invoke_fireScriptEvent(a);
 		if(Data.currentScript!=null){
-			if(Data.currentScript instanceof org.osrs.script.listeners.MessageListener){
-				org.osrs.script.events.MessageEvent event = new org.osrs.script.events.MessageEvent(a, c, b, d);
-				((org.osrs.script.listeners.MessageListener)Data.currentScript).messageReceived(event);
+			if(Data.currentScript instanceof org.osrs.script.listeners.ScriptEventListener){
+				((org.osrs.script.listeners.ScriptEventListener)Data.currentScript).scriptEventStarted(a);
 			}
 		}
+	}
+	@BDetour
+	public static void fireScriptEvent(org.osrs.api.wrappers.ScriptEvent a, byte b){
+		clientInstance.invoke_fireScriptEvent(a);
+		if(Data.currentScript!=null){
+			if(Data.currentScript instanceof org.osrs.script.listeners.ScriptEventListener){
+				((org.osrs.script.listeners.ScriptEventListener)Data.currentScript).scriptEventStarted(a);
+			}
+		}
+	}
+	@BDetour
+	public static void fireScriptEvent(org.osrs.api.wrappers.ScriptEvent a, short b){
+		clientInstance.invoke_fireScriptEvent(a);
+		if(Data.currentScript!=null){
+			if(Data.currentScript instanceof org.osrs.script.listeners.ScriptEventListener){
+				((org.osrs.script.listeners.ScriptEventListener)Data.currentScript).scriptEventStarted(a);
+			}
+		}
+	}
+	@BFunction
+	@Override
+	public void invoke_fireScriptEvent(org.osrs.api.wrappers.ScriptEvent a){
+		Object predicate = Client.clientInstance.getMethodPredicate("", "fireScriptEvent", "(L*;?)V", true);
+		if(predicate instanceof Integer)
+			_fireScriptEvent((org.osrs.api.wrappers.proxies.ScriptEvent)a, (int)predicate);
+		if(predicate instanceof Byte)
+			_fireScriptEvent((org.osrs.api.wrappers.proxies.ScriptEvent)a, (byte)predicate);
+		if(predicate instanceof Short)
+			_fireScriptEvent((org.osrs.api.wrappers.proxies.ScriptEvent)a, (short)predicate);
+	}
+	@BFunction
+	@Override
+	public void runScriptEvent(Object[] args){
+		ScriptEvent e = new ScriptEvent();
+		e.args = args;
+		invoke_fireScriptEvent(e);
 	}
 }

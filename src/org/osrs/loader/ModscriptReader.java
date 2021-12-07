@@ -64,10 +64,10 @@ public class ModscriptReader {
 						predicate = readInt();
 					}
 					else if(desc.contains("B)")){
-						predicate = (byte)readInt();
+						predicate = Byte.valueOf(""+readInt());
 					}
 					else if(desc.contains("S)")){
-						predicate = (short)readInt();
+						predicate = Short.valueOf(""+readInt());
 					}
 					//System.out.println("Method Hook : "+lastClass.obfuscatedName+"."+name+desc+"->"+refactoredName+" "+predicate);
 					lastClass.methodHooks.add(new MethodHook(lastClass.obfuscatedName, name, refactoredName, desc, predicate));
