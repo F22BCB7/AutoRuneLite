@@ -1,6 +1,7 @@
 package org.osrs.api.wrappers.proxies;
 
 import org.osrs.debug.InventoryDebug;
+import org.osrs.debug.PathDebug;
 import org.osrs.debug.TileDebug;
 import org.osrs.debug.WidgetDebug;
 import org.osrs.injection.bytescript.BClass;
@@ -75,6 +76,11 @@ public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Can
 				inventory.paint(g);
 			}
 
+			PathDebug paths = Client.clientInstance.getPathDebug();
+			if(paths!=null){
+				paths.paint(g);
+			}
+			
 			TileDebug tile = Client.clientInstance.getTileDebug();
 			if(tile!=null){
 				tile.paint(g);

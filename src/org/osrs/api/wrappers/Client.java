@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.osrs.api.methods.MethodContext;
 import org.osrs.debug.InventoryDebug;
+import org.osrs.debug.PathDebug;
 import org.osrs.debug.TileDebug;
 import org.osrs.debug.WidgetDebug;
 
@@ -18,6 +19,7 @@ public interface Client extends GameShell{
 	
 	public WidgetDebug getWidgetDebug();
 	public InventoryDebug getInventoryDebug();
+	public PathDebug getPathDebug();
 	public TileDebug getTileDebug();
 
 	public Client clientInstance();

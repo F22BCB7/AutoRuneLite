@@ -164,10 +164,34 @@ public abstract class RSActor extends RSRenderable{
 		return new RSTile(-1, -1, -1);
 	}
 	public int getLocalX(){
-		return getLocation().getX()-((Client)Data.clientInstance).mapBaseX();
+		Actor p = getAccessor();
+		if(p!=null){
+			return p.x()>>7;
+		}
+		return -1;
 	}
 	public int getLocalY(){
-		return getLocation().getY()-((Client)Data.clientInstance).mapBaseY();
+		Actor p = getAccessor();
+		if(p!=null){
+			return p.y()>>7;
+		}
+		return -1;
+	}
+	public RSTile[] getPath(){
+		Actor p = getAccessor();
+		if(p!=null){
+			int length = p.currentPathIndex();
+			int[] xPath = p.pathX();
+			int[] yPath = p.pathY();
+			if(xPath.length<length || yPath.length<length)
+				return new RSTile[]{};
+			RSTile[] path = new RSTile[length];
+			for(int i=0;i<length;++i){
+				path[i]=new RSTile(xPath[i], yPath[i]);
+			}
+			return path;
+		}
+		return new RSTile[]{};
 	}
 	public RSModel getModel(){
 		RSModel model = getAccessor().getCachedModel();
@@ -179,9 +203,9 @@ public abstract class RSActor extends RSRenderable{
 		return (int)((getAccessor().orientation()/128)*22.5);
 	}
 	public Point getScreenLocation(){
-		Actor a = getAccessor();
-		if(a!=null){
-			return methods.calculations.worldToScreen(a.x(), a.y(), getLocation().getPlane(), a.heightOffset());
+		RSTile loc = getLocation();
+		if(loc!=null){
+			return loc.getCenterPoint();//TODO change to getCenterPoint on model once completed
 		}
 		return null;
 	}
@@ -201,7 +225,7 @@ public abstract class RSActor extends RSRenderable{
 		if(acc!=null){
 			RSModel model = getModel();
 			if(model!=null){
-				return model.projectVertices(getLocation().getPlane(), acc.x(), acc.y(), (int)((acc.orientation()/128)*22.5), acc.heightOffset());
+				return model.projectVertices(getLocation().getPlane(), acc.x(), acc.y(), (int)((acc.orientation()/128)*22.5));
 			}
 		}
 		return new Point[]{};
@@ -211,7 +235,7 @@ public abstract class RSActor extends RSRenderable{
 		if(acc!=null){
 			RSModel model = getModel();
 			if(model!=null){
-				return model.getWireframe(getLocation().getPlane(), acc.x(), acc.y(), (int)((acc.orientation()/128)*22.5), acc.heightOffset());
+				return model.getWireframe(getLocation().getPlane(), acc.x(), acc.y(), (int)((acc.orientation()/128)*22.5));
 			}
 		}
 		return new Polygon[]{};
@@ -222,7 +246,7 @@ public abstract class RSActor extends RSRenderable{
 		if(acc!=null){
 			RSModel model = getModel();
 			if(model!=null){
-				Point center = model.getCenterPoint(getLocation().getPlane(), getAccessor().x(), getAccessor().y(), getOrientation(), getHeight());
+				Point center = model.getCenterPoint(getLocation());
 				return center;
 			}
 		}
@@ -241,7 +265,7 @@ public abstract class RSActor extends RSRenderable{
 	public boolean isHovering() {
 		RSModel model = getModel();
 		if(model!=null)
-			return model.containsPoint(methods.mouse.getLocation(), getLocation().getPlane(), getAccessor().x(), getAccessor().y(), getOrientation(), getHeight());
+			return model.containsPoint(methods.mouse.getLocation(), getLocation().getPlane(), getAccessor().x(), getAccessor().y(), getOrientation());
 		return false;
 	}
 	public abstract long calculateMenuUID();

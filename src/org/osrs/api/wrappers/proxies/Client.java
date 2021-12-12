@@ -2,6 +2,7 @@ package org.osrs.api.wrappers.proxies;
 
 import org.osrs.api.methods.MethodContext;
 import org.osrs.debug.InventoryDebug;
+import org.osrs.debug.PathDebug;
 import org.osrs.debug.TileDebug;
 import org.osrs.debug.WidgetDebug;
 import org.osrs.injection.MethodHook;
@@ -83,6 +84,15 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 		if(inventoryDebug==null)
 			inventoryDebug = new InventoryDebug(Client.clientInstance.getMethodContext());
 		return inventoryDebug;
+	}
+	@BVar
+	public PathDebug pathDebug;
+	@BFunction
+	@Override
+	public PathDebug getPathDebug(){
+		if(pathDebug==null)
+			pathDebug = new PathDebug(Client.clientInstance.getMethodContext());
+		return pathDebug;
 	}
 	@BVar
 	public TileDebug tileDebug;

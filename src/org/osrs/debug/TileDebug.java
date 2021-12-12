@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import org.osrs.api.methods.MethodContext;
+import org.osrs.api.objects.RSTile;
 import org.osrs.api.wrappers.Region;
 import org.osrs.util.Data;
 
@@ -20,6 +21,9 @@ public class TileDebug {
 				if(hovering!=null){
 					g.setColor(Color.CYAN);
 					g.drawPolygon(hovering.getBounds());
+					RSTile tile = new RSTile(hovering.x(), hovering.y(), hovering.renderPlane());
+					g.drawString("Hovering : "+tile.getX()+", "+tile.getY()+" "+tile.plane, 30, 60);
+					g.drawString("Local Coords : "+tile.getLocalX()+", "+tile.getLocalY(), 30, 75);
 				}
 			}
 		}

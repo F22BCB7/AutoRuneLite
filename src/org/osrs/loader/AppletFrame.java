@@ -52,6 +52,7 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
 	private MenuItem pauseScriptOption;
 	private Menu debugMenu;
 	public CheckboxMenuItem inventoryDebugOption;
+	public CheckboxMenuItem pathDebugOption;
 	public CheckboxMenuItem tileDebugOption;
 	public CheckboxMenuItem widgetDebugOption;
 	public AppletFrame(Applet applet, PageParser parser){
@@ -88,6 +89,8 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
 		debugMenu = new Menu("Debug");
 		inventoryDebugOption = new CheckboxMenuItem("Inventory");
 		debugMenu.add(inventoryDebugOption);
+		pathDebugOption = new CheckboxMenuItem("Paths");
+		debugMenu.add(pathDebugOption);
 		tileDebugOption = new CheckboxMenuItem("Tiles");
 		debugMenu.add(tileDebugOption);
 		widgetDebugOption = new CheckboxMenuItem("Widgets");

@@ -66,7 +66,7 @@ public class RSTile extends Interactable implements Comparable<RSTile> {
 	}
 	public int getLocalY(){
 		if(Data.clientInstance!=null){
-			return this.x - ((Client)Data.clientInstance).mapBaseX();
+			return this.y - ((Client)Data.clientInstance).mapBaseY();
 		}
 		return -1;
 	}
