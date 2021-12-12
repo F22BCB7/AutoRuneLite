@@ -279,7 +279,7 @@ public class Modscript {
 							methodMapping.put(owner+"."+name+desc, mh);
 						}
 						else{
-							System.out.println("Failed to load BMethod : "+owner+"."+name+desc+" "+isStatic);
+							//System.out.println("Failed to load BMethod : "+owner+"."+name+desc+" "+isStatic);
 						}
 					}
 					else if(hasAnnotation(proxyMethod, "Lorg/osrs/injection/bytescript/BFunction;")){
@@ -301,7 +301,7 @@ public class Modscript {
 							//System.out.println("Loaded BMethodDetour : "+owner+"."+name+desc+" "+obfDesc+" "+isStatic);
 						}
 						else{
-							System.out.println("Failed to load BMethodDetour : "+owner+"."+name+desc+" "+obfDesc+" "+isStatic);
+							//System.out.println("Failed to load BMethodDetour : "+owner+"."+name+desc+" "+obfDesc+" "+isStatic);
 						}
 					}
 					else if(hasAnnotation(proxyMethod, "Lorg/osrs/injection/bytescript/BGetter;")){
@@ -456,7 +456,7 @@ public class Modscript {
 						TypeInsnNode clone = (TypeInsnNode)type.clone(null);
 						String oldDesc = type.desc;
 						String newDesc = resolver.getObfuscatedClassName(oldDesc.replace("org/osrs/api/wrappers/proxies/", ""));
-						System.out.println("Type resolving : "+oldDesc+" -> "+newDesc);
+						//System.out.println("Type resolving : "+oldDesc+" -> "+newDesc);
 						if(newDesc!=null && !newDesc.equals("null"))
 							clone.desc = newDesc;
 						else
@@ -485,7 +485,7 @@ public class Modscript {
 						String oldName = fin.name;
 						FieldHook fh = resolver.getFieldHook(oldOwner, oldName, insn.getOpcode()==Opcodes.GETSTATIC||insn.getOpcode()==Opcodes.PUTSTATIC);
 						if(fh==null){
-							System.out.println("Failed to find field hook : "+oldOwner+"."+oldName);
+							//System.out.println("Failed to find field hook : "+oldOwner+"."+oldName);
 						}
 						else{
 							fh.hooked=true;
@@ -634,7 +634,7 @@ public class Modscript {
 						TypeInsnNode clone = (TypeInsnNode)type.clone(null);
 						String oldDesc = type.desc;
 						String newDesc = resolver.getObfuscatedClassName(oldDesc.replace("org/osrs/api/wrappers/proxies/", ""));
-						System.out.println("Type resolving : "+oldDesc+" -> "+newDesc);
+						//System.out.println("Type resolving : "+oldDesc+" -> "+newDesc);
 						if(newDesc!=null && !newDesc.equals("null"))
 							clone.desc = newDesc;
 						else

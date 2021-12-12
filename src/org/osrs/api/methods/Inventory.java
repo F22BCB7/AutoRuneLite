@@ -41,6 +41,8 @@ public class Inventory extends MethodDefinition{
 			for(int i=0;i<28;++i){
 				if(inventoryItems[i]==null)
 					inventoryItems[i] = new InventoryItem(-1, 0, i);
+				if(methods.grandExchange.isGEInventoryOpen())
+					inventoryItems[i].updateInfo(ids[i]+1, counts[i]);
 				inventoryItems[i].updateInfo(ids[i], counts[i]);
 			}
 		}

@@ -43,10 +43,10 @@ public interface Actor extends RenderableNode{
 	public int logicalHeight();
 	public int rotationOffset();
 	public int rotation();
-	public int movementSpeed();
+	public int currentPathIndex();
 	public int[] pathX();
 	public int[] pathY();
-	public byte[] pathTraversed();
+	public MovementType[] pathMovementSpeeds();
 	public int currPathIndex();
 	public int currPathLength();
 	public int worldX();
@@ -65,6 +65,8 @@ public interface Actor extends RenderableNode{
 	public boolean rights();
 	public int heightOffset();
 	public int overridingCombatLevel();
+	public int startAnimationCycle();
+	public int endAnimationCycle();
 	
 	public RSModel getCachedModel();
 	public void setCachedModel(RSModel model);

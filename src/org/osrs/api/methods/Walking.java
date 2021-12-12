@@ -105,8 +105,8 @@ public class Walking extends MethodDefinition{
 	public boolean isWalking(){
 		RSPlayer p = methods.players.getLocalPlayer();
 		if(p!=null)
-			return p.getAccessor().movementSpeed()>0;
-			return false;
+			return p.getAccessor().currentPathIndex()>0;
+		return false;
 	}
 	/**
 	 * Turns running on if param is true, off if false

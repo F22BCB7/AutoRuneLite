@@ -17,7 +17,6 @@ import java.util.Map;
 
 @BClass(name="Actor")
 public class Actor extends RenderableNode implements org.osrs.api.wrappers.Actor{
-
 	@BField
 	public boolean animationStretching;
 	@BGetter
@@ -219,10 +218,10 @@ public class Actor extends RenderableNode implements org.osrs.api.wrappers.Actor
 	@Override
 	public int rotation(){return rotation;}
 	@BField
-	public int movementSpeed;
+	public int currentPathIndex;
 	@BGetter
 	@Override
-	public int movementSpeed(){return movementSpeed;}
+	public int currentPathIndex(){return currentPathIndex;}
 	@BField
 	public int[] pathX;
 	@BGetter
@@ -234,10 +233,10 @@ public class Actor extends RenderableNode implements org.osrs.api.wrappers.Actor
 	@Override
 	public int[] pathY(){return pathY;}
 	@BField
-	public byte[] pathTraversed;
+	public org.osrs.api.wrappers.MovementType[] pathMovementSpeeds;
 	@BGetter
 	@Override
-	public byte[] pathTraversed(){return pathTraversed;}
+	public org.osrs.api.wrappers.MovementType[] pathMovementSpeeds(){return pathMovementSpeeds;}
 	@BField
 	public int currPathIndex;
 	@BGetter
@@ -328,6 +327,14 @@ public class Actor extends RenderableNode implements org.osrs.api.wrappers.Actor
 	@BGetter
 	@Override
 	public int overridingCombatLevel(){return overridingCombatLevel;}
+	@BField
+	public int startAnimationCycle;
+	@Override
+	public int startAnimationCycle(){return startAnimationCycle;}
+	@BField
+	public int endAnimationCycle;
+	@Override
+	public int endAnimationCycle(){return endAnimationCycle;}
 	
 	@BVar
 	public org.osrs.api.objects.RSModel cachedModel;
@@ -341,5 +348,4 @@ public class Actor extends RenderableNode implements org.osrs.api.wrappers.Actor
 	public void setCachedModel(org.osrs.api.objects.RSModel model){
 		cachedModel = model;
 	}
-	
 }

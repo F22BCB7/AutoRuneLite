@@ -5,7 +5,7 @@ import org.osrs.injection.bytescript.BDetour;
 import org.osrs.injection.bytescript.BField;
 import org.osrs.injection.bytescript.BFunction;
 import org.osrs.injection.bytescript.BMethod;
-import org.osrs.script.events.RuneScriptEvent;
+import org.osrs.script.events.VarcEvent;
 import org.osrs.util.Data;
 import org.osrs.injection.bytescript.BGetter;
 
@@ -67,7 +67,7 @@ public class RuneScriptVM implements org.osrs.api.wrappers.RuneScriptVM{
 		if(predicate instanceof Short)
 			val = _getVarcString(a, (short)predicate);
 		//System.out.println("[getVarcString] "+a+" : "+val);
-		sendEvent(a, val, RuneScriptEvent.GET_STRING_EVENT_TYPE);
+		sendEvent(a, val, VarcEvent.GET_STRING_EVENT_TYPE);
 		return val;
 	}
 
@@ -100,7 +100,7 @@ public class RuneScriptVM implements org.osrs.api.wrappers.RuneScriptVM{
 		if(predicate instanceof Short)
 			_putVarcString(var1, var2, (short)predicate);
 		//System.out.println("[putVarcString] "+var1+" : "+var2);
-		sendEvent(var1, var2, RuneScriptEvent.PUT_STRING_EVENT_TYPE);
+		sendEvent(var1, var2, VarcEvent.PUT_STRING_EVENT_TYPE);
 	}
 
 	@BMethod(name="getStringAtIndex")
@@ -197,7 +197,7 @@ public class RuneScriptVM implements org.osrs.api.wrappers.RuneScriptVM{
 		if(predicate instanceof Short)
 			val = _getVarcInt(var1, (short)predicate);
 		//System.out.println("[getVarcInt] "+var1+" : "+val);
-		sendEvent(var1, val, RuneScriptEvent.GET_INT_EVENT_TYPE);
+		sendEvent(var1, val, VarcEvent.GET_INT_EVENT_TYPE);
 		return val;
 	}
 
@@ -230,15 +230,15 @@ public class RuneScriptVM implements org.osrs.api.wrappers.RuneScriptVM{
 		if(predicate instanceof Short)
 			_putVarcInt(var1, var2, (short)predicate);
 		//System.out.println("[putVarcInt] "+var1+" : "+var2);
-		sendEvent(var1, var2, RuneScriptEvent.PUT_INT_EVENT_TYPE);
+		sendEvent(var1, var2, VarcEvent.PUT_INT_EVENT_TYPE);
 	}
 	
 	@BFunction
 	private void sendEvent(int key, Object value, int type){
 		if(Data.currentScript!=null){
-			if(Data.currentScript instanceof org.osrs.script.listeners.RuneScriptVMListener){
-				org.osrs.script.events.RuneScriptEvent event = new org.osrs.script.events.RuneScriptEvent(key, value, type);
-				((org.osrs.script.listeners.RuneScriptVMListener)Data.currentScript).rsvmEvent(event);
+			if(Data.currentScript instanceof org.osrs.script.listeners.VarcListener){
+				org.osrs.script.events.VarcEvent event = new org.osrs.script.events.VarcEvent(key, value, type);
+				((org.osrs.script.listeners.VarcListener)Data.currentScript).varcEvent(event);
 			}
 		}
 	}

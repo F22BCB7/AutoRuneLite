@@ -25,7 +25,7 @@ public abstract class RSActor extends RSRenderable{
 	public boolean isMoving(){
 		Actor a = getAccessor();
 		if(a!=null){
-			return a.movementSpeed()>0;
+			return a.currentPathIndex()>0;
 		}
 		return false;
 	}

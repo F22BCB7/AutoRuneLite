@@ -28,7 +28,7 @@ public class GrandExchange extends MethodDefinition{
 						if(children.length!=28)
 							continue;
 						for(RSWidget ic2 : children){
-							if(ic2.type()==5 && ic2.isDisplayed()){
+							if(ic2.type()==5 && ic2.isDisplayed() && ic2.itemID()!=-1){
 								inventoryWidget = ic;
 								break findInventoryLoop;
 							}
