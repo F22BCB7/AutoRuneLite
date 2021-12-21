@@ -39,12 +39,12 @@ public class WallDecoration implements org.osrs.api.wrappers.WallDecoration{
 	@Override
 	public int height(){return height;}
 	@BField
-	public org.osrs.api.wrappers.RenderableNode model;
+	public RenderableNode model;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.RenderableNode model(){return model;}
 	@BField
-	public org.osrs.api.wrappers.RenderableNode secondaryModel;
+	public RenderableNode secondaryModel;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.RenderableNode secondaryModel(){return secondaryModel;}

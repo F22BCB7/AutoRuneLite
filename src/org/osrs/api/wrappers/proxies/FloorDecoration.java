@@ -14,7 +14,7 @@ import java.util.Map;
 public class FloorDecoration implements org.osrs.api.wrappers.FloorDecoration{
 
 	@BField
-	public org.osrs.api.wrappers.RenderableNode model;
+	public RenderableNode model;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.RenderableNode model(){return model;}

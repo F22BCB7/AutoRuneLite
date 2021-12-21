@@ -18,12 +18,12 @@ public class EntityNode extends Node implements org.osrs.api.wrappers.EntityNode
 	@Override
 	public long entityUID(){return entityUID;}
 	@BField
-	public org.osrs.api.wrappers.EntityNode next;
+	public EntityNode next;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.EntityNode next(){return next;}
 	@BField
-	public org.osrs.api.wrappers.EntityNode previous;
+	public EntityNode previous;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.EntityNode previous(){return previous;}

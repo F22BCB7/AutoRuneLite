@@ -17,20 +17,20 @@ public class RSTile extends Interactable implements Comparable<RSTile> {
 	public RSTile(int x, int y) {
 		methods = ((Client)Data.clientInstance).getMethodContext();
 		this.x = x;
-		if(this.x<104)
+		if(this.x<104 && this.x>=0)
 			this.x+=methods.game.mapBaseX();
 		this.y = y;
-		if(this.y<104)
+		if(this.y<104 && this.y>=0)
 			this.y+=methods.game.mapBaseY();
 		this.plane = 0;
 	}
 	public RSTile(int x, int y, int plane) {
 		methods = ((Client)Data.clientInstance).getMethodContext();
 		this.x = x;
-		if(this.x<104)
+		if(this.x<104 && this.x>=0)
 			this.x+=methods.game.mapBaseX();
 		this.y = y;
-		if(this.y<104)
+		if(this.y<104 && this.y>=0)
 			this.y+=methods.game.mapBaseY();
 		this.plane = plane;
 	}

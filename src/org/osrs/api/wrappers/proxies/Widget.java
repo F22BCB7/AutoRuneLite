@@ -336,7 +336,7 @@ public class Widget extends Node implements org.osrs.api.wrappers.Widget{
 	@Override
 	public String opbase(){return opbase;}
 	@BField
-	public org.osrs.api.wrappers.Widget dragParent;
+	public Widget dragParent;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Widget dragParent(){return dragParent;}
@@ -671,7 +671,7 @@ public class Widget extends Node implements org.osrs.api.wrappers.Widget{
 	@Override
 	public int[] tableActions(){return tableActions;}
 	@BField
-	public org.osrs.api.wrappers.Widget[] children;
+	public Widget[] children;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Widget[] children(){return children;}

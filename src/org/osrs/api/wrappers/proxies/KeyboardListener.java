@@ -12,31 +12,31 @@ public class KeyboardListener implements org.osrs.api.wrappers.KeyboardListener{
 	@BVar
 	public boolean isShiftPressed;
 
-	@BMethod(name="keyPressed")
-	public void _keyPressed(KeyEvent e){}
+	@BMethod(name="keyPressed0")
+	public void keyPressed0(KeyEvent e){}
 	@BFunction
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.isShiftDown() || e.getKeyCode()==KeyEvent.VK_SHIFT)
 			isShiftPressed=true;
-		_keyPressed(e);
+		keyPressed0(e);
 	}
 
-	@BMethod(name="keyReleased")
-	public void _keyReleased(KeyEvent e){}
+	@BMethod(name="keyReleased0")
+	public void keyReleased0(KeyEvent e){}
 	@BFunction
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(!e.isShiftDown() || e.getKeyCode()==KeyEvent.VK_SHIFT)
 			isShiftPressed=false;
-		_keyReleased(e);
+		keyReleased0(e);
 	}
 
-	@BMethod(name="keyTyped")
-	public void _keyTyped(KeyEvent e){}
+	@BMethod(name="keyTyped0")
+	public void keyTyped0(KeyEvent e){}
 	@BFunction
 	@Override
 	public void keyTyped(KeyEvent e) {
-		_keyTyped(e);
+		keyTyped0(e);
 	}
 }

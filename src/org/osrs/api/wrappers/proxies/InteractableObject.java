@@ -54,7 +54,7 @@ public class InteractableObject implements org.osrs.api.wrappers.InteractableObj
 	@Override
 	public int height(){return height;}
 	@BField
-	public org.osrs.api.wrappers.RenderableNode model;
+	public RenderableNode model;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.RenderableNode model(){return model;}

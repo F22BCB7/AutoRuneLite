@@ -13,5 +13,4 @@ public interface Region{
 	public int maxX();
 	public int[][] tileMasks();
 	public org.osrs.api.wrappers.Tile getHoveringTile();
-	public void setHoveringTile(org.osrs.api.wrappers.Tile tile);
 }

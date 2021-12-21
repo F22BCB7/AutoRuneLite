@@ -46,16 +46,16 @@ public class GameShell extends Applet implements org.osrs.api.wrappers.GameShell
 	@BFunction
 	public void invoke_processEngine(){
 		HashMap<Integer, Integer> widgetVisibleTicks = new HashMap<Integer, Integer>();
-		org.osrs.api.wrappers.Widget[][] allWidgets = Client.clientInstance.widgets();
+		Widget[][] allWidgets = Client.widgets;
 		if(allWidgets!=null){
-			for(org.osrs.api.wrappers.Widget[] widgets : allWidgets){
+			for(Widget[] widgets : allWidgets){
 				if(widgets!=null){
-					for(org.osrs.api.wrappers.Widget widget : widgets){
+					for(Widget widget : widgets){
 						if(widget!=null){
 							widgetVisibleTicks.put(widget.hashCode(), widget.visibleCycle());
-							org.osrs.api.wrappers.Widget[] children = widget.children();
+							Widget[] children = widget.children;
 							if(children!=null){
-								for(org.osrs.api.wrappers.Widget child : children){
+								for(Widget child : children){
 									if(child!=null){
 										widgetVisibleTicks.put(child.hashCode(), child.visibleCycle());
 									}
@@ -76,15 +76,15 @@ public class GameShell extends Applet implements org.osrs.api.wrappers.GameShell
 			_processEngine((short)predicate);
 
 		if(allWidgets!=null){
-			for(org.osrs.api.wrappers.Widget[] widgets : allWidgets){
+			for(Widget[] widgets : allWidgets){
 				if(widgets!=null){
-					for(org.osrs.api.wrappers.Widget widget : widgets){
+					for(Widget widget : widgets){
 						if(widget!=null){
 							Object oldTick = widgetVisibleTicks.get(widget.hashCode());
 							widget.setVisible(oldTick==null || (int)oldTick!=widget.visibleCycle());
-							org.osrs.api.wrappers.Widget[] children = widget.children();
+							Widget[] children = widget.children;
 							if(children!=null){
-								for(org.osrs.api.wrappers.Widget child : children){
+								for(Widget child : children){
 									if(child!=null){
 										oldTick = widgetVisibleTicks.get(child.hashCode());
 										child.setVisible(oldTick==null || (int)oldTick!=child.visibleCycle());

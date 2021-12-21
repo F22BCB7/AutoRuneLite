@@ -44,20 +44,20 @@ public class MouseListener implements org.osrs.api.wrappers.MouseListener{
 	@BVar
 	public boolean clientPressed=false;
 
-	@BMethod(name="_mouseClicked")
-	public void _mouseClicked(MouseEvent e){}
-	@BMethod(name="_mouseDragged")
-	public void _mouseDragged(MouseEvent e){}
-	@BMethod(name="_mouseEntered")
-	public void _mouseEntered(MouseEvent e){}
-	@BMethod(name="_mouseExited")
-	public void _mouseExited(MouseEvent e){}
-	@BMethod(name="_mouseMoved")
-	public void _mouseMoved(MouseEvent e){}
-	@BMethod(name="_mousePressed")
-	public void _mousePressed(MouseEvent e){}
-	@BMethod(name="_mouseReleased")
-	public void _mouseReleased(MouseEvent e){}
+	@BMethod(name="mouseClicked0")
+	public void mouseClicked0(MouseEvent e){}
+	@BMethod(name="mouseDragged0")
+	public void mouseDragged0(MouseEvent e){}
+	@BMethod(name="mouseEntered0")
+	public void mouseEntered0(MouseEvent e){}
+	@BMethod(name="mouseExited0")
+	public void mouseExited0(MouseEvent e){}
+	@BMethod(name="mouseMoved0")
+	public void mouseMoved0(MouseEvent e){}
+	@BMethod(name="mousePressed0")
+	public void mousePressed0(MouseEvent e){}
+	@BMethod(name="mouseReleased0")
+	public void mouseReleased0(MouseEvent e){}
 
 	@BFunction
 	@Override
@@ -140,7 +140,7 @@ public class MouseListener implements org.osrs.api.wrappers.MouseListener{
 		//if(script==null || script.isPaused){
 			clientX = e.getX();
 			clientY = e.getY();
-			_mouseClicked(e);
+			mouseClicked0(e);
 		//}
 		//else
 		//	System.out.println("Script is running.");
@@ -158,7 +158,7 @@ public class MouseListener implements org.osrs.api.wrappers.MouseListener{
 		//if(script==null || script.isPaused){
 			clientX = e.getX();
 			clientY = e.getY();
-			_mouseDragged(e);
+			mouseDragged0(e);
 		//}
 		e.consume();
 	}
@@ -174,7 +174,7 @@ public class MouseListener implements org.osrs.api.wrappers.MouseListener{
 			clientX = e.getX();
 			clientY = e.getY();
 			clientPresent = true;
-			_mouseEntered(e);
+			mouseEntered0(e);
 		//}
 	
 		e.consume();
@@ -191,7 +191,7 @@ public class MouseListener implements org.osrs.api.wrappers.MouseListener{
 			clientX = e.getX();
 			clientY = e.getY();
 			clientPresent = false;
-			_mouseExited(e);
+			mouseExited0(e);
 		//}
 	
 		e.consume();
@@ -212,7 +212,7 @@ public class MouseListener implements org.osrs.api.wrappers.MouseListener{
 		//if(script==null || script.isPaused){
 			clientX = e.getX();
 			clientY = e.getY();
-			_mouseMoved(e);
+			mouseMoved0(e);
 		//}
 	
 		realLastMoveTime = System.currentTimeMillis();
@@ -236,7 +236,7 @@ public class MouseListener implements org.osrs.api.wrappers.MouseListener{
 			clientPressX = e.getX();
 			clientPressY = e.getY();
 			clientPressTime = System.currentTimeMillis();
-			_mousePressed(e);
+			mousePressed0(e);
 		//}
 		e.consume();
 	}
@@ -252,7 +252,7 @@ public class MouseListener implements org.osrs.api.wrappers.MouseListener{
 			clientX = e.getX();
 			clientY = e.getY();
 			clientPressed = false;
-			_mouseReleased(e);
+			mouseReleased0(e);
 		//}
 		e.consume();
 	}
@@ -264,26 +264,26 @@ public class MouseListener implements org.osrs.api.wrappers.MouseListener{
 		clientY = e.getY();
 		try {
 			if (e.getID() == MouseEvent.MOUSE_CLICKED) {
-				_mouseClicked(e);
+				mouseClicked0(e);
 			} else if (e.getID() == MouseEvent.MOUSE_DRAGGED) {
-				_mouseDragged(e);
+				mouseDragged0(e);
 			} else if (e.getID() == MouseEvent.MOUSE_ENTERED) {
 				clientPresent = true;
-				_mouseEntered(e);
+				mouseEntered0(e);
 			} else if (e.getID() == MouseEvent.MOUSE_EXITED) {
 				clientPresent = false;
-				_mouseExited(e);
+				mouseExited0(e);
 			} else if (e.getID() == MouseEvent.MOUSE_MOVED) {
-				_mouseMoved(e);
+				mouseMoved0(e);
 			} else if (e.getID() == MouseEvent.MOUSE_PRESSED) {
 				clientPressX = e.getX();
 				clientPressY = e.getY();
 				clientPressTime = System.currentTimeMillis();
 				clientPressed = true;
-				_mousePressed(e);
+				mousePressed0(e);
 			} else if (e.getID() == MouseEvent.MOUSE_RELEASED) {
 				clientPressed = false;
-				_mouseReleased(e);
+				mouseReleased0(e);
 			} else {
 				throw new InternalError(e.toString());
 			}

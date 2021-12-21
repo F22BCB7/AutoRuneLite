@@ -14,12 +14,12 @@ import java.util.Map;
 @BClass(name="NodeList")
 public class NodeList implements org.osrs.api.wrappers.NodeList{
 	@BField
-	public org.osrs.api.wrappers.Node current;
+	public Node current;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Node current(){return current;}
 	@BField
-	public org.osrs.api.wrappers.Node head;
+	public Node head;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Node head(){return head;}

@@ -38,7 +38,7 @@ public class ScriptEvent extends Node implements org.osrs.api.wrappers.ScriptEve
 	@Override
 	public int op(){return op;}
 	@BField
-	public org.osrs.api.wrappers.Widget target;
+	public Widget target;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Widget target(){return target;}
@@ -58,7 +58,7 @@ public class ScriptEvent extends Node implements org.osrs.api.wrappers.ScriptEve
 	@Override
 	public String opbase(){return opbase;}
 	@BField
-	public org.osrs.api.wrappers.Widget source;
+	public Widget source;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Widget source(){return source;}

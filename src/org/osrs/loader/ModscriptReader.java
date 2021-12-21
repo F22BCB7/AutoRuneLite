@@ -92,7 +92,16 @@ public class ModscriptReader {
 					String name = readString();
 					String refactoredName = readString();
 					String desc = readString();
-					Object predicate = readInt();
+					Object predicate=null;
+					if(desc.contains("I)")){
+						predicate = readInt();
+					}
+					else if(desc.contains("B)")){
+						predicate = Byte.valueOf(""+readInt());
+					}
+					else if(desc.contains("S)")){
+						predicate = Short.valueOf(""+readInt());
+					}
 					//System.out.println("Static Method Hook : "+owner+"."+name+desc+"->"+refactoredName+" "+predicate);
 					modscript.staticMethods.add(new MethodHook(owner, name, refactoredName, desc, predicate));
 					methods++;

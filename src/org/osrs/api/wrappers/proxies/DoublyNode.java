@@ -13,12 +13,12 @@ import java.util.Map;
 public class DoublyNode implements org.osrs.api.wrappers.DoublyNode{
 
 	@BField
-	public org.osrs.api.wrappers.EntityNode head;
+	public EntityNode head;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.EntityNode head(){return head;}
 	@BField
-	public org.osrs.api.wrappers.EntityNode current;
+	public EntityNode current;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.EntityNode current(){return current;}

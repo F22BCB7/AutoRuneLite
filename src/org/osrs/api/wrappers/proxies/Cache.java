@@ -13,7 +13,7 @@ import java.util.Map;
 public class Cache implements org.osrs.api.wrappers.Cache{
 
 	@BField
-	public org.osrs.api.wrappers.EntityNode cacheableNode;
+	public EntityNode cacheableNode;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.EntityNode cacheableNode(){return cacheableNode;}
@@ -28,12 +28,12 @@ public class Cache implements org.osrs.api.wrappers.Cache{
 	@Override
 	public int remaining(){return remaining;}
 	@BField
-	public org.osrs.api.wrappers.FixedSizeDeque table;
+	public FixedSizeDeque table;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.FixedSizeDeque table(){return table;}
 	@BField
-	public org.osrs.api.wrappers.DoublyNode nodes;
+	public DoublyNode nodes;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.DoublyNode nodes(){return nodes;}

@@ -123,7 +123,7 @@ public class Actor extends RenderableNode implements org.osrs.api.wrappers.Actor
 	@Override
 	public int[] hitsplatDamages2(){return hitsplatDamages2;}
 	@BField
-	public org.osrs.api.wrappers.NodeList combatInfoList;
+	public NodeList combatInfoList;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.NodeList combatInfoList(){return combatInfoList;}
@@ -233,7 +233,7 @@ public class Actor extends RenderableNode implements org.osrs.api.wrappers.Actor
 	@Override
 	public int[] pathY(){return pathY;}
 	@BField
-	public org.osrs.api.wrappers.MovementType[] pathMovementSpeeds;
+	public MovementType[] pathMovementSpeeds;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.MovementType[] pathMovementSpeeds(){return pathMovementSpeeds;}

@@ -18,17 +18,17 @@ public class HashTable implements org.osrs.api.wrappers.HashTable{
 	@Override
 	public int size(){return size;}
 	@BField
-	public org.osrs.api.wrappers.Node[] buckets;
+	public Node[] buckets;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Node[] buckets(){return buckets;}
 	@BField
-	public org.osrs.api.wrappers.Node head;
+	public Node head;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Node head(){return head;}
 	@BField
-	public org.osrs.api.wrappers.Node tail;
+	public Node tail;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Node tail(){return tail;}

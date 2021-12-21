@@ -1,7 +1,10 @@
 package org.osrs.api.wrappers.proxies;
 
 import org.osrs.api.methods.MethodContext;
+import org.osrs.debug.CameraDebug;
 import org.osrs.debug.InventoryDebug;
+import org.osrs.debug.LocationDebug;
+import org.osrs.debug.MouseDebug;
 import org.osrs.debug.PathDebug;
 import org.osrs.debug.TileDebug;
 import org.osrs.debug.WidgetDebug;
@@ -11,7 +14,9 @@ import org.osrs.injection.bytescript.BDetour;
 import org.osrs.injection.bytescript.BField;
 import org.osrs.injection.bytescript.BFunction;
 import org.osrs.injection.bytescript.BGetter;
+import org.osrs.injection.bytescript.BGetterDetour;
 import org.osrs.injection.bytescript.BMethod;
+import org.osrs.injection.bytescript.BSetterDetour;
 import org.osrs.injection.bytescript.BVar;
 import org.osrs.util.Data;
 
@@ -103,20 +108,46 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 			tileDebug = new TileDebug(Client.clientInstance.getMethodContext());
 		return tileDebug;
 	}
+	@BVar
+	public CameraDebug cameraDebug;
+	@BFunction
+	@Override
+	public CameraDebug getCameraDebug(){
+		if(cameraDebug==null)
+			cameraDebug = new CameraDebug(Client.clientInstance.getMethodContext());
+		return cameraDebug;
+	}
+	@BVar
+	public LocationDebug locationDebug;
+	@BFunction
+	@Override
+	public LocationDebug getLocationDebug(){
+		if(locationDebug==null)
+			locationDebug = new LocationDebug(Client.clientInstance.getMethodContext());
+		return locationDebug;
+	}
+	@BVar
+	public MouseDebug mouseDebug;
+	@BFunction
+	@Override
+	public MouseDebug getMouseDebug(){
+		if(mouseDebug==null)
+			mouseDebug = new MouseDebug(Client.clientInstance.getMethodContext());
+		return mouseDebug;
+	}
 
 	@BField
-	public static org.osrs.api.wrappers.Client clientInstance;
+	public static Client clientInstance;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Client clientInstance(){return clientInstance;}
-	
 	@BField
-	public static org.osrs.api.wrappers.MouseListener mouseListener;
+	public static MouseListener mouseListener;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.MouseListener mouseListener(){return mouseListener;}
 	@BField
-	public static org.osrs.api.wrappers.KeyboardListener keyboardListener;
+	public static KeyboardListener keyboardListener;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.KeyboardListener keyboardListener(){return keyboardListener;}
@@ -144,7 +175,9 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	public int mapBaseY(){return mapBaseY;}
 	
 	@BField
-	public static org.osrs.api.wrappers.Widget[][] widgets;
+	public static Widget[][] widgets;
+	@BVar
+	public org.osrs.api.wrappers.Widget[][] widgetCache;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Widget[][] widgets(){return widgets;}
@@ -169,7 +202,7 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@Override
 	public int[] widgetHeights(){return widgetHeights;}
 	@BField
-	public static org.osrs.api.wrappers.HashTable componentTable;
+	public static HashTable componentTable;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.HashTable componentTable(){return componentTable;}
@@ -179,7 +212,7 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@Override
 	public int widgetVisibleCycle(){return widgetVisibleCycle;}
 	@BField
-	public static org.osrs.api.wrappers.HashTable itemContainers;
+	public static HashTable itemContainers;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.HashTable itemContainers(){return itemContainers;}
@@ -242,17 +275,17 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	public int mapRotation(){return mapRotation;}
 
 	@BField
-	public static org.osrs.api.wrappers.Player[] players;
+	public static Player[] players;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Player[] players(){return players;}
 	@BField
-	public static org.osrs.api.wrappers.Player localPlayer;
+	public static Player localPlayer;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Player localPlayer(){return localPlayer;}
 	@BField
-	public static org.osrs.api.wrappers.Npc[] npcs;
+	public static Npc[] npcs;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Npc[] npcs(){return npcs;}
@@ -289,7 +322,7 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@Override
 	public int itemSelectionState(){return itemSelectionState;}
 	@BField
-	public static org.osrs.api.wrappers.Cache itemModelCache;
+	public static Cache itemModelCache;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Cache itemModelCache(){return itemModelCache;}
@@ -343,7 +376,7 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	public int[] varps(){return varps;}
 	
 	@BField
-	public static org.osrs.api.wrappers.Region region;
+	public static Region region;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Region region(){return region;}
@@ -365,33 +398,62 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	public int runEnergy(){return runEnergy;}
 
 	@BField
-	public static org.osrs.api.wrappers.Deque drawnTileDeque;
+	public static Deque drawnTileDeque;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Deque drawnTileDeque(){return drawnTileDeque;}
 
 	@BField
-	public static org.osrs.api.wrappers.RuneScriptVM runescriptVM;
+	public static RuneScriptVM runescriptVM;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.RuneScriptVM runescriptVM(){return runescriptVM;}
 	
+	@BField
+	public static int mouseCrosshairState;
+	@BGetter
+	@Override
+	public int mouseCrosshairState(){return mouseCrosshairState;}
+	@BVar
+	public boolean preventIdleMouse;
+	@BFunction
+	@Override
+	public void setPreventIdleMouse(boolean val){
+		preventIdleMouse = val;
+	}
+	@BFunction
+	@Override
+	public boolean getPreventIdleMouse(){
+		return preventIdleMouse;
+	}
+	@BField
+	public static int mouseIdleTicks;
+	@BGetter
+	@Override
+	public int mouseIdleTicks(){return mouseIdleTicks;}
+	@BGetterDetour
+	public static int get_mouseIdleTicks(){
+		if(clientInstance.preventIdleMouse)
+			return 0;
+		return mouseIdleTicks;
+	}
+	
 	@BMethod(name="getItemDefinition")
-	public static org.osrs.api.wrappers.ItemDefinition _getItemDefinition(int a, int b){return null;}
+	public static ItemDefinition _getItemDefinition(int a, int b){return null;}
 	@BMethod(name="getItemDefinition")
-	public static org.osrs.api.wrappers.ItemDefinition _getItemDefinition(int a, byte b){return null;}
+	public static ItemDefinition _getItemDefinition(int a, byte b){return null;}
 	@BMethod(name="getItemDefinition")
-	public static org.osrs.api.wrappers.ItemDefinition _getItemDefinition(int a, short b){return null;}
+	public static ItemDefinition _getItemDefinition(int a, short b){return null;}
 	@BFunction
 	@Override
 	public org.osrs.api.wrappers.ItemDefinition invoke_getItemDefinition(int a){
 		Object predicate = Client.clientInstance.getMethodPredicate("", "getItemDefinition", "(I?)L*;", true);
 		if(predicate instanceof Integer)
-			return _getItemDefinition(a, (int)predicate);
+			return _getItemDefinition(a, (Integer)predicate);
 		if(predicate instanceof Byte)
-			return _getItemDefinition(a, (byte)predicate);
+			return _getItemDefinition(a, (Byte)predicate);
 		if(predicate instanceof Short)
-			return _getItemDefinition(a, (short)predicate);
+			return _getItemDefinition(a, (Short)predicate);
 		return null;
 	}
 	
@@ -406,11 +468,11 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	public org.osrs.api.wrappers.ObjectDefinition invoke_getObjectDefinition(int a){
 		Object predicate = Client.clientInstance.getMethodPredicate("", "getObjectDefinition", "(I?)L*;", true);
 		if(predicate instanceof Integer)
-			return _getObjectDefinition(a, (int)predicate);
+			return _getObjectDefinition(a, (Integer)predicate);
 		if(predicate instanceof Byte)
-			return _getObjectDefinition(a, (byte)predicate);
+			return _getObjectDefinition(a, (Byte)predicate);
 		if(predicate instanceof Short)
-			return _getObjectDefinition(a, (short)predicate);
+			return _getObjectDefinition(a, (Short)predicate);
 		return null;
 	}
 
@@ -455,20 +517,20 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	public void invoke_addChatMessage(int a, String b, String c, String d){
 		Object predicate = Client.clientInstance.getMethodPredicate("", "addChatMessage", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;?)V", true);
 		if(predicate instanceof Integer)
-			_addChatMessage(a, b, c, d, (int)predicate);
+			_addChatMessage(a, b, c, d, (Integer)predicate);
 		if(predicate instanceof Byte)
-			_addChatMessage(a, b, c, d, (byte)predicate);
+			_addChatMessage(a, b, c, d, (Byte)predicate);
 		if(predicate instanceof Short)
-			_addChatMessage(a, b, c, d, (short)predicate);
+			_addChatMessage(a, b, c, d, (Short)predicate);
 	}
 	@BMethod(name="fireScriptEvent")
-	public static void _fireScriptEvent(org.osrs.api.wrappers.ScriptEvent a, int b){}
+	public static void _fireScriptEvent(ScriptEvent a, int b){}
 	@BMethod(name="fireScriptEvent")
-	public static void _fireScriptEvent(org.osrs.api.wrappers.ScriptEvent a, byte b){}
+	public static void _fireScriptEvent(ScriptEvent a, byte b){}
 	@BMethod(name="fireScriptEvent")
-	public static void _fireScriptEvent(org.osrs.api.wrappers.ScriptEvent a, short b){}
+	public static void _fireScriptEvent(ScriptEvent a, short b){}
 	@BDetour
-	public static void fireScriptEvent(org.osrs.api.wrappers.ScriptEvent a, int b){
+	public static void fireScriptEvent(ScriptEvent a, int b){
 		clientInstance.invoke_fireScriptEvent(a);
 		if(Data.currentScript!=null){
 			if(Data.currentScript instanceof org.osrs.script.listeners.ScriptEventListener){
@@ -477,7 +539,7 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 		}
 	}
 	@BDetour
-	public static void fireScriptEvent(org.osrs.api.wrappers.ScriptEvent a, byte b){
+	public static void fireScriptEvent(ScriptEvent a, byte b){
 		clientInstance.invoke_fireScriptEvent(a);
 		if(Data.currentScript!=null){
 			if(Data.currentScript instanceof org.osrs.script.listeners.ScriptEventListener){
@@ -486,7 +548,7 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 		}
 	}
 	@BDetour
-	public static void fireScriptEvent(org.osrs.api.wrappers.ScriptEvent a, short b){
+	public static void fireScriptEvent(ScriptEvent a, short b){
 		clientInstance.invoke_fireScriptEvent(a);
 		if(Data.currentScript!=null){
 			if(Data.currentScript instanceof org.osrs.script.listeners.ScriptEventListener){

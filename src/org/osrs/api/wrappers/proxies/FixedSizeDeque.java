@@ -18,17 +18,27 @@ public class FixedSizeDeque implements org.osrs.api.wrappers.FixedSizeDeque{
 	@Override
 	public int size(){return size;}
 	@BField
-	public org.osrs.api.wrappers.Node[] buckets;
+	public Node[] buckets;
 	@BGetter
 	@Override
-	public org.osrs.api.wrappers.Node[] buckets(){return buckets;}
+	public org.osrs.api.wrappers.Node[] buckets(){
+		if(buckets!=null){
+			int length = buckets.length;
+			org.osrs.api.wrappers.Node[] nodes = new org.osrs.api.wrappers.Node[length];
+			for(int i=0;i<length;++i){
+				nodes[i]=buckets[i];
+			}
+			return nodes;
+		}
+		return new org.osrs.api.wrappers.Node[]{};
+	}
 	@BField
-	public org.osrs.api.wrappers.Node head;
+	public Node head;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Node head(){return head;}
 	@BField
-	public org.osrs.api.wrappers.Node tail;
+	public Node tail;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Node tail(){return tail;}

@@ -17,12 +17,12 @@ public class MouseWheelListener implements org.osrs.api.wrappers.MouseWheelListe
 	public int rotation(){return rotation;}
 	
 	
-	@BMethod(name="_mouseWheelMoved")
-	public void _mouseWheelMoved(MouseWheelEvent var1) {}
+	@BMethod(name="mouseWheelMoved0")
+	public void mouseWheelMoved0(MouseWheelEvent var1) {}
 	@BFunction
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent var1) {
 		//System.out.println(e.toString());
-		_mouseWheelMoved(var1);
+		mouseWheelMoved0(var1);
 	}
 }

@@ -241,4 +241,7 @@ public class FieldNode extends FieldVisitor {
     }
     fieldVisitor.visitEnd();
   }
+  public boolean isStatic(){
+	  return (access & Opcodes.ACC_STATIC)!=0;
+  }
 }

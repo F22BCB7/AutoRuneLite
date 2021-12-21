@@ -3,7 +3,10 @@ package org.osrs.api.wrappers;
 import java.util.ArrayList;
 
 import org.osrs.api.methods.MethodContext;
+import org.osrs.debug.CameraDebug;
 import org.osrs.debug.InventoryDebug;
+import org.osrs.debug.LocationDebug;
+import org.osrs.debug.MouseDebug;
 import org.osrs.debug.PathDebug;
 import org.osrs.debug.TileDebug;
 import org.osrs.debug.WidgetDebug;
@@ -21,6 +24,9 @@ public interface Client extends GameShell{
 	public InventoryDebug getInventoryDebug();
 	public PathDebug getPathDebug();
 	public TileDebug getTileDebug();
+	public CameraDebug getCameraDebug();
+	public LocationDebug getLocationDebug();
+	public MouseDebug getMouseDebug();
 
 	public Client clientInstance();
 	
@@ -88,6 +94,11 @@ public interface Client extends GameShell{
 	public Deque drawnTileDeque();
 	
 	public RuneScriptVM runescriptVM();
+	
+	public int mouseCrosshairState();
+	public void setPreventIdleMouse(boolean val);
+	public boolean getPreventIdleMouse();
+	public int mouseIdleTicks();
 	
 	public ItemDefinition invoke_getItemDefinition(int a);
 	public ObjectDefinition invoke_getObjectDefinition(int a);

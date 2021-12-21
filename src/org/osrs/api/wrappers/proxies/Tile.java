@@ -3,7 +3,6 @@ package org.osrs.api.wrappers.proxies;
 import org.osrs.api.methods.Calculations;
 import org.osrs.api.methods.MethodContext;
 import org.osrs.api.objects.RSModel;
-import org.osrs.api.wrappers.Client;
 import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BField;
 import org.osrs.injection.bytescript.BFunction;
@@ -56,7 +55,7 @@ public class Tile extends Node implements org.osrs.api.wrappers.Tile{
 	@Override
 	public void createBoundsHeights(){
 		if(methods==null)
-			methods = ((Client)Data.clientInstance).getMethodContext();
+			methods = Client.clientInstance.getMethodContext();
 		tileModelSize = 64;	
 		verticesX = new int[]{0, tileModelSize, -tileModelSize, tileModelSize, -tileModelSize};
 		verticesY = new int[]{0, 0, 0, 0, 0};	
@@ -283,22 +282,22 @@ public class Tile extends Node implements org.osrs.api.wrappers.Tile{
 	@Override
 	public int renderPlane(){return renderPlane;}
 	@BField
-	public org.osrs.api.wrappers.TilePaint paint;
+	public TilePaint paint;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.TilePaint paint(){return paint;}
 	@BField
-	public org.osrs.api.wrappers.ItemLayer itemLayer;
+	public ItemLayer itemLayer;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.ItemLayer itemLayer(){return itemLayer;}
 	@BField
-	public org.osrs.api.wrappers.BoundaryObject boundary;
+	public BoundaryObject boundary;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.BoundaryObject boundary(){return boundary;}
 	@BField
-	public org.osrs.api.wrappers.WallDecoration wall;
+	public WallDecoration wall;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.WallDecoration wall(){return wall;}
@@ -308,7 +307,7 @@ public class Tile extends Node implements org.osrs.api.wrappers.Tile{
 	@Override
 	public boolean visible(){return visible;}
 	@BField
-	public org.osrs.api.wrappers.TileModel overlay;
+	public TileModel overlay;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.TileModel overlay(){return overlay;}
@@ -318,10 +317,20 @@ public class Tile extends Node implements org.osrs.api.wrappers.Tile{
 	@Override
 	public int entityCount(){return entityCount;}
 	@BField
-	public org.osrs.api.wrappers.InteractableObject[] objects;
+	public InteractableObject[] objects;
 	@BGetter
 	@Override
-	public org.osrs.api.wrappers.InteractableObject[] objects(){return objects;}
+	public org.osrs.api.wrappers.InteractableObject[] objects(){
+		if(objects!=null){
+			int length = objects.length;
+			org.osrs.api.wrappers.InteractableObject[] retObjs = new org.osrs.api.wrappers.InteractableObject[length];
+			for(int i=0;i<length;++i){
+				retObjs[i]=objects[i];
+			}
+			return retObjs;
+		}
+		return new org.osrs.api.wrappers.InteractableObject[]{};
+	}
 	@BField
 	public int[] entityFlags;
 	@BGetter
@@ -368,12 +377,12 @@ public class Tile extends Node implements org.osrs.api.wrappers.Tile{
 	@Override
 	public int wallCullOppositeDirection(){return wallCullOppositeDirection;}
 	@BField
-	public org.osrs.api.wrappers.FloorDecoration floor;
+	public FloorDecoration floor;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.FloorDecoration floor(){return floor;}
 	@BField
-	public org.osrs.api.wrappers.Tile bridge;
+	public Tile bridge;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Tile bridge(){return bridge;}

@@ -19,7 +19,7 @@ public class Player extends Actor implements org.osrs.api.wrappers.Player{
 	@Override
 	public int minX(){return minX;}
 	@BField
-	public org.osrs.api.wrappers.PlayerDefinition definition;
+	public PlayerDefinition definition;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.PlayerDefinition definition(){return definition;}
@@ -34,7 +34,7 @@ public class Player extends Actor implements org.osrs.api.wrappers.Player{
 	@Override
 	public int overheadIcon(){return overheadIcon;}
 	@BField
-	public org.osrs.api.wrappers.NameComposite nameComposite;
+	public NameComposite nameComposite;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.NameComposite nameComposite(){return nameComposite;}
@@ -74,7 +74,7 @@ public class Player extends Actor implements org.osrs.api.wrappers.Player{
 	@Override
 	public String[] actions(){return actions;}
 	@BField
-	public org.osrs.api.wrappers.Model model;
+	public Model model;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Model model(){return model;}

@@ -19,25 +19,34 @@ public class ClassResolver {
      * @return obfuscatedDesc
      */
     public String getObfuscatedDesc(String refactoredDesc){
+		String arg = "";
+		if(refactoredDesc.startsWith("[")){
+			arg = "[";
+			refactoredDesc=refactoredDesc.substring(1, refactoredDesc.length());
+			while(refactoredDesc.startsWith("[")){
+				arg+="[";
+				refactoredDesc=refactoredDesc.substring(1, refactoredDesc.length());
+			}
+		}
     	String obfuscatedDesc = new2old.get(refactoredDesc);
     	if(obfuscatedDesc!=null)
-    		return obfuscatedDesc;
+    		return arg+obfuscatedDesc;
     	obfuscatedDesc = refactoredDesc;
     	String oldRetType = refactoredDesc.substring(refactoredDesc.indexOf(")")+1);
-    	String retType = getObfuscatedType(oldRetType.replace("org/osrs/api/wrappers/", ""));
+    	String retType = getObfuscatedType(oldRetType.replace("org/osrs/api/wrappers/proxies/", ""));
     	if(retType!=null)
     		obfuscatedDesc = obfuscatedDesc.replace(oldRetType, retType);
     	String[] params = parseArguments(refactoredDesc);
     	for(int i=0;i<params.length;++i){
     		if(params[i].startsWith("L") && params[i].endsWith(";")){
-    			String s = getObfuscatedType(params[i].replace("org/osrs/api/wrappers/", ""));
+    			String s = getObfuscatedType(params[i].replace("org/osrs/api/wrappers/proxies/", ""));
     			if(s!=null){
     				obfuscatedDesc = obfuscatedDesc.replace(params[i], s);
     			}
     		}
     	}
     	new2old.put(refactoredDesc, obfuscatedDesc);
-    	return obfuscatedDesc;
+    	return arg+obfuscatedDesc;
     }
     /**
      * E.G. (ILab;I)Lab; -> (ILNode;I)LNode;
@@ -45,9 +54,18 @@ public class ClassResolver {
      * @return refactoredDesc
      */
     public String getRefactoredDesc(String obfuscatedDesc){
+		String arg = "";
+		if(obfuscatedDesc.startsWith("[")){
+			arg = "[";
+			obfuscatedDesc=obfuscatedDesc.substring(1, obfuscatedDesc.length());
+			while(obfuscatedDesc.startsWith("[")){
+				arg+="[";
+				obfuscatedDesc=obfuscatedDesc.substring(1, obfuscatedDesc.length());
+			}
+		}
     	String refactoredDesc = old2new.get(obfuscatedDesc);
     	if(refactoredDesc!=null)
-    		return refactoredDesc;
+    		return arg+refactoredDesc;
     	refactoredDesc = obfuscatedDesc;
     	String oldRetType = obfuscatedDesc.substring(obfuscatedDesc.indexOf(")")+1);
     	String retType = getRefactoredType(oldRetType);
@@ -63,7 +81,7 @@ public class ClassResolver {
     		}
     	}
     	old2new.put(obfuscatedDesc, refactoredDesc);
-    	return refactoredDesc;
+    	return arg+refactoredDesc;
     }
     /**
      * E.G. LNode; -> Lab;
@@ -72,9 +90,18 @@ public class ClassResolver {
      */
     public String getObfuscatedType(String refactoredType){
     	//TODO determine array+dimension
+		String arg = "";
+		if(refactoredType.startsWith("[")){
+			arg = "[";
+			refactoredType=refactoredType.substring(1, refactoredType.length());
+			while(refactoredType.startsWith("[")){
+				arg+="[";
+				refactoredType=refactoredType.substring(1, refactoredType.length());
+			}
+		}
     	String type = new2old.get(refactoredType);
     	if(type!=null)
-    		return type;
+    		return arg+type;
     	if(refactoredType.startsWith("L") && refactoredType.endsWith(";")){
 	    	type = refactoredType;
 	    	String array = "";
@@ -88,10 +115,10 @@ public class ClassResolver {
 	    	if(type!=null){
 	    		type = array+"L"+type+";";
 	    		new2old.put(refactoredType, type);
-	    		return type;
+	    		return arg+type;
 	    	}
     	}
-    	return null;
+    	return arg+refactoredType;
     }
     /**
      * E.G. Lab; -> LNode;
@@ -99,9 +126,18 @@ public class ClassResolver {
      * @return refactoredType
      */
     public String getRefactoredType(String obfuscatedType){
+		String arg = "";
+		if(obfuscatedType.startsWith("[")){
+			arg = "[";
+			obfuscatedType=obfuscatedType.substring(1, obfuscatedType.length());
+			while(obfuscatedType.startsWith("[")){
+				arg+="[";
+				obfuscatedType=obfuscatedType.substring(1, obfuscatedType.length());
+			}
+		}
     	String type = old2new.get(obfuscatedType);
     	if(type!=null)
-    		return type;
+    		return arg+type;
     	if(obfuscatedType.startsWith("L") && obfuscatedType.endsWith(";")){
 	    	type = obfuscatedType;
 	    	type = type.replace("L", "");
@@ -109,10 +145,10 @@ public class ClassResolver {
 	    	type = getRefactoredClassName(type);
 	    	if(type!=null){
 	    		old2new.put(obfuscatedType, "L"+type+";");
-	    		return "L"+type+";";
+	    		return arg+"L"+type+";";
 	    	}
     	}
-    	return null;
+    	return arg+obfuscatedType;
     }
     /**
      * E.G. Node -> ab
@@ -151,6 +187,14 @@ public class ClassResolver {
     public ClassHook getClassHook(String refactoredName){
     	for(ClassHook ch : modscript.classHooks){
     		if(ch.refactoredName.equals(refactoredName)){
+    			return ch;
+    		}
+    	}
+    	return null;
+    }
+    public ClassHook getObfusctedClassHook(String obfuscatedName){
+    	for(ClassHook ch : modscript.classHooks){
+    		if(ch.obfuscatedName.equals(obfuscatedName)){
     			return ch;
     		}
     	}
@@ -398,6 +442,27 @@ public class ClassResolver {
 		}
     	return null;
     }
+    public MethodHook getObfuscatedMethodHook(String obfuscatedOwner, String obfuscatedName, String wildcardDesc, boolean isStatic){
+    	if(isStatic){
+    		for(MethodHook mh : modscript.staticMethods){
+				if(mh.owner.equals(obfuscatedOwner) && mh.obfuscatedName.equals(obfuscatedName)){
+					new2old.put(obfuscatedOwner+"."+obfuscatedName+wildcardDesc, mh.obfuscatedName);
+					return mh;
+				}
+			}
+    	}
+		for(ClassHook ch : modscript.classHooks){
+    		if(!isStatic && ch.obfuscatedName.equals(obfuscatedOwner)){
+    			for(MethodHook mh : ch.methodHooks){
+    				if(mh.owner.equals(obfuscatedOwner) && mh.obfuscatedName.equals(obfuscatedName)){
+    					new2old.put(obfuscatedOwner+"."+obfuscatedName+wildcardDesc, mh.obfuscatedName);
+    					return mh;
+    				}
+    			}
+    		}
+		}
+    	return null;
+    }
     public FieldHook getFieldHook(String refactoredOwner, String refactoredName, boolean isStatic){
     	if(!isStatic){
 	    	for(ClassHook ch : modscript.classHooks){
@@ -419,12 +484,33 @@ public class ClassResolver {
     	}
     	return null;
     }
+    public FieldHook getObfuscatedFieldHook(String obfuscatedOwner, String obfuscatedName, boolean isStatic){
+    	if(!isStatic){
+	    	for(ClassHook ch : modscript.classHooks){
+	    		if(ch.obfuscatedName.equals(obfuscatedOwner)){
+	    			for(FieldHook fh : ch.fieldHooks){
+	    				if(fh.obfuscatedName.equals(obfuscatedName)){
+	    					return fh;
+	    				}
+	    			}
+	    		}
+	    	}
+    	}
+    	else{
+			for(FieldHook fh : modscript.staticFields){
+				if(fh.obfuscatedName.equals(obfuscatedName)){
+					return fh;
+				}
+			}
+    	}
+    	return null;
+    }
     /**
      * E.G. (LNode;IIZ)Z -> {"LNode;", "I", "I", "Z"}
      * @param desc
      * @return params
      */
-    private String[] parseArguments(String desc) {
+    public String[] parseArguments(String desc) {
         ArrayList<String> args = new ArrayList<String>();
         String signiture = desc;
         signiture = signiture.substring(signiture.indexOf("(") + 1, signiture.indexOf(")"));

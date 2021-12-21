@@ -18,18 +18,18 @@ public class RenderableNode extends EntityNode implements org.osrs.api.wrappers.
 	
 
 	@BMethod(name="getModel")
-	public org.osrs.api.wrappers.Model _getModel(int a){return null;}
+	public Model _getModel(int a){return null;}
 	@BMethod(name="getModel")
-	public org.osrs.api.wrappers.Model _getModel(byte a){return null;}
+	public Model _getModel(byte a){return null;}
 	@BMethod(name="getModel")
-	public org.osrs.api.wrappers.Model _getModel(short a){return null;}
+	public Model _getModel(short a){return null;}
 	@BFunction
 	@Override
 	public org.osrs.api.wrappers.Model invoke_getModel(){
 		org.osrs.api.wrappers.Model model = null;
 		MethodHook mh = Data.clientModscript.resolver.getMethodHook("RenderableNode", "getModel", "(?)L*;", true);
 		if(mh!=null){
-			Object predicate = Client.clientInstance.getMethodPredicate("RenderableNode", "getModel", "(?)L*;", true);
+			Object predicate = mh.predicate;
 			if(mh.desc.startsWith("(I)L"))
 				model = _getModel((int)predicate);
 			else if(mh.desc.startsWith("(B)L"))

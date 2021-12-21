@@ -27,10 +27,10 @@ public class RuneScriptVM implements org.osrs.api.wrappers.RuneScriptVM{
 	@Override
 	public boolean changed(){return changed;}
 	@BField
-	public boolean[] varcStringSerials;
+	public boolean[] varcSerials;
 	@BGetter
 	@Override
-	public boolean[] varcStringSerials(){return varcStringSerials;}
+	public boolean[] varcSerials(){return varcSerials;}
 	@BField
 	public long cycle;
 	@BGetter

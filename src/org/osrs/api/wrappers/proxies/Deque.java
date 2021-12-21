@@ -9,25 +9,25 @@ import org.osrs.injection.bytescript.BGetter;
 @BClass(name="Deque")
 public class Deque implements org.osrs.api.wrappers.Deque{
 	@BField
-	public org.osrs.api.wrappers.Node current;
+	public Node current;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Node current(){return current;}
 	@BField
-	public org.osrs.api.wrappers.Node head;
+	public Node head;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Node head(){return head;}
 	
 	@BMethod(name="popFront")
-	public org.osrs.api.wrappers.Node _popFront(){return null;}
+	public Node _popFront(){return null;}
 	@BDetour
-	public org.osrs.api.wrappers.Node popFront(){
-		org.osrs.api.wrappers.Node node = _popFront();
-		if(node!=null && node instanceof org.osrs.api.wrappers.Tile){
-			org.osrs.api.wrappers.Tile tile = (org.osrs.api.wrappers.Tile)node;
+	public Node popFront(){
+		Node node = _popFront();
+		if(node!=null && node instanceof Tile){
+			Tile tile = (Tile)node;
 			if(tile.isHovering()){
-				org.osrs.api.wrappers.Region region = Client.clientInstance.region();
+				Region region = Client.region;
 				if(region!=null){
 					region.setHoveringTile(tile);
 				}

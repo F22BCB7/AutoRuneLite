@@ -243,7 +243,7 @@ public class ItemDefinition extends EntityNode implements org.osrs.api.wrappers.
 	@Override
 	public int id(){return id;}
 	@BField
-	public org.osrs.api.wrappers.FixedSizeDeque params;
+	public FixedSizeDeque params;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.FixedSizeDeque params(){return params;}

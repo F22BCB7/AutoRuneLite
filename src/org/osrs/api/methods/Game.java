@@ -161,6 +161,21 @@ public class Game extends MethodDefinition{
 	public int runEnergy(){
 		return client.runEnergy();
 	}
+	public Deque drawnTileDeque(){
+		return client.drawnTileDeque();
+	}
+	public RuneScriptVM runescriptVM(){
+		return client.runescriptVM();
+	}
+	public int mouseCrosshairState(){
+		return client.mouseCrosshairState();
+	}
+	public int mouseIdleTicks(){
+		return client.mouseIdleTicks();
+	}
+	public void preventIdleMouse(boolean val){
+		client.setPreventIdleMouse(val);
+	}
 	
 	public ItemDefinition getItemDefinition(int id){
 		return client.invoke_getItemDefinition(id);
@@ -178,5 +193,8 @@ public class Game extends MethodDefinition{
 		if(client!=null){
 			client.invoke_addChatMessage(type, name, message, sender);
 		}
+	}
+	public void runScriptEvent(Object[] args){
+		client.runScriptEvent(args);
 	}
 }

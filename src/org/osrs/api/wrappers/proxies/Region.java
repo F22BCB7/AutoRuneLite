@@ -5,21 +5,22 @@ import org.osrs.injection.bytescript.BDetour;
 import org.osrs.injection.bytescript.BField;
 import org.osrs.injection.bytescript.BFunction;
 import org.osrs.injection.bytescript.BGetter;
+import org.osrs.injection.bytescript.BGetterDetour;
 import org.osrs.injection.bytescript.BMethod;
+import org.osrs.injection.bytescript.BSetterDetour;
 import org.osrs.injection.bytescript.BVar;
 
 @BClass(name="Region")
 public class Region implements org.osrs.api.wrappers.Region{
 	@BVar
-	public org.osrs.api.wrappers.Tile hoveringTile;
+	public Tile hoveringTile;
 	@BFunction
 	@Override
 	public org.osrs.api.wrappers.Tile getHoveringTile(){
 		return hoveringTile;
 	}
 	@BFunction
-	@Override
-	public void setHoveringTile(org.osrs.api.wrappers.Tile tile){
+	public void setHoveringTile(Tile tile){
 		hoveringTile = tile;
 	}
 	@BMethod(name="drawRegion")
@@ -35,9 +36,9 @@ public class Region implements org.osrs.api.wrappers.Region{
 		_addTile(var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12, var13, var14, var15, var16, var17, var18, var19, var20);
 	}
 	@BMethod(name="drawTile")
-	public void _drawTile(org.osrs.api.wrappers.Tile var1, boolean var2){}
+	public void _drawTile(Tile var1, boolean var2){}
 	@BDetour
-	public void drawTile(org.osrs.api.wrappers.Tile var1, boolean var2){
+	public void drawTile(Tile var1, boolean var2){
 		_drawTile(var1, var2);
 	}
 	
@@ -47,7 +48,7 @@ public class Region implements org.osrs.api.wrappers.Region{
 	@Override
 	public int maxPlane(){return maxPlane;}
 	@BField
-	public org.osrs.api.wrappers.Tile[][][] tiles;
+	public Tile[][][] tiles;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Tile[][][] tiles(){return tiles;}
@@ -72,7 +73,7 @@ public class Region implements org.osrs.api.wrappers.Region{
 	@Override
 	public int minPlane(){return minPlane;}
 	@BField
-	public org.osrs.api.wrappers.InteractableObject[] objects;
+	public InteractableObject[] objects;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.InteractableObject[] objects(){return objects;}

@@ -183,7 +183,7 @@ public class ObjectDefinition extends EntityNode implements org.osrs.api.wrapper
 	@Override
 	public short[] textureToReplace(){return textureToReplace;}
 	@BField
-	public org.osrs.api.wrappers.FixedSizeDeque params;
+	public FixedSizeDeque params;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.FixedSizeDeque params(){return params;}

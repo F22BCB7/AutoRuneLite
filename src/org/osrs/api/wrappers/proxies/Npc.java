@@ -13,7 +13,7 @@ import java.util.Map;
 @BClass(name="Npc")
 public class Npc extends Actor implements org.osrs.api.wrappers.Npc{
 	@BField
-	public org.osrs.api.wrappers.NPCDefinition definition;
+	public NPCDefinition definition;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.NPCDefinition definition(){return definition;}

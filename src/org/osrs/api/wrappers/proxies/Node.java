@@ -13,12 +13,12 @@ import java.util.Map;
 public class Node implements org.osrs.api.wrappers.Node{
 
 	@BField
-	public org.osrs.api.wrappers.Node previous;
+	public Node previous;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Node previous(){return previous;}
 	@BField
-	public org.osrs.api.wrappers.Node next;
+	public Node next;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.Node next(){return next;}

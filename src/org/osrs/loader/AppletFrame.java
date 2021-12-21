@@ -36,6 +36,7 @@ import javax.swing.filechooser.FileFilter;
 import org.osrs.api.methods.MethodContext;
 import org.osrs.api.wrappers.Canvas;
 import org.osrs.api.wrappers.Client;
+import org.osrs.api.wrappers.GameShell;
 import org.osrs.debug.WidgetDebug;
 import org.osrs.script.ScriptDef;
 import org.osrs.util.Data;
@@ -51,7 +52,10 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
 	private MenuItem startScriptOption;
 	private MenuItem pauseScriptOption;
 	private Menu debugMenu;
+	public CheckboxMenuItem cameraDebugOption;
 	public CheckboxMenuItem inventoryDebugOption;
+	public CheckboxMenuItem locationDebugOption;
+	public CheckboxMenuItem mouseDebugOption;
 	public CheckboxMenuItem pathDebugOption;
 	public CheckboxMenuItem tileDebugOption;
 	public CheckboxMenuItem widgetDebugOption;
@@ -87,8 +91,14 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
 		menuBar.add(fileMenu);
 		
 		debugMenu = new Menu("Debug");
+		cameraDebugOption = new CheckboxMenuItem("Camera");
+		debugMenu.add(cameraDebugOption);
 		inventoryDebugOption = new CheckboxMenuItem("Inventory");
 		debugMenu.add(inventoryDebugOption);
+		locationDebugOption = new CheckboxMenuItem("Location");
+		debugMenu.add(locationDebugOption);
+		mouseDebugOption = new CheckboxMenuItem("Mouse");
+		debugMenu.add(mouseDebugOption);
 		pathDebugOption = new CheckboxMenuItem("Paths");
 		debugMenu.add(pathDebugOption);
 		tileDebugOption = new CheckboxMenuItem("Tiles");
@@ -230,7 +240,7 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
 	}
 	public void appletResize(int arg0, int arg1) {
 		if(Data.clientInstance!=null){
-			Canvas canvas = (Canvas) ((org.osrs.api.wrappers.GameShell)Data.clientInstance).canvas();
+			Canvas canvas = (Canvas) ((GameShell)Data.clientInstance).canvas();
 			if(canvas!=null)
 				canvas.applySize(arg0, arg1);
 		}

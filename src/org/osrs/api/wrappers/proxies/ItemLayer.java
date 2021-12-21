@@ -14,7 +14,7 @@ import java.util.Map;
 public class ItemLayer implements org.osrs.api.wrappers.ItemLayer{
 
 	@BField
-	public org.osrs.api.wrappers.RenderableNode bottom;
+	public RenderableNode bottom;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.RenderableNode bottom(){return bottom;}
@@ -39,12 +39,12 @@ public class ItemLayer implements org.osrs.api.wrappers.ItemLayer{
 	@Override
 	public long hash(){return hash;}
 	@BField
-	public org.osrs.api.wrappers.RenderableNode middle;
+	public RenderableNode middle;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.RenderableNode middle(){return middle;}
 	@BField
-	public org.osrs.api.wrappers.RenderableNode top;
+	public RenderableNode top;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.RenderableNode top(){return top;}

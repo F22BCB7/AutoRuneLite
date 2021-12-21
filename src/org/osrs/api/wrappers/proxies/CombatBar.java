@@ -13,12 +13,12 @@ import java.util.Map;
 public class CombatBar extends Node implements org.osrs.api.wrappers.CombatBar{
 
 	@BField
-	public org.osrs.api.wrappers.NodeList combatDataList;
+	public NodeList combatDataList;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.NodeList combatDataList(){return combatDataList;}
 	@BField
-	public org.osrs.api.wrappers.CombatBarDefinition definition;
+	public CombatBarDefinition definition;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.CombatBarDefinition definition(){return definition;}

@@ -126,7 +126,7 @@ public class RSClassLoader extends ClassLoader{
 				byte[] buf = this.classBytes.get(entryName);
 				Class<?> clazz = defineClass(name, buf, 0, buf.length, null);
 				if(clazz!=null){
-					classes.put(entryName, clazz);
+					classes.put(name, clazz);
 					return clazz;
 				}
 	    	}

@@ -1,6 +1,9 @@
 package org.osrs.api.wrappers.proxies;
 
+import org.osrs.debug.CameraDebug;
 import org.osrs.debug.InventoryDebug;
+import org.osrs.debug.LocationDebug;
+import org.osrs.debug.MouseDebug;
 import org.osrs.debug.PathDebug;
 import org.osrs.debug.TileDebug;
 import org.osrs.debug.WidgetDebug;
@@ -40,19 +43,19 @@ public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Can
 		
 		Graphics g = gameImage.getGraphics();
 		g.setColor(Color.ORANGE);
-		g.drawString("AutoRuneLite v0.1", 15, 15);
+		g.drawString("AutoRuneLite v0.2", 15, 15);
 
 		int gameCycle = Client.clientInstance.gameCycle();
-		org.osrs.api.wrappers.Widget[][] allWidgets = Client.clientInstance.widgets();
+		Widget[][] allWidgets = Client.widgets;
 		if(allWidgets!=null){
-			for(org.osrs.api.wrappers.Widget[] widgets : allWidgets){
+			for(Widget[] widgets : allWidgets){
 				if(widgets!=null){
-					for(org.osrs.api.wrappers.Widget widget : widgets){
+					for(Widget widget : widgets){
 						if(widget!=null){
 							widget.setDisplayed(widget.displayCycle()>=gameCycle);
-							org.osrs.api.wrappers.Widget[] children = widget.children();
+							Widget[] children = widget.children;
 							if(children!=null){
-								for(org.osrs.api.wrappers.Widget child : children){
+								for(Widget child : children){
 									if(child!=null){
 										child.setDisplayed(child.displayCycle()>=gameCycle);
 									}
@@ -80,10 +83,25 @@ public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Can
 			if(paths!=null){
 				paths.paint(g);
 			}
-			
+
 			TileDebug tile = Client.clientInstance.getTileDebug();
 			if(tile!=null){
 				tile.paint(g);
+			}
+			
+			CameraDebug camera = Client.clientInstance.getCameraDebug();
+			if(camera!=null){
+				camera.paint(g);
+			}
+			
+			LocationDebug location = Client.clientInstance.getLocationDebug();
+			if(location!=null){
+				location.paint(g);
+			}
+			
+			MouseDebug mouse = Client.clientInstance.getMouseDebug();
+			if(mouse!=null){
+				mouse.paint(g);
 			}
 		}
 		if(Data.currentScript!=null){
@@ -92,7 +110,7 @@ public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Can
 			}
 		}
 		
-		Client.clientInstance.mouseListener().paint(g);
+		Client.mouseListener.paint(g);
 		
 		super.getGraphics().drawImage(gameImage, 0, 0, null);
 		return g;

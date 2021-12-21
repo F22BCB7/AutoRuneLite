@@ -138,7 +138,7 @@ public class NPCDefinition extends EntityNode implements org.osrs.api.wrappers.N
 	@Override
 	public int configID(){return configID;}
 	@BField
-	public org.osrs.api.wrappers.FixedSizeDeque params;
+	public FixedSizeDeque params;
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.FixedSizeDeque params(){return params;}

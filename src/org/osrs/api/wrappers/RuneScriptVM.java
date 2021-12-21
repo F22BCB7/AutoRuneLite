@@ -6,7 +6,7 @@ public interface RuneScriptVM{
 	public String[] strings();
 	public Map varcMap();
 	public boolean changed();
-	public boolean[] varcStringSerials();
+	public boolean[] varcSerials();
 	public long cycle();
 	
 	public String invoke_getVarcString(int a);
