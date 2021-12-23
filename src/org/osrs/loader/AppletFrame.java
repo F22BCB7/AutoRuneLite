@@ -52,12 +52,19 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
 	private MenuItem startScriptOption;
 	private MenuItem pauseScriptOption;
 	private Menu debugMenu;
+	public CheckboxMenuItem boundaryObjDebugOption;
 	public CheckboxMenuItem cameraDebugOption;
+	public CheckboxMenuItem floorDecDebugOption;
+	public CheckboxMenuItem interactableObjDebugOption;
 	public CheckboxMenuItem inventoryDebugOption;
 	public CheckboxMenuItem locationDebugOption;
+	public CheckboxMenuItem menuDebugOption;
+	public CheckboxMenuItem npcDebugOption;
 	public CheckboxMenuItem mouseDebugOption;
 	public CheckboxMenuItem pathDebugOption;
+	public CheckboxMenuItem playerDebugOption;
 	public CheckboxMenuItem tileDebugOption;
+	public CheckboxMenuItem wallDecDebugOption;
 	public CheckboxMenuItem widgetDebugOption;
 	public AppletFrame(Applet applet, PageParser parser){
 		long start = System.currentTimeMillis();
@@ -89,20 +96,34 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
         });
 		fileMenu.add(pauseScriptOption);
 		menuBar.add(fileMenu);
-		
+
 		debugMenu = new Menu("Debug");
+		boundaryObjDebugOption = new CheckboxMenuItem("Boundary Objects");
+		debugMenu.add(boundaryObjDebugOption);
 		cameraDebugOption = new CheckboxMenuItem("Camera");
 		debugMenu.add(cameraDebugOption);
+		floorDecDebugOption = new CheckboxMenuItem("Floor Decorations");
+		debugMenu.add(floorDecDebugOption);
+		interactableObjDebugOption = new CheckboxMenuItem("Interactable Objects");
+		debugMenu.add(interactableObjDebugOption);
 		inventoryDebugOption = new CheckboxMenuItem("Inventory");
 		debugMenu.add(inventoryDebugOption);
 		locationDebugOption = new CheckboxMenuItem("Location");
 		debugMenu.add(locationDebugOption);
+		menuDebugOption = new CheckboxMenuItem("Menu");
+		debugMenu.add(menuDebugOption);
+		npcDebugOption = new CheckboxMenuItem("NPCs");
+		debugMenu.add(npcDebugOption);
 		mouseDebugOption = new CheckboxMenuItem("Mouse");
 		debugMenu.add(mouseDebugOption);
 		pathDebugOption = new CheckboxMenuItem("Paths");
 		debugMenu.add(pathDebugOption);
+		playerDebugOption = new CheckboxMenuItem("Players");
+		debugMenu.add(playerDebugOption);
 		tileDebugOption = new CheckboxMenuItem("Tiles");
 		debugMenu.add(tileDebugOption);
+		wallDecDebugOption = new CheckboxMenuItem("Wall Decorations");
+		debugMenu.add(wallDecDebugOption);
 		widgetDebugOption = new CheckboxMenuItem("Widgets");
 		widgetDebugOption.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {

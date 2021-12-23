@@ -1,11 +1,18 @@
 package org.osrs.api.wrappers.proxies;
 
+import org.osrs.debug.BoundaryObjDebug;
 import org.osrs.debug.CameraDebug;
+import org.osrs.debug.FloorDecDebug;
+import org.osrs.debug.InteractableObjDebug;
 import org.osrs.debug.InventoryDebug;
 import org.osrs.debug.LocationDebug;
+import org.osrs.debug.MenuDebug;
 import org.osrs.debug.MouseDebug;
+import org.osrs.debug.NPCDebug;
 import org.osrs.debug.PathDebug;
+import org.osrs.debug.PlayerDebug;
 import org.osrs.debug.TileDebug;
+import org.osrs.debug.WallDecDebug;
 import org.osrs.debug.WidgetDebug;
 import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BField;
@@ -98,10 +105,45 @@ public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Can
 			if(location!=null){
 				location.paint(g);
 			}
-			
+
 			MouseDebug mouse = Client.clientInstance.getMouseDebug();
 			if(mouse!=null){
 				mouse.paint(g);
+			}
+			
+			MenuDebug menu = Client.clientInstance.getMenuDebug();
+			if(menu!=null){
+				menu.paint(g);
+			}
+			
+			NPCDebug npcs = Client.clientInstance.getNPCDebug();
+			if(npcs!=null){
+				npcs.paint(g);
+			}
+
+			PlayerDebug players = Client.clientInstance.getPlayerDebug();
+			if(players!=null){
+				players.paint(g);
+			}
+			
+			BoundaryObjDebug boundary = Client.clientInstance.getBoundaryObjDebug();
+			if(boundary!=null){
+				boundary.paint(g);
+			}
+			
+			FloorDecDebug floor = Client.clientInstance.getFloorDecDebug();
+			if(floor!=null){
+				floor.paint(g);
+			}
+			
+			InteractableObjDebug interactable = Client.clientInstance.getInteractableObjDebug();
+			if(interactable!=null){
+				interactable.paint(g);
+			}
+			
+			WallDecDebug wall = Client.clientInstance.getWallDecDebug();
+			if(wall!=null){
+				wall.paint(g);
 			}
 		}
 		if(Data.currentScript!=null){

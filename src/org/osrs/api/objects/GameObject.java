@@ -39,7 +39,7 @@ public class GameObject extends Interactable{
 					model = new RSModel(tmp);
 				else{
 					try{
-						model = new RSModel(tmp.invoke_getModel());
+						model = tmp.getCachedModel();
 					}
 					catch(Exception e){}
 				}
@@ -58,7 +58,7 @@ public class GameObject extends Interactable{
 			else{
 				RenderableNode obj = ((FloorDecoration)ref).model();
 				try{
-					model = new RSModel(obj.invoke_getModel());
+					model = obj.getCachedModel();
 				}
 				catch(Exception e){}
 			}
@@ -71,7 +71,7 @@ public class GameObject extends Interactable{
 			else{
 				RenderableNode obj = ((InteractableObject)ref).model();
 				try{
-					model = new RSModel(obj.invoke_getModel());
+					model = obj.getCachedModel();
 				}
 				catch(Exception e){}
 			}
@@ -87,7 +87,7 @@ public class GameObject extends Interactable{
 			else{
 				RenderableNode obj = ((WallDecoration)ref).model();
 				try{
-					model = new RSModel(obj.invoke_getModel());
+					model = obj.getCachedModel();
 				}
 				catch(Exception e){}
 			}

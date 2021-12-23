@@ -3,12 +3,19 @@ package org.osrs.api.wrappers;
 import java.util.ArrayList;
 
 import org.osrs.api.methods.MethodContext;
+import org.osrs.debug.BoundaryObjDebug;
 import org.osrs.debug.CameraDebug;
+import org.osrs.debug.FloorDecDebug;
+import org.osrs.debug.InteractableObjDebug;
 import org.osrs.debug.InventoryDebug;
 import org.osrs.debug.LocationDebug;
+import org.osrs.debug.MenuDebug;
 import org.osrs.debug.MouseDebug;
+import org.osrs.debug.NPCDebug;
 import org.osrs.debug.PathDebug;
+import org.osrs.debug.PlayerDebug;
 import org.osrs.debug.TileDebug;
+import org.osrs.debug.WallDecDebug;
 import org.osrs.debug.WidgetDebug;
 
 public interface Client extends GameShell{
@@ -27,6 +34,13 @@ public interface Client extends GameShell{
 	public CameraDebug getCameraDebug();
 	public LocationDebug getLocationDebug();
 	public MouseDebug getMouseDebug();
+	public MenuDebug getMenuDebug();
+	public NPCDebug getNPCDebug();
+	public PlayerDebug getPlayerDebug();
+	public BoundaryObjDebug getBoundaryObjDebug();
+	public FloorDecDebug getFloorDecDebug();
+	public InteractableObjDebug getInteractableObjDebug();
+	public WallDecDebug getWallDecDebug();
 
 	public Client clientInstance();
 	

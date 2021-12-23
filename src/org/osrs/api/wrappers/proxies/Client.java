@@ -1,12 +1,19 @@
 package org.osrs.api.wrappers.proxies;
 
 import org.osrs.api.methods.MethodContext;
+import org.osrs.debug.BoundaryObjDebug;
 import org.osrs.debug.CameraDebug;
+import org.osrs.debug.FloorDecDebug;
+import org.osrs.debug.InteractableObjDebug;
 import org.osrs.debug.InventoryDebug;
 import org.osrs.debug.LocationDebug;
+import org.osrs.debug.MenuDebug;
 import org.osrs.debug.MouseDebug;
+import org.osrs.debug.NPCDebug;
 import org.osrs.debug.PathDebug;
+import org.osrs.debug.PlayerDebug;
 import org.osrs.debug.TileDebug;
+import org.osrs.debug.WallDecDebug;
 import org.osrs.debug.WidgetDebug;
 import org.osrs.injection.MethodHook;
 import org.osrs.injection.bytescript.BClass;
@@ -134,6 +141,69 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 		if(mouseDebug==null)
 			mouseDebug = new MouseDebug(Client.clientInstance.getMethodContext());
 		return mouseDebug;
+	}
+	@BVar
+	public MenuDebug menuDebug;
+	@BFunction
+	@Override
+	public MenuDebug getMenuDebug(){
+		if(menuDebug==null)
+			menuDebug = new MenuDebug(Client.clientInstance.getMethodContext());
+		return menuDebug;
+	}
+	@BVar
+	public NPCDebug npcDebug;
+	@BFunction
+	@Override
+	public NPCDebug getNPCDebug(){
+		if(npcDebug==null)
+			npcDebug = new NPCDebug(Client.clientInstance.getMethodContext());
+		return npcDebug;
+	}
+	@BVar
+	public PlayerDebug playerDebug;
+	@BFunction
+	@Override
+	public PlayerDebug getPlayerDebug(){
+		if(playerDebug==null)
+			playerDebug = new PlayerDebug(Client.clientInstance.getMethodContext());
+		return playerDebug;
+	}
+	@BVar
+	public BoundaryObjDebug boundaryObjDebug;
+	@BFunction
+	@Override
+	public BoundaryObjDebug getBoundaryObjDebug(){
+		if(boundaryObjDebug==null)
+			boundaryObjDebug = new BoundaryObjDebug(Client.clientInstance.getMethodContext());
+		return boundaryObjDebug;
+	}
+	@BVar
+	public FloorDecDebug floorDecDebug;
+	@BFunction
+	@Override
+	public FloorDecDebug getFloorDecDebug(){
+		if(floorDecDebug==null)
+			floorDecDebug = new FloorDecDebug(Client.clientInstance.getMethodContext());
+		return floorDecDebug;
+	}
+	@BVar
+	public InteractableObjDebug interactableObjDebug;
+	@BFunction
+	@Override
+	public InteractableObjDebug getInteractableObjDebug(){
+		if(interactableObjDebug==null)
+			interactableObjDebug = new InteractableObjDebug(Client.clientInstance.getMethodContext());
+		return interactableObjDebug;
+	}
+	@BVar
+	public WallDecDebug wallDecDebug;
+	@BFunction
+	@Override
+	public WallDecDebug getWallDecDebug(){
+		if(wallDecDebug==null)
+			wallDecDebug = new WallDecDebug(Client.clientInstance.getMethodContext());
+		return wallDecDebug;
 	}
 
 	@BField
@@ -458,11 +528,11 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	}
 	
 	@BMethod(name="getObjectDefinition")
-	public static org.osrs.api.wrappers.ObjectDefinition _getObjectDefinition(int a, int b){return null;}
+	public static ObjectDefinition _getObjectDefinition(int a, int b){return null;}
 	@BMethod(name="getObjectDefinition")
-	public static org.osrs.api.wrappers.ObjectDefinition _getObjectDefinition(int a, byte b){return null;}
+	public static ObjectDefinition _getObjectDefinition(int a, byte b){return null;}
 	@BMethod(name="getObjectDefinition")
-	public static org.osrs.api.wrappers.ObjectDefinition _getObjectDefinition(int a, short b){return null;}
+	public static ObjectDefinition _getObjectDefinition(int a, short b){return null;}
 	@BFunction
 	@Override
 	public org.osrs.api.wrappers.ObjectDefinition invoke_getObjectDefinition(int a){

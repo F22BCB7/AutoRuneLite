@@ -32,6 +32,13 @@ public abstract class RSActor extends RSRenderable{
 	public boolean isIdle(){
 		return !isMoving() && getAnimationID()==-1;
 	}
+	public int getCombatLevel(){
+		Actor a = getAccessor();
+		if(a!=null){
+			return a.overridingCombatLevel();
+		}
+		return -1;
+	}
 	public CombatBarData getCombatData(){
 		if(Data.clientInstance!=null){
 			int gameCycle = ((Client)Data.clientInstance).gameCycle();

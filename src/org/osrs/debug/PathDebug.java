@@ -16,6 +16,8 @@ public class PathDebug {
 	public Graphics paint(Graphics g){
 		if(Data.clientFrame.pathDebugOption.getState()){
 			for(RSPlayer p : methods.players.getAllPlayers()){
+				if(p.getLocation().getPlane()!=methods.game.currentPlane())
+					continue;
 				if(p!=null){
 					g.setColor(Color.ORANGE);
 					for(RSTile t : p.getPath()){
@@ -26,6 +28,8 @@ public class PathDebug {
 				}
 			}
 			for(RSNpc n : methods.npcs.getAll()){
+				if(n.getLocation().getPlane()!=methods.game.currentPlane())
+					continue;
 				if(n!=null){
 					g.setColor(Color.ORANGE);
 					for(RSTile t : n.getPath()){

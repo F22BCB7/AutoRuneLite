@@ -320,17 +320,7 @@ public class Tile extends Node implements org.osrs.api.wrappers.Tile{
 	public InteractableObject[] objects;
 	@BGetter
 	@Override
-	public org.osrs.api.wrappers.InteractableObject[] objects(){
-		if(objects!=null){
-			int length = objects.length;
-			org.osrs.api.wrappers.InteractableObject[] retObjs = new org.osrs.api.wrappers.InteractableObject[length];
-			for(int i=0;i<length;++i){
-				retObjs[i]=objects[i];
-			}
-			return retObjs;
-		}
-		return new org.osrs.api.wrappers.InteractableObject[]{};
-	}
+	public org.osrs.api.wrappers.InteractableObject[] objects(){return objects;}
 	@BField
 	public int[] entityFlags;
 	@BGetter

@@ -336,16 +336,4 @@ public class Actor extends RenderableNode implements org.osrs.api.wrappers.Actor
 	@Override
 	public int endAnimationCycle(){return endAnimationCycle;}
 	
-	@BVar
-	public org.osrs.api.objects.RSModel cachedModel;
-	@BFunction
-	@Override
-	public org.osrs.api.objects.RSModel getCachedModel(){
-		return cachedModel;
-	}
-	@BFunction
-	@Override
-	public void setCachedModel(org.osrs.api.objects.RSModel model){
-		cachedModel = model;
-	}
 }

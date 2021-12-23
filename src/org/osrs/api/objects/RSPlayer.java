@@ -18,6 +18,7 @@ public class RSPlayer extends RSActor{
 	public String getName(){
 		return getAccessor().nameComposite().name();
 	}
+	@Override
 	public int getCombatLevel(){
 		return getAccessor().combatLevel();
 	}

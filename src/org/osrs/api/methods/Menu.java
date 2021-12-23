@@ -132,6 +132,8 @@ public class Menu extends MethodDefinition{
 	 * @return The menu bounds.
 	 */
 	public Rectangle getBounds() {
+		if(!isOpen())
+			return new Rectangle(-1, -1, 0, 0);
 		return new Rectangle(((Client)methods.botInstance).menuX(), ((Client)methods.botInstance).menuY(), ((Client)methods.botInstance).menuWidth(), ((Client)methods.botInstance).menuHeight());
 	}
 	/**
@@ -152,6 +154,8 @@ public class Menu extends MethodDefinition{
 	 * @return The point.
 	 */
 	public Point getClickPoint(int index) {
+		if(!isOpen())
+			return new Point(-1, -1);
 		Rectangle r = getBounds(index);
 		int xOff = new Random().nextInt(getWidth()-5)+5;
 		int yOff = new Random().nextInt((int)r.getHeight()-5)+5;
@@ -162,6 +166,8 @@ public class Menu extends MethodDefinition{
 	 * @return height
 	 */
 	public int getHeight(){
+		if(!isOpen())
+			return 0;
 		return ((Client)methods.botInstance).menuHeight();
 	}
 	/**
@@ -222,8 +228,8 @@ public class Menu extends MethodDefinition{
 	 */
 	public Point getLocation(){
 		if(isOpen())
-			return new Point(((Client)methods.botInstance).menuX(), ((Client)methods.botInstance).menuY());
-		return methods.mouse.getLocation();
+			return new Point(getX(), getY());
+		return new Point(-1, -1);
 	}
 	/**
 	 * Grabs the menu options.
@@ -289,6 +295,8 @@ public class Menu extends MethodDefinition{
 	 * @return width
 	 */
 	public int getWidth(){
+		if(!isOpen())
+			return 0;
 		return ((Client)methods.botInstance).menuWidth();
 	}
 	/**
@@ -296,6 +304,8 @@ public class Menu extends MethodDefinition{
 	 * @return point.x
 	 */
 	public int getX(){
+		if(!isOpen())
+			return -1;
 		return ((Client)methods.botInstance).menuX();
 	}
 	/**
@@ -303,6 +313,8 @@ public class Menu extends MethodDefinition{
 	 * @return point.y
 	 */
 	public int getY(){
+		if(!isOpen())
+			return -1;
 		return ((Client)methods.botInstance).menuY();
 	}
 	/**
@@ -317,6 +329,15 @@ public class Menu extends MethodDefinition{
 			return getBounds(index).contains(pt);
 		}
 		return false;
+	}
+	public int getHoveringIndex(){
+		if(isOpen()){
+			for(int i=0;i<getItemCount();++i){
+				if(isHoveringIndex(i))
+					return i;
+			}
+		}
+		return 0;
 	}
 	/**
 	 * Returns whether or not the Menu is open.
