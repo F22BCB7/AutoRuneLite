@@ -1,5 +1,7 @@
 package org.osrs.api.wrappers;
 
+import org.osrs.api.objects.RSModel;
+
 public interface ItemDefinition extends EntityNode{
 	public int inventoryModelID();
 	public boolean tradable();
@@ -48,4 +50,5 @@ public interface ItemDefinition extends EntityNode{
 	public String name();
 	public int id();
 	public FixedSizeDeque params();
+	public RSModel getCachedModel();
 }

@@ -74,15 +74,15 @@ public class GroundItems extends MethodDefinition{
 				return new GroundItem[]{};
 			Item item = (Item) layer.top();
 			if(item!=null){
-				items.add(new GroundItem(new RSTile(x, y, plane), item));
+				items.add(new GroundItem(new RSTile(x, y, plane), item, layer.height()));
 			}
 			item = (Item) layer.middle();
 			if(item!=null){
-				items.add(new GroundItem(new RSTile(x, y, plane), item));
+				items.add(new GroundItem(new RSTile(x, y, plane), item, layer.height()));
 			}
 			item = (Item) layer.bottom();
 			if(item!=null){
-				items.add(new GroundItem(new RSTile(x, y, plane), item));
+				items.add(new GroundItem(new RSTile(x, y, plane), item, layer.height()));
 			}
 			return items.toArray(new GroundItem[]{});
 		}

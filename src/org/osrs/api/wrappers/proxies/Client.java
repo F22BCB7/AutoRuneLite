@@ -4,6 +4,7 @@ import org.osrs.api.methods.MethodContext;
 import org.osrs.debug.BoundaryObjDebug;
 import org.osrs.debug.CameraDebug;
 import org.osrs.debug.FloorDecDebug;
+import org.osrs.debug.GroundItemDebug;
 import org.osrs.debug.InteractableObjDebug;
 import org.osrs.debug.InventoryDebug;
 import org.osrs.debug.LocationDebug;
@@ -204,6 +205,15 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 		if(wallDecDebug==null)
 			wallDecDebug = new WallDecDebug(Client.clientInstance.getMethodContext());
 		return wallDecDebug;
+	}
+	@BVar
+	public GroundItemDebug groundItemDebug;
+	@BFunction
+	@Override
+	public GroundItemDebug getGroundItemDebug(){
+		if(groundItemDebug==null)
+			groundItemDebug = new GroundItemDebug(Client.clientInstance.getMethodContext());
+		return groundItemDebug;
 	}
 
 	@BField

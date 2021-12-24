@@ -3,6 +3,7 @@ package org.osrs.api.wrappers.proxies;
 import org.osrs.debug.BoundaryObjDebug;
 import org.osrs.debug.CameraDebug;
 import org.osrs.debug.FloorDecDebug;
+import org.osrs.debug.GroundItemDebug;
 import org.osrs.debug.InteractableObjDebug;
 import org.osrs.debug.InventoryDebug;
 import org.osrs.debug.LocationDebug;
@@ -144,6 +145,11 @@ public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Can
 			WallDecDebug wall = Client.clientInstance.getWallDecDebug();
 			if(wall!=null){
 				wall.paint(g);
+			}
+			
+			GroundItemDebug groundItems = Client.clientInstance.getGroundItemDebug();
+			if(groundItems!=null){
+				groundItems.paint(g);
 			}
 		}
 		if(Data.currentScript!=null){

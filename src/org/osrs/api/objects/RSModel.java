@@ -170,11 +170,14 @@ public class RSModel{
 		return projectVertices(location, 0);
 	}  
 	public Point[] projectVertices(RSTile location, int orientation) {
+		return projectVertices(location, orientation, 0);
+	}
+	public Point[] projectVertices(RSTile location, int orientation, int heightOffset) {
 		double localX = location.getX()-((Client)Data.clientInstance).mapBaseX();
 		double localY = location.getY()-((Client)Data.clientInstance).mapBaseY();
 		double _x = ((localX+0.5)*128.0);
 		double _z = ((localY+0.5)*128.0);
-		return projectVertices(location.getPlane(), _x, _z, orientation);
+		return projectVertices(location.getPlane(), _x, _z, orientation, heightOffset);
 	}
 	public Point[] projectVertices(int plane, double worldX, double worldY, int orientation){
 		return projectVertices(plane, worldX, worldY, orientation, 0);
@@ -264,11 +267,14 @@ public class RSModel{
 		return getWireframe(location, 0);
 	}
 	public Polygon[] getWireframe(RSTile location, int orientation){
+		return getWireframe(location, orientation, 0);
+	}
+	public Polygon[] getWireframe(RSTile location, int orientation, int heightOffset){
 		double localX = location.getX()-((Client)Data.clientInstance).mapBaseX();
 		double localY = location.getY()-((Client)Data.clientInstance).mapBaseY();
 		double _x = ((localX+0.5)*128.0);
 		double _z = ((localY+0.5)*128.0);
-		return getWireframe(location.getPlane(), _x, _z, orientation);
+		return getWireframe(location.getPlane(), _x, _z, orientation, heightOffset);
 	}
 	public Polygon[] getWireframe(int plane, double worldX, double worldY, int orientation){
 		return getWireframe(plane, worldX, worldY, orientation, 0);
@@ -329,7 +335,10 @@ public class RSModel{
 		return getPolygon(location, 0);
 	}
 	public Polygon getPolygon(RSTile location, int orientation){
-		Point[] points = getPolygonPoints(projectVertices(location, orientation));
+		return getPolygon(location, orientation, 0);
+	}
+	public Polygon getPolygon(RSTile location, int orientation, int heightOffset){
+		Point[] points = getPolygonPoints(projectVertices(location, orientation, heightOffset));
 		Polygon p = new Polygon();
 		for(int i = 0; i < points.length; i++) {
 			p.addPoint(points[i].x, points[i].y);

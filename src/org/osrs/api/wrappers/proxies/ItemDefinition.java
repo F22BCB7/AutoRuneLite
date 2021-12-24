@@ -1,11 +1,16 @@
 package org.osrs.api.wrappers.proxies;
 
+import org.osrs.api.objects.RSModel;
+import org.osrs.injection.MethodHook;
 import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BDetour;
 import org.osrs.injection.bytescript.BField;
+import org.osrs.injection.bytescript.BFunction;
 import org.osrs.injection.bytescript.BMethod;
 import org.osrs.injection.bytescript.BGetter;
 import org.osrs.injection.bytescript.BVar;
+import org.osrs.util.Data;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -247,4 +252,53 @@ public class ItemDefinition extends EntityNode implements org.osrs.api.wrappers.
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.FixedSizeDeque params(){return params;}
+
+	@BVar
+	public org.osrs.api.objects.RSModel cachedModel;
+	@BFunction
+	@Override
+	public org.osrs.api.objects.RSModel getCachedModel(){
+		return cachedModel;
+	}
+	@BFunction
+	public void setCachedModel(org.osrs.api.objects.RSModel model){
+		cachedModel = model;
+	}
+	@BMethod(name="getModel")
+	public Model _getModel(int a, int b){return null;}
+	@BMethod(name="getModel")
+	public Model _getModel(int a, byte b){return null;}
+	@BMethod(name="getModel")
+	public Model _getModel(int a, short b){return null;}
+	@BDetour
+	public Model getModel(int a, int b){return (Model)invoke_getModel(a);}
+	@BDetour
+	public Model getModel(int a, byte b){return (Model)invoke_getModel(a);}
+	@BDetour
+	public Model getModel(int a, short b){return (Model)invoke_getModel(a);}
+	@BFunction
+	public org.osrs.api.wrappers.Model invoke_getModel(int a){
+		org.osrs.api.wrappers.Model model = null;
+		MethodHook mh = Data.clientModscript.resolver.getMethodHook("ItemDefinition", "getModel", "(I?)L*;", false);
+		if(mh!=null){
+			Object predicate = mh.predicate;
+			if(mh.desc.startsWith("(II)L"))
+				model = _getModel(a, (int)predicate);
+			else if(mh.desc.startsWith("(IB)L"))
+				model = _getModel(a, (byte)predicate);
+			else if(mh.desc.startsWith("(IS)L"))
+				model = _getModel(a, (short)predicate);
+		}
+
+		if(model!=null){
+			if(cachedModel!=null)
+				cachedModel.updateModel(model);
+			else
+				cachedModel = new RSModel(model);
+		}
+		else{
+			this.cachedModel=null;
+		}
+		return model;
+	}
 }

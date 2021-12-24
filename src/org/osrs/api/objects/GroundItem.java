@@ -13,14 +13,16 @@ import org.osrs.util.Data;
 
 public class GroundItem extends Interactable{
 	private RSTile location;
+	private int itemPileHeight;
 	private Item itemNode;
 	private ItemDefinition definition;
 	private RSModel model;
-	public GroundItem(RSTile t, Item item){
+	public GroundItem(RSTile t, Item item, int pileHeight){
 		methods = ((Client)Data.clientInstance).getMethodContext();
 		this.location=t;
 		this.itemNode=item;
 		definition = getDefinition();
+		itemPileHeight = pileHeight;
 	}
 	public ItemDefinition getDefinition(){
 		if(definition!=null)
@@ -34,33 +36,7 @@ public class GroundItem extends Interactable{
 		definition = getDefinition();
 		if(definition==null)
 			return null;
-		int id = getID();
-		if(itemNode.quantity()>1){
-			int stackIndex = -1;
-			int[] amounts = definition.stackAmounts();
-			if(amounts!=null){
-				for(int amount : amounts){
-					if(itemNode.quantity()>=amount)
-						stackIndex++;
-					else
-						break;
-				}
-			}
-			if(stackIndex!=-1){
-				int[] stackIDs = definition.stackIDs();
-				if(stackIDs!=null){
-					if(stackIDs.length>stackIndex)
-						id = stackIDs[stackIndex];
-				}
-			}
-		}
-		Cache cache = ((Client)Data.clientInstance).itemModelCache();
-		if(cache!=null){
-			Node node = methods.nodes.lookup(cache.table(), id);
-			if(node!=null && node instanceof Model){
-				model = new RSModel((Model)node);
-			}
-		}
+		model = definition.getCachedModel();
 		return model;
 	}
 	public int getID(){
@@ -116,21 +92,22 @@ public class GroundItem extends Interactable{
 	public Point[] projectVertices(){
 		RSModel model = getModel();
 		if(model!=null){
-			return model.projectVertices(location);
+			return model.projectVertices(location, 0, itemPileHeight);
 		}
 		return new Point[]{};
 	}
 	public Polygon[] getWireframe(){
 		RSModel model = getModel();
 		if(model!=null){
-			return model.getWireframe(location);
+			return model.getWireframe(location, 0, itemPileHeight);
 		}
 		return new Polygon[]{};
 	}
 	@Override
 	public Point getCenterPoint() {
-		if(model!=null)
-			return model.getCenterPoint(location);
+		RSModel m = getModel();
+		if(m!=null)
+			return m.getCenterPoint(location, 0, itemPileHeight);
 		return new Point(-1, -1);
 	}
 	@Override
@@ -146,8 +123,9 @@ public class GroundItem extends Interactable{
 	}
 	@Override
 	public boolean isHovering() {
-		if(model!=null)
-			return model.containsPoint(methods.mouse.getLocation(), location);
+		RSModel m = getModel();
+		if(m!=null)
+			return m.containsPoint(methods.mouse.getLocation(), location, 0, itemPileHeight);
 		return false;
 	}
 }
