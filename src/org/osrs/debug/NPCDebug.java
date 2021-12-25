@@ -1,7 +1,6 @@
 package org.osrs.debug;
 
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.Polygon;
 
 import org.osrs.api.methods.MethodContext;
@@ -14,7 +13,11 @@ public class NPCDebug {
 		this.methods=methods;
 	}
 	public Graphics paint(Graphics g){
+		int x = 30;
+		int y = 60;
 		if(Data.clientFrame.npcDebugOption.getState()){
+			g.drawString("ID : NAME : COMBAT LEVEL : ANIMATION ID : ORIENTATION : LOCATION : INTERACTING ID : HP : HEIGHT", x, y);
+			y+=15;
 			for(RSNpc npc : methods.npcs.getAll()){
 				if(npc.getLocation().getPlane()!=methods.game.currentPlane())
 					continue;
@@ -22,24 +25,8 @@ public class NPCDebug {
 					for(Polygon p : npc.getWireframe()){
 						g.drawPolygon(p);
 					}
-					Point pt = npc.getScreenLocation();
-					g.drawString("NPC ID : "+npc.getID(), pt.x+15, pt.y);
-					pt.y+=15;
-					g.drawString("NPC Name : "+npc.getName(), pt.x+15, pt.y);
-					pt.y+=15;
-					g.drawString("Combat Level : "+npc.getCombatLevel(), pt.x+15, pt.y);
-					pt.y+=15;
-					g.drawString("Animation ID : "+npc.getAnimationID(), pt.x+15, pt.y);
-					pt.y+=15;
-					g.drawString("Orientation : "+npc.getOrientation(), pt.x+15, pt.y);
-					pt.y+=15;
-					g.drawString("Location : "+npc.getLocation(), pt.x+15, pt.y);
-					pt.y+=15;
-					g.drawString("Interacting ID : "+npc.getInteractingID(), pt.x+15, pt.y);
-					pt.y+=15;
-					g.drawString("Height : "+npc.getHeight(), pt.x+15, pt.y);
-					pt.y+=15;
-					g.drawString("HP Percent : "+npc.getHPPercent(), pt.x+15, pt.y);
+					g.drawString(""+npc.getID()+" : "+npc.getName()+" : "+npc.getCombatLevel()+" : "+npc.getAnimationID()+" : "+npc.getOrientation()+" : "+npc.getLocation()+" : "+npc.getInteractingID()+" : "+npc.getHPPercent()+" : "+npc.getHeight(), x, y);
+					y+=15;
 				}
 			}
 		}

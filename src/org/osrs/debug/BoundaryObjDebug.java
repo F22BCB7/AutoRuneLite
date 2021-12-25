@@ -1,7 +1,6 @@
 package org.osrs.debug;
 
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.Polygon;
 
 import org.osrs.api.methods.MethodContext;
@@ -15,7 +14,11 @@ public class BoundaryObjDebug {
 		this.methods=methods;
 	}
 	public Graphics paint(Graphics g){
+		int x = 30;
+		int y = 60;
 		if(Data.clientFrame.boundaryObjDebugOption.getState()){
+			g.drawString("ID : NAME : ORIENTATION : LOCATION", x, y);
+			y+=15;
 			for(GameObject go : methods.objects.getAllObjects()){
 				if(go.getLocation().getPlane()!=methods.game.currentPlane())
 					continue;
@@ -24,15 +27,8 @@ public class BoundaryObjDebug {
 						for(Polygon p : go.getWireframe()){
 							g.drawPolygon(p);
 						}
-						Point pt = go.getScreenLocation();
-						g.drawString("ID : "+go.getID(), pt.x+15, pt.y);
-						pt.y+=15;
-						g.drawString("Name : "+go.getName(), pt.x+15, pt.y);
-						pt.y+=15;
-						g.drawString("Location : "+go.getLocation(), pt.x+15, pt.y);
-						pt.y+=15;
-						g.drawString("Orientation : "+go.getOrientation(), pt.x+15, pt.y);
-						pt.y+=15;
+						g.drawString(""+go.getID()+" : "+go.getName()+" : "+go.getOrientation()+" : "+go.getLocation(), x, y);
+						y+=15;
 					}
 				}
 			}
