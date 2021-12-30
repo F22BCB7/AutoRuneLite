@@ -834,6 +834,14 @@ public class RSWidget extends Interactable{
 		}
 		return null;
 	}
+	public boolean containsAction(String action){
+		String[] actions = actions();
+		for(int i=0;actions!=null && i<actions.length;++i){
+			if(actions[i].equals(action))
+				return true;
+		}
+		return false;
+	}
 	public int[] itemIDs(){
 		Widget w = getInternal();
 		if(w!=null){
@@ -841,12 +849,28 @@ public class RSWidget extends Interactable{
 		}
 		return null;
 	}
+	public boolean containsItemID(int id){
+		int[] ids = itemIDs();
+		for(int i=0;ids!=null && i<ids.length;++i){
+			if(ids[i]==id)
+				return true;
+		}
+		return false;
+	}
 	public int[] itemQuantities(){
 		Widget w = getInternal();
 		if(w!=null){
 			return w.itemQuantities();
 		}
 		return null;
+	}
+	public boolean containsItemQuantity(int quantity){
+		int[] quantities = itemQuantities();
+		for(int i=0;quantities!=null && i<quantities.length;++i){
+			if(quantities[i]==quantity)
+				return true;
+		}
+		return false;
 	}
 	public int childModelRotationHash(){
 		Widget w = getInternal();
@@ -876,6 +900,14 @@ public class RSWidget extends Interactable{
 		}
 		return null;
 	}
+	public boolean containsSpriteID(int id){
+		int[] ids = spriteIDs();
+		for(int i=0;ids!=null && i<ids.length;++i){
+			if(ids[i]==id)
+				return true;
+		}
+		return false;
+	}
 	public int[] ySprites(){
 		Widget w = getInternal();
 		if(w!=null){
@@ -904,12 +936,28 @@ public class RSWidget extends Interactable{
 		}
 		return null;
 	}
+	public boolean containsWidgetVarp(int id){
+		int[] ids = widgetVarps();
+		for(int i=0;ids!=null && i<ids.length;++i){
+			if(ids[i]==id)
+				return true;
+		}
+		return false;
+	}
 	public String[] configActions(){
 		Widget w = getInternal();
 		if(w!=null){
 			return w.configActions();
 		}
 		return null;
+	}
+	public boolean containsConfigAction(String action){
+		String[] actions = configActions();
+		for(int i=0;actions!=null && i<actions.length;++i){
+			if(actions[i].equals(action))
+				return true;
+		}
+		return false;
 	}
 	public int[][] scriptOpcodes(){
 		Widget w = getInternal();

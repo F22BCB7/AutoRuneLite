@@ -3,15 +3,11 @@ package org.osrs.api.methods;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import org.osrs.api.objects.RSInterface;
 import org.osrs.api.objects.RSTile;
 import org.osrs.api.objects.RSWidget;
-import org.osrs.util.Data;
-import org.osrs.api.wrappers.Client;
 
 public class Minimap extends MethodDefinition{
-	private final int RESIZE_MODE_MINIMAP_PARENT = 164;
-	private final int RESIZE_MODE_MINIMAP_BOUNDS = 28;
-	
 	public Minimap(MethodContext context){
 		super(context);
 	}
@@ -22,14 +18,14 @@ public class Minimap extends MethodDefinition{
 		return methods.calculations.locationToMinimap(tile);
 	}
 	public Rectangle getMinimapBounds(){
-		if(Data.clientInstance!=null){
-			if(((Client)Data.clientInstance).resizeMode()){//resize mode bounds
-				RSWidget w = methods.widgets.getChild(RESIZE_MODE_MINIMAP_PARENT, RESIZE_MODE_MINIMAP_BOUNDS);
-				if(w!=null){
-					return w.getBounds();
+		for(RSInterface iface : methods.widgets.getAll()){
+			if(iface!=null){
+				for(RSWidget w : iface.getChildren()){
+					if(w!=null && w.isDisplayed() && w.contentType()==1338){
+						return w.getBounds();
+					}
 				}
 			}
-			return new Rectangle(643, 84, 0, 0);//Fixed mode bounds
 		}
 		return new Rectangle(0, 0, 0, 0);
 	}

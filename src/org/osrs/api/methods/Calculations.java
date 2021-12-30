@@ -8,6 +8,7 @@ import org.osrs.api.objects.RSPlayer;
 import org.osrs.api.objects.RSTile;
 import org.osrs.api.objects.RSWidget;
 import org.osrs.util.Data;
+
 import org.osrs.api.wrappers.Client;
 
 public class Calculations extends MethodDefinition{
@@ -195,9 +196,8 @@ public class Calculations extends MethodDefinition{
 			return false;
 		Point p = locationToMinimap(tile);
 		Rectangle r = methods.minimap.getMinimapBounds();
-		boolean resize = ((Client)Data.clientInstance).resizeMode();
-		int baseX = resize?(r.x+(r.width/2)):(r.x);
-		int baseY = resize?(r.y+(r.height/2)):(r.y);
+		int baseX = (r.x+(r.width/2));
+		int baseY = (r.y+(r.height/2));
 		return !p.equals(new Point(-1, -1)) && distance(baseX, p.x, baseY, p.y)<75;
 	}	
 	public Rectangle getViewportBounds(){
@@ -251,7 +251,7 @@ public class Calculations extends MethodDefinition{
 			if ((X < 128.0D) || (Y < 128.0D) || (X > 13056.0D) || (Y > 13056.0D)) {
 				return new Point(-1, -1);
 			}
-			int Z = tileHeight((int) X, (int) Y, plane) - height;
+			int Z = tileHeight(X, Y, plane) - height;
 			X -= ((Client)Data.clientInstance).cameraX();
 			Y -= ((Client)Data.clientInstance).cameraY();
 			Z -= ((Client)Data.clientInstance).cameraZ();
@@ -291,7 +291,12 @@ public class Calculations extends MethodDefinition{
 			if(x<0 || y<0 || x>=104 || y>=104)
 				return 0;
 			if(heights.length>=plane && heights[plane].length>=x && heights[plane][x].length>=y){
-				return heights[plane][x][y];
+				int height = heights[plane][x][y];
+				int z1 = height;
+				int z2 = x + 1 < 104 ? heights[plane][x+1][y] : z1;
+				int z3 = y + 1 < 104 ? heights[plane][x][y+1] : z1;
+				int z4 = x + 1 < 104 && y + 1 < 104 ? heights[plane][x+1][y+1] : z1;
+				return (z1+z2+z3+z4)/4;
 			}
 		}
 		return 0;
@@ -321,9 +326,8 @@ public class Calculations extends MethodDefinition{
 		int localPointX = (regionOffsetY * angleSine + regionOffsetX * angleCosine) >> 16;
 		int localPointY = (regionOffsetY * angleCosine - regionOffsetX * angleSine) >> 16;
 		Rectangle r = ((Client)Data.clientInstance).getMethodContext().minimap.getMinimapBounds();
-		boolean resize = ((Client)Data.clientInstance).resizeMode();
-		int baseX = resize?(r.x+(r.width/2)):(r.x);
-		int baseY = resize?(r.y+(r.height/2)):(r.y);
+		int baseX = (r.x+(r.width/2));
+		int baseY = (r.y+(r.height/2));
 		return new Point(baseX + localPointX, baseY - localPointY);
 	}
 	static {

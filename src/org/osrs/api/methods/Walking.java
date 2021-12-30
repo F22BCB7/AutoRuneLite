@@ -164,10 +164,14 @@ public class Walking extends MethodDefinition{
 		try{
 			RSPlayer localPlayer = methods.players.getLocalPlayer();
 			if(localPlayer!=null){
-				if(methods.calculations.onViewport(tile)){
-					//return tile.doAction("Walk here");
+				/*if(methods.calculations.onViewport(tile)){
+					return tile.doAction("Walk here");
 				}
 				else if(methods.calculations.onMap(tile)){
+					methods.region.clickMap(tile);
+					return true;
+				}*/
+				if(methods.calculations.onMap(tile)){
 					methods.region.clickMap(tile);
 					return true;
 				}

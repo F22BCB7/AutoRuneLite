@@ -112,10 +112,13 @@ public interface Client extends GameShell{
 	public RuneScriptVM runescriptVM();
 	
 	public int mouseCrosshairState();
+	public CollisionMap[] collisionMaps();
+	
 	public void setPreventIdleMouse(boolean val);
 	public boolean getPreventIdleMouse();
 	public int mouseIdleTicks();
 	
+	public int invoke_getVarp(int var);
 	public ItemDefinition invoke_getItemDefinition(int a);
 	public ObjectDefinition invoke_getObjectDefinition(int a);
 	public void invoke_addChatMessage(int a, String b, String c, String d);

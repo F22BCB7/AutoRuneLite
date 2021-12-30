@@ -2,6 +2,7 @@ package org.osrs.api.objects;
 
 import java.lang.ref.SoftReference;
 
+import org.osrs.api.wrappers.Actor;
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.NPCDefinition;
 import org.osrs.api.wrappers.Npc;
@@ -19,6 +20,14 @@ public class RSNpc extends RSActor{
 	}
 	public NPCDefinition getDefinition(){
 		return getAccessor().definition();
+	}
+	@Override
+	public int getCombatLevel(){
+		NPCDefinition def = getDefinition();
+		if(def!=null){
+			return def.combatLevel();
+		}
+		return -1;
 	}
 	public int getID(){
 		Npc npc = getAccessor();

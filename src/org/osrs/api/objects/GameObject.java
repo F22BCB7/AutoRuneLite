@@ -77,9 +77,6 @@ public class GameObject extends Interactable{
 			}
 			id = ((InteractableObject) ref).hash();
 			orientation = ((InteractableObject) ref).orientation();
-			int x = (((Client)Data.clientInstance).mapBaseX()+(((InteractableObject)ref).x()/128));
-			int y = (((Client)Data.clientInstance).mapBaseY()+(((InteractableObject)ref).y()/128));
-			location = new RSTile(x, y, loc.getPlane());
 		}
 		if (ref instanceof WallDecoration) {
 			if(((WallDecoration)ref).model() instanceof Model)

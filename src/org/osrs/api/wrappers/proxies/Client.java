@@ -494,6 +494,13 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@BGetter
 	@Override
 	public int mouseCrosshairState(){return mouseCrosshairState;}
+
+	@BField
+	public static CollisionMap[] collisionMaps;
+	@BGetter
+	@Override
+	public org.osrs.api.wrappers.CollisionMap[] collisionMaps(){return collisionMaps;}
+	
 	@BVar
 	public boolean preventIdleMouse;
 	@BFunction
@@ -516,6 +523,25 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 		if(clientInstance.preventIdleMouse)
 			return 0;
 		return mouseIdleTicks;
+	}
+
+	@BMethod(name="getVarp")
+	public static int _getVarp(int a, int b){return -1;}
+	@BMethod(name="getVarp")
+	public static int _getVarp(int a, byte b){return -1;}
+	@BMethod(name="getVarp")
+	public static int _getVarp(int a, short b){return -1;}
+	@BFunction
+	@Override
+	public int invoke_getVarp(int var){
+		Object predicate = Client.clientInstance.getMethodPredicate("", "getVarp", "(I?)I", true);
+		if(predicate instanceof Integer)
+			return _getVarp(var, (Integer)predicate);
+		if(predicate instanceof Byte)
+			return _getVarp(var, (Byte)predicate);
+		if(predicate instanceof Short)
+			return _getVarp(var, (Short)predicate);
+		return -1;
 	}
 	
 	@BMethod(name="getItemDefinition")

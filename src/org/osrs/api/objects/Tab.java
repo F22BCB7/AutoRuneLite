@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import org.osrs.util.Data;
+import org.osrs.api.methods.MethodContext;
 import org.osrs.api.wrappers.Client;
 
 public class Tab extends Interactable{
@@ -12,8 +13,8 @@ public class Tab extends Interactable{
 	private int[] resizeModeWidgetIndexs = new int[]{-1, -1};
 	private int[] fixedModeWidgetIndexs = new int[]{-1, -1};
 	
-	public Tab(int resize_interfaceIndex, int resize_childIndex, int fixed_interfaceIndex, int fixed_childIndex, String tabName, int index){
-		methods = ((Client)Data.clientInstance).getMethodContext();
+	public Tab(MethodContext context, int resize_interfaceIndex, int resize_childIndex, int fixed_interfaceIndex, int fixed_childIndex, String tabName, int index){
+		methods = context;
 		resizeModeWidgetIndexs[0]=resize_interfaceIndex;
 		resizeModeWidgetIndexs[1]=resize_childIndex;
 		fixedModeWidgetIndexs[0]=fixed_interfaceIndex;

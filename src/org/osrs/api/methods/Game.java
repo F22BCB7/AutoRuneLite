@@ -170,6 +170,9 @@ public class Game extends MethodDefinition{
 	public int mouseCrosshairState(){
 		return client.mouseCrosshairState();
 	}
+	public CollisionMap[] collisionMaps(){
+		return client.collisionMaps();
+	}
 	public int mouseIdleTicks(){
 		return client.mouseIdleTicks();
 	}

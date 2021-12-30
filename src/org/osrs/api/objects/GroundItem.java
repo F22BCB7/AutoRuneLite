@@ -3,12 +3,9 @@ package org.osrs.api.objects;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
-import org.osrs.api.wrappers.Cache;
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.Item;
 import org.osrs.api.wrappers.ItemDefinition;
-import org.osrs.api.wrappers.Model;
-import org.osrs.api.wrappers.Node;
 import org.osrs.util.Data;
 
 public class GroundItem extends Interactable{

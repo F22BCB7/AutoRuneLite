@@ -54,6 +54,19 @@ public class Modscript {
 			System.exit(0);
 		}
 		new ModscriptReader(this).loadModscript();
+
+
+		/**Hotfix hooks**/
+		for(ClassHook ch : classHooks){
+			if(ch.refactoredName.equals("Widget")){
+				for(FieldHook fh : ch.fieldHooks){
+					if(fh.refactoredName.equals("spriteID"))
+						fh.multiplier = (int)949557953;
+				}
+			}
+		}
+		/****************/
+			
 		System.out.println("Loaded modscript r"+modscriptRevision+" in "+(System.currentTimeMillis()-start)+"ms");
 		resolver = new ClassResolver(this);
 	}
@@ -63,7 +76,7 @@ public class Modscript {
 		compiler.loadModFiles();
 		compiler.parseModClasses();
 		compiler.remapInstructions();
-
+		
 		dumpClasses("injected.jar", classNodes);
 	}
 	public boolean containsAnnotation(MethodNode method, String annotation){

@@ -8,6 +8,7 @@ import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.FloorDecoration;
 import org.osrs.api.wrappers.InteractableObject;
 import org.osrs.api.wrappers.WallDecoration;
+import org.osrs.util.Data;
 import org.osrs.api.wrappers.Region;
 import org.osrs.api.wrappers.Tile;
 
@@ -28,7 +29,9 @@ public class Objects extends MethodDefinition{
 						for(InteractableObject io : tile.objects()){
 							if(io==null)
 								continue;
-							objects.add(new GameObject(io, new RSTile(x, y, plane)));
+							if(x==(io.x()/128) && y==(io.y()/128)){
+								objects.add(new GameObject(io, new RSTile(x, y, plane)));
+							}
 						}
 						BoundaryObject bo = tile.boundary();
 						if(bo!=null)
