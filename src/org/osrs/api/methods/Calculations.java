@@ -87,10 +87,8 @@ public class Calculations extends MethodDefinition{
 		RSPlayer p = methods.players.getLocalPlayer();
 		if(p==null)return new Point(-1, -1);
 		RSTile center = p.getLocation();
-		double x = tile.getX() - ((Client)Data.clientInstance).mapBaseX();
-		double y = tile.getY() - ((Client)Data.clientInstance).mapBaseY();
-		int mmX = (int) (x * 4 + 2 - (((center.getX() - ((Client)Data.clientInstance).mapBaseX())+0.5D)*128) / 32);
-		int mmY = (int) (y * 4 + 2 - (((center.getY() - ((Client)Data.clientInstance).mapBaseY())+0.5D)*128) / 32);
+		int mmX = (int) (tile.getLocalX() * 4 + 2 - ((center.getLocalX()+0.5D)*128) / 32);
+		int mmY = (int) (tile.getLocalY() * 4 + 2 - ((center.getLocalY()+0.5D)*128) / 32);
 		return worldToMinimap(mmX, mmY);
 	}
 	/**
@@ -104,8 +102,8 @@ public class Calculations extends MethodDefinition{
 		RSPlayer p = methods.players.getLocalPlayer();
 		if(p==null)return new Point(-1, -1);
 		RSTile center = p.getLocation();
-		int mmX = (int) (localX * 4 + 2 - (((center.getX() - ((Client)Data.clientInstance).mapBaseX())+0.5D)*128) / 32);
-		int mmY = (int) (localY * 4 + 2 - (((center.getY() - ((Client)Data.clientInstance).mapBaseY())+0.5D)*128) / 32);
+		int mmX = (int) (localX * 4 + 2 - ((center.getLocalX()+0.5D)*128) / 32);
+		int mmY = (int) (localY * 4 + 2 - ((center.getLocalY()+0.5D)*128) / 32);
 		return worldToMinimap(mmX, mmY);
 	}
 	/**
@@ -325,7 +323,7 @@ public class Calculations extends MethodDefinition{
 		int angleCosine = Calculations.COS_TABLE[angle];
 		int localPointX = (regionOffsetY * angleSine + regionOffsetX * angleCosine) >> 16;
 		int localPointY = (regionOffsetY * angleCosine - regionOffsetX * angleSine) >> 16;
-		Rectangle r = ((Client)Data.clientInstance).getMethodContext().minimap.getMinimapBounds();
+		Rectangle r = methods.minimap.getMinimapBounds();
 		int baseX = (r.x+(r.width/2));
 		int baseY = (r.y+(r.height/2));
 		return new Point(baseX + localPointX, baseY - localPointY);

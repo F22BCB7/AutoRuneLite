@@ -43,7 +43,8 @@ public class Inventory extends MethodDefinition{
 					inventoryItems[i] = new InventoryItem(-1, 0, i);
 				if(methods.grandExchange.isGEInventoryOpen())
 					inventoryItems[i].updateInfo(ids[i]+1, counts[i]);
-				inventoryItems[i].updateInfo(ids[i], counts[i]);
+				else
+					inventoryItems[i].updateInfo(ids[i]-1, counts[i]);
 			}
 		}
 		catch(NullPointerException e){

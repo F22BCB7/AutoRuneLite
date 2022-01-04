@@ -14,7 +14,7 @@ import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.Widget;
 
 public class Walking extends MethodDefinition{
-	private Walker walker = null;
+	public Walker walker = null;
 	public Walking(MethodContext context){
 		super(context);
 		walker = new Walker();
@@ -43,7 +43,7 @@ public class Walking extends MethodDefinition{
 					for(RSWidget child : childs){
 						if(child!=null){
 							Widget widget = child.getInternal();
-							if(widget!=null){
+							if(widget!=null && widget.isDisplayed()){
 								String[] actions = widget.actions();
 								if(actions!=null && actions.length>0 && actions[0].equals("Toggle Run"))
 									return child;
@@ -60,7 +60,7 @@ public class Walking extends MethodDefinition{
 	 * @return true if its up
 	 */
 	public boolean hasDestination(){
-		return !(getDestination().equals(new RSTile(-1, -1)));
+		return !(getDestination().equals(new RSTile(-1, -1, -1)));
 	}
 	/**
 	 * Reverses the order of a given RSTile path.
@@ -225,7 +225,7 @@ public class Walking extends MethodDefinition{
 					g.setColor(Color.BLACK);
 					g.fillRect(p.x + 1, p.y + 1, 3, 3);
 					if (i > 0) {
-						final Point p1 = methods.calculations.locationToMinimap(path[i - 1].getX(), path[i - 1].getY());
+						final Point p1 = methods.calculations.locationToMinimap(path[i - 1]);
 						g.setColor(Color.ORANGE);
 						if (p1.x != -1 && p1.y != -1)
 							g.drawLine(p.x + 2, p.y + 2, p1.x + 2, p1.y + 2);
@@ -243,7 +243,7 @@ public class Walking extends MethodDefinition{
 	}
 	
 
-	private class Walker extends Thread{
+	public class Walker extends Thread{
 		public RSTile tile = null;
 		public boolean done = false;
 		public int movementTimer = 10000;
@@ -265,14 +265,14 @@ public class Walking extends MethodDefinition{
 						methods.sleep(new Random().nextInt(50)+150);
 					}
 				}
-				if (!pl.isMoving() || (((Client)methods.botInstance).destinationX() == -1 || ((Client)methods.botInstance).destinationY()==-1) || methods.calculations.distanceTo(methods.walking.getDestination()) < randomReturn) {
+				if (!pl.isMoving() || !hasDestination() || methods.calculations.distanceTo(methods.walking.getDestination()) < randomReturn) {
 					RSTile nextTile = nextTile(path);
 					if(nextTile.equals(new RSTile(-1, -1)))
 						continue;
-					if ((methods.walking.hasDestination()) && methods.calculations.distanceBetween(methods.walking.getDestination(), nextTile) <= distanceTo) {
+					if (hasDestination() && methods.calculations.distanceBetween(getDestination(), nextTile) <= distanceTo) {
 						continue;
 					}
-					methods.region.clickMap(nextTile);
+					walkTile(nextTile);
 					if(nextTile.equals(tile))
 						done = true;
 					if(!waitToMove(new Random().nextInt(400)+800)){
@@ -296,7 +296,6 @@ public class Walking extends MethodDefinition{
 				done = true;
 			}
 		}
-		public Thread walker = null;
 		public RSTile[] path = null;
 		public boolean waitToMove(int timeout){
 			long start = System.currentTimeMillis();
@@ -315,18 +314,16 @@ public class Walking extends MethodDefinition{
 			}
 			this.tile = path[path.length - 1];
 			this.path = path;
-			walker = new Thread(this);
-			if(walker==null)return false;
-			walker.start();
+			this.start();
 			waitToMove(new Random().nextInt(400)+800);
 			if (waitUntilDest) {
-				while (walker.isAlive()) {
+				while (this.isAlive()) {
 					methods.sleep(new Random().nextInt(300)+300);
 				}
-				walker=null;
+				this.stop();
 				return done;
 			}
-			walker=null;
+			this.stop();
 			return true;
 		}
 		/**

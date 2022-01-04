@@ -95,8 +95,8 @@ public class GameShell extends Applet implements org.osrs.api.wrappers.GameShell
 					}
 				}
 			}
+			Client.clientInstance.getMethodContext().inventory.updateInventoryItems();
 		}
-		Client.clientInstance.getMethodContext().inventory.updateInventoryItems();
 	
 		if(Data.currentScript!=null){
 			if(Data.currentScript instanceof org.osrs.script.listeners.CycleListener){
