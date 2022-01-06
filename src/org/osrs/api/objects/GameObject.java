@@ -185,8 +185,7 @@ public class GameObject extends Interactable{
 		return false;
 	}
 	public boolean isVisible(){
-		Point pt = methods.calculations.locationToScreen(location);
-		return pt.x!=-1 && pt.y!=-1;
+		return methods.calculations.onViewport(getLocation());
 	}
 	public Point[] projectVertices(){
 		if(model!=null){

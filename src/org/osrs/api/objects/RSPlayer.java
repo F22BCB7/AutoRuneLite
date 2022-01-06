@@ -3,6 +3,7 @@ package org.osrs.api.objects;
 import java.lang.ref.SoftReference;
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.Player;
+import org.osrs.api.wrappers.PlayerDefinition;
 import org.osrs.util.Data;
 
 public class RSPlayer extends RSActor{
@@ -14,6 +15,12 @@ public class RSPlayer extends RSActor{
 	}
 	public Player getAccessor(){
 		return accessor.get();
+	}
+	public PlayerDefinition getDefinition(){
+		Player p = getAccessor();
+		if(p!=null)
+			return p.definition();
+		return null;
 	}
 	public String getName(){
 		return getAccessor().nameComposite().name();

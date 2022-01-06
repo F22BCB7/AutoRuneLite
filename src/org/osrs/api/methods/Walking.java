@@ -314,7 +314,8 @@ public class Walking extends MethodDefinition{
 			}
 			this.tile = path[path.length - 1];
 			this.path = path;
-			this.start();
+			if(!done && !this.isAlive())
+				this.start();
 			waitToMove(new Random().nextInt(400)+800);
 			if (waitUntilDest) {
 				while (this.isAlive()) {

@@ -22,7 +22,6 @@ public class MouseWheelListener implements org.osrs.api.wrappers.MouseWheelListe
 	@BFunction
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent var1) {
-		//System.out.println(e.toString());
 		mouseWheelMoved0(var1);
 	}
 }

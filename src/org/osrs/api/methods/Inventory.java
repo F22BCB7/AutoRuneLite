@@ -399,6 +399,23 @@ public class Inventory extends MethodDefinition{
 		if(methods.grandExchange.isGEInventoryOpen()){
 			return methods.grandExchange.getInventoryWidget();
 		}
+		if(methods.equipment.isEquipmentStatsOpen()){
+			for(RSInterface iface : methods.widgets.getAll()){
+				if(iface!=null){
+					for(RSWidget wP : iface.getChildren()){
+						if(wP!=null){
+							RSWidget[] children = wP.getChildren();
+							if(children==null || children.length!=29)
+								continue;
+							RSWidget check = children[28];
+							if(check!=null && check.modelZoom()==1777)
+								return wP;
+						}
+					}
+				}
+			}
+			return null;
+		}
 		if(inventoryWidget!=null)
 			return inventoryWidget;
 		findInventoryLoop:for(RSInterface i : methods.widgets.getAll()){

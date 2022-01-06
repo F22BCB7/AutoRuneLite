@@ -1,5 +1,7 @@
 package org.osrs.api.methods;
 
+import java.util.Arrays;
+
 import org.osrs.api.wrappers.*;
 import org.osrs.api.wrappers.Region;
 
@@ -49,6 +51,26 @@ public class Game extends MethodDefinition{
 	}
 	public HashTable componentTable(){
 		return client.componentTable();
+	}
+	public int widgetVisibleCycle(){
+		return client.widgetVisibleCycle();
+	}
+	public HashTable itemContainers(){
+		return client.itemContainers();
+	}
+	public ItemStorage[] getItemStorages(){
+		ItemStorage[] storages = new ItemStorage[32];
+		HashTable table = itemContainers();
+		int index=0;
+		for(Node node : table.buckets()){
+			if(node!=null){
+				if(!node.next().equals(node) && node.next() instanceof ItemStorage){
+					storages[index] = (ItemStorage)node.next();
+				}
+			}
+			index++;
+		}
+		return storages;
 	}
 	
 	public int cameraX(){

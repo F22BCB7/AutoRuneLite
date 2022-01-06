@@ -2,6 +2,7 @@ package org.osrs.api.methods;
 
 import java.util.ArrayList;
 import org.osrs.api.objects.BankItem;
+import org.osrs.api.objects.RSInterface;
 import org.osrs.api.objects.RSWidget;
 
 public class Bank extends MethodDefinition{
@@ -14,6 +15,22 @@ public class Bank extends MethodDefinition{
 	
 	public Bank(MethodContext context){
 		super(context);
+	}
+	public boolean close(){
+		for(RSInterface iface : methods.widgets.getAll()){
+			if(iface!=null){
+				for(RSWidget w : iface.getChildren()){
+					if(w==null)
+						continue;
+					for(RSWidget child : w.getChildren()){
+						if(child!=null && child.isDisplayed() && child.spriteID()==535){
+							return child.click();
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 	/**
 	 * Grabs a specified item by id from the bank.

@@ -4,6 +4,8 @@ import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BFunction;
 import org.osrs.injection.bytescript.BMethod;
 import org.osrs.injection.bytescript.BVar;
+import org.osrs.script.ScriptDef;
+import org.osrs.util.Data;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -132,104 +134,86 @@ public class MouseListener implements org.osrs.api.wrappers.MouseListener{
 	@BFunction
 	@Override
 	public final void mouseClicked(final MouseEvent e) {
-		//System.out.println(e.toString());
 		realX=e.getX();
 		realY=e.getY();
-
-		//ScriptDef script = Data.currentScripts.get(instance);
-		//if(script==null || script.isPaused){
+		ScriptDef script = Data.currentScript;
+		if(script==null || script.isPaused){
 			clientX = e.getX();
 			clientY = e.getY();
 			mouseClicked0(e);
-		//}
-		//else
-		//	System.out.println("Script is running.");
-			
+		}
 		e.consume();
 	}
 	@BFunction
 	@Override
 	public final void mouseDragged(final MouseEvent e) {
-		//System.out.println(e.toString());
 		realX=e.getX();
 		realY=e.getY();
-
-		//ScriptDef script = Data.currentScripts.get(instance);
-		//if(script==null || script.isPaused){
+		ScriptDef script = Data.currentScript;
+		if(script==null || script.isPaused){
 			clientX = e.getX();
 			clientY = e.getY();
 			mouseDragged0(e);
-		//}
+		}
 		e.consume();
 	}
 	@BFunction
 	@Override
 	public final void mouseEntered(final MouseEvent e) {
-		//System.out.println(e.toString());
 		realPresent=true;
 		realX=e.getX();
 		realY=e.getY();
-		//ScriptDef script = Data.currentScripts.get(instance);
-		//if(script==null || script.isPaused){
+		ScriptDef script = Data.currentScript;
+		if(script==null || script.isPaused){
 			clientX = e.getX();
 			clientY = e.getY();
 			clientPresent = true;
 			mouseEntered0(e);
-		//}
-	
+		}
 		e.consume();
 	}
 	@BFunction
 	@Override
 	public final void mouseExited(final MouseEvent e) {
-		//System.out.println(e.toString());
 		realPresent=false;
 		realX=e.getX();
 		realY=e.getY();
-		//ScriptDef script = Data.currentScripts.get(instance);
-		//if(script==null || script.isPaused){
+		ScriptDef script = Data.currentScript;
+		if(script==null || script.isPaused){
 			clientX = e.getX();
 			clientY = e.getY();
 			clientPresent = false;
 			mouseExited0(e);
-		//}
-	
+		}
 		e.consume();
 	}
 	@BFunction
 	@Override
 	public final void mouseMoved(final MouseEvent e) {
-		//System.out.println("Source : "+e.getSource());
 		if(realLastMoveTime==0)
 			realLastMoveTime = System.currentTimeMillis();
-		//byte[] seed = ByteBuffer.allocate(8).putLong((System.currentTimeMillis()-realLastMoveTime)+e.getXOnScreen()+e.getYOnScreen()).array();
-		//Data.randomSeed[Data.randomSeedIndice++] = (byte) (seed[7] * (methods.calculations.random(10)%2==1?-1:1));
-		//if(Data.randomSeedIndice==8)
-		//	Data.randomSeedIndice=0;
 		realX=e.getX();
 		realY=e.getY();
-		//ScriptDef script = Data.currentScripts.get(instance);
-		//if(script==null || script.isPaused){
+		ScriptDef script = Data.currentScript;
+		if(script==null || script.isPaused){
 			clientX = e.getX();
 			clientY = e.getY();
 			mouseMoved0(e);
-		//}
-	
+		}
 		realLastMoveTime = System.currentTimeMillis();
 		e.consume();
 	}
 	@BFunction
 	@Override
 	public final void mousePressed(final MouseEvent e) {
-		//System.out.println(e.toString());
 		realPressed=true;
 		realX=e.getX();
 		realY=e.getY();
 		realPressX = e.getX();
 		realPressY = e.getY();
 		realPressTime = System.currentTimeMillis();
-		//ScriptDef script = Data.currentScripts.get(instance);
-		//if(script==null || script.isPaused){
+		ScriptDef script = Data.currentScript;
+		if(script==null || script.isPaused){
 			clientPressed = true;
 			clientX = e.getX();
 			clientY = e.getY();
@@ -237,29 +221,27 @@ public class MouseListener implements org.osrs.api.wrappers.MouseListener{
 			clientPressY = e.getY();
 			clientPressTime = System.currentTimeMillis();
 			mousePressed0(e);
-		//}
+		}
 		e.consume();
 	}
 	@BFunction
 	@Override
 	public final void mouseReleased(final MouseEvent e) {
-	//	System.out.println(e.toString());
 		realX=e.getX();
 		realY=e.getY();
 		realPressed = false;
-		//ScriptDef script = Data.currentScripts.get(instance);
-		//if(script==null || script.isPaused){
+		ScriptDef script = Data.currentScript;
+		if(script==null || script.isPaused){
 			clientX = e.getX();
 			clientY = e.getY();
 			clientPressed = false;
 			mouseReleased0(e);
-		//}
+		}
 		e.consume();
 	}
 	@BFunction
 	@Override
 	public final void sendEvent(final MouseEvent e) {
-		//System.out.println("Sending event : "+e.toString());
 		clientX = e.getX();
 		clientY = e.getY();
 		try {
@@ -288,19 +270,8 @@ public class MouseListener implements org.osrs.api.wrappers.MouseListener{
 				throw new InternalError(e.toString());
 			}
 		} catch (@SuppressWarnings("unused") final NullPointerException npe) {
-			// client may throw NPE when a listener
-			// is being re-instantiated.
-		}
-		if (e.getID() == MouseEvent.MOUSE_CLICKED || e.getID() == MouseEvent.MOUSE_PRESSED ||
-				e.getID() == MouseEvent.MOUSE_RELEASED) {
-			/*ArrayList<java.awt.event.MouseListener> mls = Client.clientInstance.getRegisteredMouseListeners();
-			for(java.awt.event.MouseListener ml : mls){
-				if(ml==null || (ml instanceof ScriptDef && !((ScriptDef)ml).isAlive())){
-					Client.clientInstance.unregisterMouseListener(ml);
-				}
-				else
-					ml.mouseClicked(e);
-			}*/
+			// client may throw NPE when a listener is being re-instantiated.
+			// We ignore, and continue on our day.
 		}
 	}
 	@BFunction

@@ -3,11 +3,12 @@ package org.osrs.api.methods;
 import java.util.ArrayList;
 
 import org.osrs.api.objects.RSInterface;
+import org.osrs.api.objects.RSPlayer;
 import org.osrs.api.objects.RSWidget;
 import org.osrs.api.objects.WidgetItem;
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.ItemDefinition;
-import org.osrs.api.wrappers.Player;
+import org.osrs.api.wrappers.ItemStorage;
 import org.osrs.api.wrappers.PlayerDefinition;
 
 public class Equipment extends MethodDefinition{
@@ -37,9 +38,9 @@ public class Equipment extends MethodDefinition{
 	 * TODO use ItemContainer instead of widgets - itemContainer.bucket[30].next.ids[equipIndex]
 	 */
 	public WidgetItem[] getItems() {
-		Player local = ((Client)methods.botInstance).localPlayer();
+		RSPlayer local = methods.players.getLocalPlayer();
 		if(local!=null){
-			PlayerDefinition localDef = local.definition();
+			PlayerDefinition localDef = local.getDefinition();
 			if(localDef!=null){
 				int[] equips = localDef.equipmentIDs();
 				RSInterface iface = methods.widgets.get(INTERFACE_EQUIPMENT);
@@ -65,12 +66,18 @@ public class Equipment extends MethodDefinition{
 		}
 		return new WidgetItem[]{};
 	}
+	public ItemStorage getEquipmentItemStorage(){
+		return methods.game.getItemStorages()[30];
+	}
 	/**
 	 * Returns the number of items equipped excluding stack sizes.
 	 * @return Amount of items currently equipped.
 	 */
 	public int getCount() {
-		return ITEM_SLOTS - getCount(-1);
+		ItemStorage storage = getEquipmentItemStorage();
+		if(storage!=null)
+			return Math.min(storage.ids().length, storage.stackSizes().length);
+		return -1;
 	}
 	/**
 	 * Returns the number of items matching a given ID equipped excluding stack
@@ -82,12 +89,24 @@ public class Equipment extends MethodDefinition{
 	 */
 	public int getCount(final int itemID) {
 		int count = 0;
-		for (WidgetItem item : getItems()) {
-			if (item.getID() == itemID) {
-				count++;
+		ItemStorage storage = getEquipmentItemStorage();
+		if(storage!=null){
+			for(int id : storage.ids()){
+				if(id==itemID)
+					count++;
 			}
 		}
 		return count;
+	}
+	public boolean containsItem(int itemID){
+		ItemStorage storage = getEquipmentItemStorage();
+		if(storage!=null){
+			for(int id : storage.ids()){
+				if(id==itemID)
+					return true;
+			}
+		}
+		return false;
 	}
 	/**
 	 * Checks whether the player has all of the given items equipped.
@@ -97,17 +116,11 @@ public class Equipment extends MethodDefinition{
 	 *         <tt>false</tt>.
 	 */
 	public boolean containsAll(final int... items) {
-		WidgetItem[] equips = getItems();
-		int count = 0;
 		for (int item : items) {
-			for (WidgetItem equip : equips) {
-				if (equip.getID() == item) {
-					count++;
-					break;
-				}
-			}
+			if(!containsItem(item))
+				return false;
 		}
-		return count == items.length;
+		return true;
 	}
 	/**
 	 * Checks if the player has one (or more) of the given items equipped.
@@ -116,10 +129,20 @@ public class Equipment extends MethodDefinition{
 	 *         equipped; otherwise <tt>false</tt>.
 	 */
 	public boolean containsOneOf(final int... items) {
-		for (WidgetItem item : getItems()) {
-			for (int id : items) {
-				if (item.getID() == id) {
-					return true;
+		for(int item : items){
+			if(containsItem(item))
+				return true;
+		}
+		return false;
+	}
+	public boolean isEquipmentStatsOpen(){
+		for(RSInterface iface : methods.widgets.getAll()){
+			if(iface!=null){
+				for(RSWidget w : iface.getChildren()){
+					if(w!=null && w.isDisplayed() && w.clickMask()==0 && 
+							w.spriteID()==297 && w.alpha()==0 && w.boundsIndex()==1){
+						return true;
+					}
 				}
 			}
 		}
