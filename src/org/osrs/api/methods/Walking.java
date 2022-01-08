@@ -17,7 +17,6 @@ public class Walking extends MethodDefinition{
 	public Walker walker = null;
 	public Walking(MethodContext context){
 		super(context);
-		walker = new Walker();
 	}
 	/**
 	 * Gets the current destination tile.
@@ -148,8 +147,12 @@ public class Walking extends MethodDefinition{
 	 * @return true if destination reached
 	 */
 	public boolean walkPath(RSTile[] path) {
-		if (!isWalking() || methods.calculations.distanceTo(getDestination()) <= 5)
+		if (!isWalking() || methods.calculations.distanceTo(getDestination()) <= 5){
+			if(walker!=null && walker.isAlive())
+				walker.stop();
+			walker = new Walker();
 			return walker.walkTo(path, true);
+		}
 		return false;
 	}
 	/**
@@ -161,24 +164,15 @@ public class Walking extends MethodDefinition{
 	 * @return true if we walked to the tile
 	 */
 	public boolean walkTile(RSTile tile){
-		try{
-			RSPlayer localPlayer = methods.players.getLocalPlayer();
-			if(localPlayer!=null){
-				/*if(methods.calculations.onViewport(tile)){
-					return tile.doAction("Walk here");
-				}
-				else if(methods.calculations.onMap(tile)){
-					methods.region.clickMap(tile);
-					return true;
-				}*/
-				if(methods.calculations.onMap(tile)){
-					methods.region.clickMap(tile);
-					return true;
-				}
+		RSPlayer localPlayer = methods.players.getLocalPlayer();
+		if(localPlayer!=null){
+			if(methods.calculations.onViewport(tile)){
+				return tile.click("Walk here");
 			}
-		}
-		catch(@SuppressWarnings("unused") Exception e){
-
+			if(methods.calculations.onMap(tile)){
+				methods.region.clickMap(tile);
+				return true;
+			}
 		}
 		return false;
 	}
@@ -312,10 +306,10 @@ public class Walking extends MethodDefinition{
 				System.out.println("[Walker] Path not local. Not walking.");
 				return false;
 			}
+			
 			this.tile = path[path.length - 1];
 			this.path = path;
-			if(!done && !this.isAlive())
-				this.start();
+			this.start();
 			waitToMove(new Random().nextInt(400)+800);
 			if (waitUntilDest) {
 				while (this.isAlive()) {

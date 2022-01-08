@@ -31,6 +31,7 @@ import javax.swing.tree.TreeSelectionModel;
 import org.osrs.api.methods.MethodContext;
 import org.osrs.api.objects.RSInterface;
 import org.osrs.api.objects.RSWidget;
+import org.osrs.injection.FieldHook;
 import org.osrs.util.Data;
 
 public class WidgetDebug {
@@ -87,8 +88,11 @@ public class WidgetDebug {
 							g2.drawString(dataNames[i+currentDataIndex]+" : "+Arrays.toString(array), x, y);
 						}
 						else{
-							if(dataNames[i+currentDataIndex].equals("visibleCycle"))
-								g2.drawString(dataNames[i+currentDataIndex]+" : "+data+" : client:"+methods.game.client().widgetVisibleCycle(), x, y);
+							if(dataNames[i+currentDataIndex].equals("visibleCycle")){
+								FieldHook fh = Data.clientModscript.resolver.getFieldHook("Widget", "visibleCycle", false);
+								int clientCycle = methods.game.client().widgetVisibleCycle() * (int)Data.clientModscript.getGetterMultiplier("Widget", "visibleCycle", false);
+								g2.drawString(dataNames[i+currentDataIndex]+" : "+data+" : client:"+(clientCycle)+" : "+(((int)data+1)>=clientCycle), x, y);
+							}
 							else if(dataNames[i+currentDataIndex].equals("displayCycle"))
 								g2.drawString(dataNames[i+currentDataIndex]+" : "+data+" : client:"+methods.game.client().gameCycle()+" : "+(methods.game.client().gameCycle()==(int)data), x, y);
 							else if(dataNames[i+currentDataIndex].equals("relativeX"))

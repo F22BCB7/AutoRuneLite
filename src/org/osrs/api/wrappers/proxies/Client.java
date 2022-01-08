@@ -500,6 +500,12 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.CollisionMap[] collisionMaps(){return collisionMaps;}
+
+	@BField
+	public static boolean spellSelected;
+	@BGetter
+	@Override
+	public boolean spellSelected(){return spellSelected;}
 	
 	@BVar
 	public boolean preventIdleMouse;

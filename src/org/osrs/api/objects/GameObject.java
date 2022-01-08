@@ -178,7 +178,7 @@ public class GameObject extends Interactable{
 		return methods.calculations.worldToScreen(_x, _y, location.getPlane(), 0);
 	}
 	public boolean isOnMap(){
-		Point p = methods.calculations.locationToMinimap(location);
+		Point p = methods.calculations.locationToMinimap(getLocation());
 		Rectangle bounds = methods.minimap.getMinimapBounds();
 		if(!p.equals(new Point(-1, -1)) && (bounds.contains(p)))
 			return true;

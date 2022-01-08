@@ -62,8 +62,14 @@ public class Modscript {
 				for(FieldHook fh : ch.fieldHooks){
 					if(fh.refactoredName.equals("spriteID"))
 						fh.multiplier = (int)949557953;
+					else if(fh.refactoredName.equals("visibleCycle"))
+						fh.multiplier = (int)1631841167;
 				}
 			}
+		}
+		for(FieldHook fh : staticFields){
+			if(fh.refactoredName.equals("widgetVisibleCycle"))
+				fh.multiplier = (int)-837735965;
 		}
 		/****************/
 			
@@ -309,8 +315,8 @@ public class Modscript {
 	public Object getGetterMultiplier(String owner, String name, boolean isStatic){
 		FieldHook fh = resolver.getFieldHook(owner, name, isStatic);
 		if(fh!=null)
-			return fh.dataType.equals("I")?(int)fh.multiplier:(long)fh.multiplier;
-			return 1;
+			return fh.multiplier;
+		return 1;
 	}
 	public Object getSetterMultiplier(String owner, String name, boolean isStatic){
 		FieldHook fh = resolver.getFieldHook(owner, name, isStatic);

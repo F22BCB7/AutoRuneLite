@@ -195,6 +195,9 @@ public class Game extends MethodDefinition{
 	public CollisionMap[] collisionMaps(){
 		return client.collisionMaps();
 	}
+	public boolean spellSelected(){
+		return client.spellSelected();
+	}
 	public int mouseIdleTicks(){
 		return client.mouseIdleTicks();
 	}

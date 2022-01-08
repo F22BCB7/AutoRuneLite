@@ -113,6 +113,8 @@ public interface Client extends GameShell{
 	
 	public int mouseCrosshairState();
 	public CollisionMap[] collisionMaps();
+
+	public boolean spellSelected();
 	
 	public void setPreventIdleMouse(boolean val);
 	public boolean getPreventIdleMouse();

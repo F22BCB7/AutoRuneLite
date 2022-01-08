@@ -12,6 +12,7 @@ public class MethodContext {
 	public GroundItems groundItems;
 	public Inventory inventory;
 	public Keyboard keyboard;
+	public Magic magic;
 	public Menu menu;
 	public Minimap minimap;
 	public Mouse mouse;
@@ -39,6 +40,7 @@ public class MethodContext {
 		groundItems = new GroundItems(this);
 		inventory = new Inventory(this);
 		keyboard = new Keyboard(this);
+		magic = new Magic(this);
 		menu = new Menu(this);
 		minimap = new Minimap(this);
 		mouse = new Mouse(this);

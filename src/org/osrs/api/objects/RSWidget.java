@@ -837,7 +837,7 @@ public class RSWidget extends Interactable{
 	public boolean containsAction(String action){
 		String[] actions = actions();
 		for(int i=0;actions!=null && i<actions.length;++i){
-			if(actions[i].equals(action))
+			if(actions[i]!=null && actions[i].equals(action))
 				return true;
 		}
 		return false;
@@ -954,7 +954,7 @@ public class RSWidget extends Interactable{
 	public boolean containsConfigAction(String action){
 		String[] actions = configActions();
 		for(int i=0;actions!=null && i<actions.length;++i){
-			if(actions[i].equals(action))
+			if(actions[i]!=null && actions[i].equals(action))
 				return true;
 		}
 		return false;
