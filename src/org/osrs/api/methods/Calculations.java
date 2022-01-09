@@ -196,7 +196,7 @@ public class Calculations extends MethodDefinition{
 		Rectangle r = methods.minimap.getMinimapBounds();
 		int baseX = (r.x+(r.width/2));
 		int baseY = (r.y+(r.height/2));
-		return !p.equals(new Point(-1, -1)) && distance(baseX, p.x, baseY, p.y)<75;
+		return !p.equals(new Point(-1, -1)) && distance(baseX, p.x, baseY, p.y)<(methods.game.resizeMode()?75:60);
 	}	
 	public Rectangle getViewportBounds(){
 		if(((Client)Data.clientInstance).resizeMode()){
