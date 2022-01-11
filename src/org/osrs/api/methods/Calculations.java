@@ -229,7 +229,6 @@ public class Calculations extends MethodDefinition{
 	public boolean onViewport(Point p){
 		if(getViewportBounds().contains(p)){
 			if(methods.minimap.getMinimapBounds().contains(p)){
-				System.out.println("In minimap!");
 				return false;
 			}
 			for(RSInterface iface : methods.widgets.getAll()){
