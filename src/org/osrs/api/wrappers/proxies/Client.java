@@ -578,13 +578,18 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@BFunction
 	@Override
 	public org.osrs.api.wrappers.ObjectDefinition invoke_getObjectDefinition(int a){
-		Object predicate = Client.clientInstance.getMethodPredicate("", "getObjectDefinition", "(I?)L*;", true);
-		if(predicate instanceof Integer)
-			return _getObjectDefinition(a, (Integer)predicate);
-		if(predicate instanceof Byte)
-			return _getObjectDefinition(a, (Byte)predicate);
-		if(predicate instanceof Short)
-			return _getObjectDefinition(a, (Short)predicate);
+		try{
+			Object predicate = Client.clientInstance.getMethodPredicate("", "getObjectDefinition", "(I?)L*;", true);
+			if(predicate instanceof Integer)
+				return _getObjectDefinition(a, (Integer)predicate);
+			if(predicate instanceof Byte)
+				return _getObjectDefinition(a, (Byte)predicate);
+			if(predicate instanceof Short)
+				return _getObjectDefinition(a, (Short)predicate);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 		return null;
 	}
 

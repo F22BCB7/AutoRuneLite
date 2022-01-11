@@ -311,7 +311,7 @@ public class Objects extends MethodDefinition{
 								continue;
 							GameObject go = new GameObject(io, rstile);
 							if(id==go.getID()){
-								if(closest==null || methods.calculations.distanceTo(closest.getLocation())<methods.calculations.distanceTo(rstile)){
+								if(closest==null || methods.calculations.distanceTo(go.getLocation())<methods.calculations.distanceTo(closest.getLocation())){
 									closest=go;
 								}
 							}
@@ -320,7 +320,7 @@ public class Objects extends MethodDefinition{
 						if(bo!=null){
 							GameObject go = new GameObject(bo, rstile);
 							if(id==go.getID()){
-								if(closest==null || methods.calculations.distanceTo(closest.getLocation())<methods.calculations.distanceTo(rstile)){
+								if(closest==null || methods.calculations.distanceTo(go.getLocation())<methods.calculations.distanceTo(closest.getLocation())){
 									closest=go;
 								}
 							}
@@ -329,7 +329,7 @@ public class Objects extends MethodDefinition{
 						if(fo!=null){
 							GameObject go = new GameObject(fo, rstile);
 							if(id==go.getID()){
-								if(closest==null || methods.calculations.distanceTo(closest.getLocation())<methods.calculations.distanceTo(rstile)){
+								if(closest==null || methods.calculations.distanceTo(go.getLocation())<methods.calculations.distanceTo(closest.getLocation())){
 									closest=go;
 								}
 							}
@@ -338,7 +338,7 @@ public class Objects extends MethodDefinition{
 						if(wo!=null){
 							GameObject go = new GameObject(wo, rstile);
 							if(id==go.getID()){
-								if(closest==null || methods.calculations.distanceTo(closest.getLocation())<methods.calculations.distanceTo(rstile)){
+								if(closest==null || methods.calculations.distanceTo(go.getLocation())<methods.calculations.distanceTo(closest.getLocation())){
 									closest=go;
 								}
 							}
@@ -372,7 +372,7 @@ public class Objects extends MethodDefinition{
 							GameObject go = new GameObject(io, rstile);
 							for(long id : ids){
 								if(id==go.getID()){
-									if(closest==null || methods.calculations.distanceTo(closest.getLocation())<methods.calculations.distanceTo(rstile)){
+									if(closest==null || methods.calculations.distanceTo(go.getLocation())<methods.calculations.distanceTo(closest.getLocation())){
 										closest=go;
 										break;
 									}
@@ -384,7 +384,7 @@ public class Objects extends MethodDefinition{
 							GameObject go = new GameObject(bo, rstile);
 							for(long id : ids){
 								if(id==go.getID()){
-									if(closest==null || methods.calculations.distanceTo(closest.getLocation())<methods.calculations.distanceTo(rstile)){
+									if(closest==null || methods.calculations.distanceTo(go.getLocation())<methods.calculations.distanceTo(closest.getLocation())){
 										closest=go;
 										break;
 									}
@@ -396,7 +396,7 @@ public class Objects extends MethodDefinition{
 							GameObject go = new GameObject(fo, rstile);
 							for(long id : ids){
 								if(id==go.getID()){
-									if(closest==null || methods.calculations.distanceTo(closest.getLocation())<methods.calculations.distanceTo(rstile)){
+									if(closest==null || methods.calculations.distanceTo(go.getLocation())<methods.calculations.distanceTo(closest.getLocation())){
 										closest=go;
 										break;
 									}
@@ -408,7 +408,7 @@ public class Objects extends MethodDefinition{
 							GameObject go = new GameObject(wo, rstile);
 							for(long id : ids){
 								if(id==go.getID()){
-									if(closest==null || methods.calculations.distanceTo(closest.getLocation())<methods.calculations.distanceTo(rstile)){
+									if(closest==null || methods.calculations.distanceTo(go.getLocation())<methods.calculations.distanceTo(closest.getLocation())){
 										closest=go;
 										break;
 									}
