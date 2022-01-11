@@ -53,8 +53,8 @@ public class Camera extends MethodDefinition{
 			pitch=150;
 		int curr = getPitch();
 		boolean up = pitch>curr;
-		Component keyboardTarget = ((Component)methods.botInstance);
-		KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_PRESSED, 0, 0, (up?KeyEvent.VK_UP:KeyEvent.VK_DOWN), (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
+		Component keyboardTarget = ((Applet)methods.botInstance).getComponent(0);
+		KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, (up?KeyEvent.VK_UP:KeyEvent.VK_DOWN), (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
 		keyboardTarget.dispatchEvent(event); 
 		int last=-1;
 		for(int i=0;i<20;){
@@ -76,7 +76,7 @@ public class Camera extends MethodDefinition{
 				break;
 			sleep(100, 200);
 		}
-		event = new KeyEvent(keyboardTarget, KeyEvent.KEY_RELEASED, 0, 0, (up?KeyEvent.VK_UP:KeyEvent.VK_DOWN), (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
+		event = new KeyEvent(keyboardTarget, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, (up?KeyEvent.VK_UP:KeyEvent.VK_DOWN), (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
 		keyboardTarget.dispatchEvent(event);
 		return up?(curr>=pitch):(curr<=pitch);
 	}	
@@ -93,9 +93,9 @@ public class Camera extends MethodDefinition{
 	}
 	public boolean setAngle(int degrees) {
 		long start = System.currentTimeMillis();
-		Component keyboardTarget = ((Component)methods.botInstance);
+		Component keyboardTarget = ((Applet)methods.botInstance).getComponent(0);
 		if (getAngleTo(degrees) > 5) {
-			KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_PRESSED, 0, 0, KeyEvent.VK_LEFT, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
+			KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_LEFT, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
 			Data.inputManager.getKeyboardListener().keyPressed(event);
 			int last=-1;
 			for(int i=0;i<20;){
@@ -116,10 +116,10 @@ public class Camera extends MethodDefinition{
 				} catch (InterruptedException e) {
 				}
 			}
-			event = new KeyEvent(keyboardTarget, KeyEvent.KEY_RELEASED, 0, 0, KeyEvent.VK_LEFT, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
+			event = new KeyEvent(keyboardTarget, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_LEFT, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
 			Data.inputManager.getKeyboardListener().keyReleased(event);
 		} else if (getAngleTo(degrees) < -5) {
-			KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_PRESSED, 0, 0, KeyEvent.VK_RIGHT, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
+			KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_RIGHT, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
 			Data.inputManager.getKeyboardListener().keyPressed(event);
 			int last=-1;
 			for(int i=0;i<20;){
@@ -140,7 +140,7 @@ public class Camera extends MethodDefinition{
 				} catch (InterruptedException e) {
 				}
 			}
-			event = new KeyEvent(keyboardTarget, KeyEvent.KEY_RELEASED, 0, 0, KeyEvent.VK_RIGHT, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
+			event = new KeyEvent(keyboardTarget, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_RIGHT, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
 			Data.inputManager.getKeyboardListener().keyReleased(event);
 		}
 		return Math.abs(getAngleTo(degrees))<5;
