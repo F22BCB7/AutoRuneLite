@@ -227,7 +227,34 @@ public class Calculations extends MethodDefinition{
 	 * @return boolean
 	 */
 	public boolean onViewport(Point p){
-		return getViewportBounds().contains(p);
+		if(getViewportBounds().contains(p)){
+			if(methods.minimap.getMinimapBounds().contains(p)){
+				System.out.println("In minimap!");
+				return false;
+			}
+			for(RSInterface iface : methods.widgets.getAll()){
+				if(iface!=null){
+					for(RSWidget w : iface.getChildren()){
+						if(w!=null && w.isDisplayed() && (w.noClickThrough() || w.opbase().equals("<col=ff9040>XP drops</col>"))){
+							if(w.getBounds().contains(p)){
+								return false;
+							}
+						}
+						if(w!=null){
+							for(RSWidget w2 : w.getChildren()){
+								if(w2!=null && w2.isDisplayed() && w2.noClickThrough()){
+									if(w2.getBounds().contains(p)){
+										return false;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 	public boolean onViewport(int screenX, int screenY){
 		return onViewport(new Point(screenX, screenY));
