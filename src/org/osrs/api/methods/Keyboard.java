@@ -1,5 +1,6 @@
 package org.osrs.api.methods;
 
+import java.applet.Applet;
 import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.util.Random;
@@ -22,9 +23,9 @@ public class Keyboard extends MethodDefinition{
 			code -= 32;
 		}
 		Component keyboardTarget = getTarget();
-		KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_PRESSED, 0, 0, code, s, getLocation(s));
+		KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, code, s, getLocation(s));
 		Data.inputManager.getKeyboardListener().keyPressed(event);
-		event = new KeyEvent(keyboardTarget, KeyEvent.KEY_TYPED, 0, 0, KeyEvent.VK_UNDEFINED, s, 0);
+		event = new KeyEvent(keyboardTarget, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, s, 0);
 		Data.inputManager.getKeyboardListener().keyTyped(event);
 	}
 	public void releaseKey(char s){
@@ -33,7 +34,7 @@ public class Keyboard extends MethodDefinition{
 			code -= 32;
 		}
 		Component keyboardTarget = getTarget();
-		KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_RELEASED, 0, 0, code, s, getLocation(s));
+		KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, code, s, getLocation(s));
 		Data.inputManager.getKeyboardListener().keyReleased(event);
 		
 	}
@@ -43,13 +44,13 @@ public class Keyboard extends MethodDefinition{
 			code -= 32;
 		}
 		Component keyboardTarget = getTarget();
-		KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_PRESSED, 0, 0, code, s, getLocation(s));
+		KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, code, s, getLocation(s));
 		Data.inputManager.getKeyboardListener().keyPressed(event);
 		
-		event = new KeyEvent(keyboardTarget, KeyEvent.KEY_TYPED, 0, 0, KeyEvent.VK_UNDEFINED, s, 0);
+		event = new KeyEvent(keyboardTarget, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyEvent.VK_UNDEFINED, s, 0);
 		Data.inputManager.getKeyboardListener().keyTyped(event);
 		
-		event = new KeyEvent(keyboardTarget, KeyEvent.KEY_RELEASED, 0, 0, code, s, getLocation(s));
+		event = new KeyEvent(keyboardTarget, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, code, s, getLocation(s));
 		Data.inputManager.getKeyboardListener().keyReleased(event);
 		
 	}
@@ -65,7 +66,7 @@ public class Keyboard extends MethodDefinition{
 		}
 	}
 	private Component getTarget(){
-		return (Component)Data.clientInstance;
+		return ((Applet)Data.clientInstance).getComponent(0);
 	}
 }
 

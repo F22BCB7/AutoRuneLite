@@ -20,6 +20,13 @@ public class Calculations extends MethodDefinition{
 	public Calculations(MethodContext context){
 		super(context);
 	}
+	public int angleToTile(RSTile t) {
+		RSPlayer p = methods.players.getLocalPlayer();
+		if(p==null)return 0;
+		RSTile t2 = p.getLocation();
+		final int angle = (int) Math.toDegrees(Math.atan2(t.getY() - t2.getY(), t.getX() - t2.getX()));
+		return angle >= 0 ? angle : 360 + angle;
+	}
 	/**
 	 * Calculates the distance between two given points.
 	 * @param point1
@@ -196,7 +203,7 @@ public class Calculations extends MethodDefinition{
 		Rectangle r = methods.minimap.getMinimapBounds();
 		int baseX = (r.x+(r.width/2));
 		int baseY = (r.y+(r.height/2));
-		return !p.equals(new Point(-1, -1)) && distance(baseX, p.x, baseY, p.y)<(methods.game.resizeMode()?75:60);
+		return !p.equals(new Point(-1, -1)) && distance(baseX, p.x, baseY, p.y)<(methods.game.resizeMode()?65:60);
 	}	
 	public Rectangle getViewportBounds(){
 		if(((Client)Data.clientInstance).resizeMode()){

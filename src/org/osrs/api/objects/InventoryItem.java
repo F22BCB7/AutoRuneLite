@@ -126,6 +126,48 @@ public class InventoryItem extends Interactable{
 		return new Rectangle(-1, -1, -1, -1);
 	}
 	@Override
+	public boolean click() {
+		if(!methods.tabs.inventory.isSelected()){
+			methods.tabs.inventory.click();
+		}
+		return super.click();
+	}
+	@Override
+	public boolean click(String action) {
+		if(!methods.tabs.inventory.isSelected()){
+			methods.tabs.inventory.click();
+		}
+		return super.click(action);
+	}
+	@Override
+	public boolean click(String action, String option) {
+		if(!methods.tabs.inventory.isSelected()){
+			methods.tabs.inventory.click();
+		}
+		return super.click(action, option);
+	}
+	@Override
+	public boolean hover() {
+		if(!methods.tabs.inventory.isSelected()){
+			methods.tabs.inventory.click();
+		}
+		return super.hover();
+	}
+	@Override
+	public boolean hover(String action) {
+		if(!methods.tabs.inventory.isSelected()){
+			methods.tabs.inventory.click();
+		}
+		return super.hover(action);
+	}
+	@Override
+	public boolean hover(String action, String option) {
+		if(!methods.tabs.inventory.isSelected()){
+			methods.tabs.inventory.click();
+		}
+		return super.hover(action, option);
+	}
+	@Override
 	public Point getCenterPoint() {
 		Rectangle bounds = getBounds();
 		if(bounds.x!=-1 && bounds.y!=-1 && bounds.width!=0 && bounds.height!=0)

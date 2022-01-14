@@ -231,6 +231,11 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@BGetter
 	@Override
 	public org.osrs.api.wrappers.KeyboardListener keyboardListener(){return keyboardListener;}
+	@BField
+	public static boolean[] pressedKeys;
+	@BGetter
+	@Override
+	public boolean[] pressedKeys(){return pressedKeys;}
 	
 	@BField
 	public static boolean resizeMode;

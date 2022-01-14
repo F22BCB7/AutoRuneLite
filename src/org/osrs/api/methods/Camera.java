@@ -5,6 +5,10 @@ import java.awt.Component;
 import java.awt.event.KeyEvent;
 
 import org.osrs.util.Data;
+import org.osrs.api.objects.GameObject;
+import org.osrs.api.objects.GroundItem;
+import org.osrs.api.objects.RSActor;
+import org.osrs.api.objects.RSTile;
 import org.osrs.api.wrappers.Client;
 
 public class Camera extends MethodDefinition{
@@ -53,9 +57,7 @@ public class Camera extends MethodDefinition{
 			pitch=150;
 		int curr = getPitch();
 		boolean up = pitch>curr;
-		Component keyboardTarget = ((Applet)methods.botInstance).getComponent(0);
-		KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, (up?KeyEvent.VK_UP:KeyEvent.VK_DOWN), (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
-		keyboardTarget.dispatchEvent(event); 
+		methods.game.client().pressedKeys()[up?98:99]=true;
 		int last=-1;
 		for(int i=0;i<20;){
 			curr=getPitch();
@@ -76,8 +78,7 @@ public class Camera extends MethodDefinition{
 				break;
 			sleep(100, 200);
 		}
-		event = new KeyEvent(keyboardTarget, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, (up?KeyEvent.VK_UP:KeyEvent.VK_DOWN), (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
-		keyboardTarget.dispatchEvent(event);
+		methods.game.client().pressedKeys()[up?98:99]=false;
 		return up?(curr>=pitch):(curr<=pitch);
 	}	
 	public int getAngleTo(int degrees) {
@@ -93,56 +94,28 @@ public class Camera extends MethodDefinition{
 	}
 	public boolean setAngle(int degrees) {
 		long start = System.currentTimeMillis();
-		Component keyboardTarget = ((Applet)methods.botInstance).getComponent(0);
-		if (getAngleTo(degrees) > 5) {
-			KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_LEFT, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
-			Data.inputManager.getKeyboardListener().keyPressed(event);
-			int last=-1;
-			for(int i=0;i<20;){
-				int curr = getAngleTo(degrees);
-				if(last!=-1){
-					if(last==curr){
-						i++;
-					}
-				}
-				else
-					last=curr;
-				if(curr<=5)
-					break;
-				if(System.currentTimeMillis()-start>2000)
-					break;
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
+		boolean ccw = getAngleTo(degrees)<0;
+		methods.game.client().pressedKeys()[ccw?97:96]=true;
+		int last=-1;
+		for(int i=0;i<20;){
+			int curr = Math.abs(getAngleTo(degrees));
+			if(last!=-1){
+				if(last==curr){
+					i++;
 				}
 			}
-			event = new KeyEvent(keyboardTarget, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_LEFT, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
-			Data.inputManager.getKeyboardListener().keyReleased(event);
-		} else if (getAngleTo(degrees) < -5) {
-			KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_RIGHT, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
-			Data.inputManager.getKeyboardListener().keyPressed(event);
-			int last=-1;
-			for(int i=0;i<20;){
-				int curr = getAngleTo(degrees);
-				if(last!=-1){
-					if(last==curr){
-						i++;
-					}
-				}
-				else
-					last=curr;
-				if(curr<-5)
-					break;
-				if(System.currentTimeMillis()-start>2000)
-					break;
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-				}
+			else
+				last=curr;
+			if(curr<=5)
+				break;
+			if(System.currentTimeMillis()-start>2000)
+				break;
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
 			}
-			event = new KeyEvent(keyboardTarget, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_RIGHT, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
-			Data.inputManager.getKeyboardListener().keyReleased(event);
 		}
+		methods.game.client().pressedKeys()[ccw?97:96]=false;
 		return Math.abs(getAngleTo(degrees))<5;
 	}
 	public void setCompass(final char direction) {
@@ -172,5 +145,32 @@ public class Camera extends MethodDefinition{
 	}
 	public boolean isDown(){
 		return getPitch()<230;
+	}
+	public boolean isFacing(RSActor actor){
+		return isFacing(actor.getLocation());
+	}
+	public boolean isFacing(GameObject object){
+		return isFacing(object.getLocation());
+	}
+	public boolean isFacing(GroundItem item){
+		return isFacing(item.getLocation());
+	}
+	public boolean isFacing(RSTile t){
+		int desiredAngle = (((methods.calculations.angleToTile(t)-90)+360)%360);
+		int angle = getAngle();
+		return angle-10<desiredAngle && angle+10>desiredAngle;
+	}
+	public boolean turnTo(RSActor actor){
+		return turnTo(actor.getLocation());
+	}
+	public boolean turnTo(GameObject object){
+		return turnTo(object.getLocation());
+	}
+	public boolean turnTo(GroundItem item){
+		return turnTo(item.getLocation());
+	}
+	public boolean turnTo(RSTile t){
+		int desiredAngle = (((methods.calculations.angleToTile(t)-90)+360)%360);
+		return setAngle(desiredAngle);
 	}
 }
