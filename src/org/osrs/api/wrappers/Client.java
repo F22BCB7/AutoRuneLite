@@ -3,6 +3,7 @@ package org.osrs.api.wrappers;
 import java.util.ArrayList;
 
 import org.osrs.api.methods.MethodContext;
+import org.osrs.debug.BankDebug;
 import org.osrs.debug.BoundaryObjDebug;
 import org.osrs.debug.CameraDebug;
 import org.osrs.debug.FloorDecDebug;
@@ -27,7 +28,7 @@ public interface Client extends GameShell{
 	public long getLongGetterMultiplier(String owner, String name, boolean isStatic);
 	public long getLongSetterMultiplier(String owner, String name, boolean isStatic);
 	public Object getMethodPredicate(String owner, String name, String desc, boolean isStatic);
-	
+
 	public WidgetDebug getWidgetDebug();
 	public InventoryDebug getInventoryDebug();
 	public PathDebug getPathDebug();
@@ -43,6 +44,7 @@ public interface Client extends GameShell{
 	public InteractableObjDebug getInteractableObjDebug();
 	public WallDecDebug getWallDecDebug();
 	public GroundItemDebug getGroundItemDebug();
+	public BankDebug getBankDebug();
 
 	public Client clientInstance();
 	

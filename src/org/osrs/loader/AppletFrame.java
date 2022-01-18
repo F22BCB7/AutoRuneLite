@@ -52,6 +52,7 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
 	private MenuItem startScriptOption;
 	private MenuItem pauseScriptOption;
 	private Menu debugMenu;
+	public CheckboxMenuItem bankDebugOption;
 	public CheckboxMenuItem boundaryObjDebugOption;
 	public CheckboxMenuItem cameraDebugOption;
 	public CheckboxMenuItem floorDecDebugOption;
@@ -99,6 +100,8 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
 		menuBar.add(fileMenu);
 
 		debugMenu = new Menu("Debug");
+		bankDebugOption = new CheckboxMenuItem("Bank");
+		debugMenu.add(bankDebugOption);
 		boundaryObjDebugOption = new CheckboxMenuItem("Boundary Objects");
 		debugMenu.add(boundaryObjDebugOption);
 		cameraDebugOption = new CheckboxMenuItem("Camera");

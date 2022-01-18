@@ -427,8 +427,10 @@ public class Objects extends MethodDefinition{
 		return closest;
 	}
 	public boolean isObjectAt(RSTile tile, long id){
-    	int localX = tile.getX() -((Client)methods.botInstance).mapBaseX();
-    	int localY = tile.getY() -((Client)methods.botInstance).mapBaseY();
+    	int localX = tile.getLocalX();
+    	int localY = tile.getLocalX();
+    	if(localX<0 || localX>104 || localY<0 || localY>104)
+    		return false;
     	Region region =((Client)methods.botInstance).region();
     	if(region!=null){
     		Tile t = region.tiles()[tile.getPlane()][localX][localY];
@@ -463,8 +465,10 @@ public class Objects extends MethodDefinition{
 		return false;
 	}
 	public boolean isObjectAt(RSTile tile, long...ids){
-    	int localX = tile.getX() -((Client)methods.botInstance).mapBaseX();
-    	int localY = tile.getY() -((Client)methods.botInstance).mapBaseY();
+    	int localX = tile.getLocalX();
+    	int localY = tile.getLocalX();
+    	if(localX<0 || localX>104 || localY<0 || localY>104)
+    		return false;
     	Region region =((Client)methods.botInstance).region();
     	if(region!=null){
     		Tile t = region.tiles()[tile.getPlane()][localX][localY];

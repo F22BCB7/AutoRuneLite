@@ -40,6 +40,10 @@ public class Menu extends MethodDefinition{
 				methods.mouse.click();
 				return true;
 			}
+			String[] actions = getActions();
+			String[] options = getOptions();
+			String oldAction = actions!=null && actions.length>index?actions[index]:"null";
+			String oldOption = options!=null && options.length>index?options[index]:"null";
 			if(!isOpen()){
 				methods.mouse.rightClick();
 				for(int i=0;i<20;++i){
@@ -50,6 +54,9 @@ public class Menu extends MethodDefinition{
 				sleep(100, 300);
 			}
 			if(isOpen()) {
+				index = getIndex(oldAction, oldOption);//update index
+				if(index==-1)
+					return false;
 				Point clickPoint = getClickPoint(index);
 				methods.mouse.move(clickPoint);
 				sleep(50, 300);

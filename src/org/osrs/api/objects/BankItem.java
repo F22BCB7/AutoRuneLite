@@ -1,6 +1,7 @@
 package org.osrs.api.objects;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.ItemDefinition;
@@ -21,6 +22,10 @@ public class BankItem extends Interactable{
 		this.definition = getDefinition();
 		this.itemStackSize = stacksize;
 		this.index=index;
+	}
+
+	public Rectangle getBounds(){
+		return itemWidget.getBounds();
 	}
 	/**
 	 * Returns the Items definition

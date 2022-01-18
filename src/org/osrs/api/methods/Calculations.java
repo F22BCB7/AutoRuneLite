@@ -234,30 +234,30 @@ public class Calculations extends MethodDefinition{
 	 * @return boolean
 	 */
 	public boolean onViewport(Point p){
-		if(getViewportBounds().contains(p)){
-			if(methods.minimap.getMinimapBounds().contains(p)){
-				return false;
-			}
+		Rectangle viewport = methods.calculations.getViewportBounds();
+		if(viewport.contains(p)){
 			for(RSInterface iface : methods.widgets.getAll()){
 				if(iface!=null){
 					for(RSWidget w : iface.getChildren()){
 						if(w!=null && w.isDisplayed() && (w.noClickThrough() || w.opbase().equals("<col=ff9040>XP drops</col>"))){
-							if(w.getBounds().contains(p)){
+							if(w.width()==viewport.width && w.height()==viewport.height)//resize mode viewport widget
+								continue;
+							if(w.isHovering())
 								return false;
-							}
 						}
 						if(w!=null){
 							for(RSWidget w2 : w.getChildren()){
 								if(w2!=null && w2.isDisplayed() && w2.noClickThrough()){
-									if(w2.getBounds().contains(p)){
+									if(w2.isHovering())
 										return false;
-									}
 								}
 							}
 						}
 					}
 				}
 			}
+			if(methods.minimap.getMinimapBounds().contains(p))
+				return false;
 			return true;
 		}
 		return false;

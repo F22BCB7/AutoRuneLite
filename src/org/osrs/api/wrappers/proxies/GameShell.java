@@ -45,19 +45,21 @@ public class GameShell extends Applet implements org.osrs.api.wrappers.GameShell
 	public void processEngine(short a){invoke_processEngine();}
 	@BFunction
 	public void invoke_processEngine(){
-		HashMap<Integer, Integer> widgetVisibleTicks = new HashMap<Integer, Integer>();
-		Widget[][] allWidgets = Client.widgets;
-		if(allWidgets!=null){
-			for(Widget[] widgets : allWidgets){
-				if(widgets!=null){
-					for(Widget widget : widgets){
-						if(widget!=null){
-							widgetVisibleTicks.put(widget.hashCode(), widget.visibleCycle());
-							Widget[] children = widget.children;
-							if(children!=null){
-								for(Widget child : children){
-									if(child!=null){
-										widgetVisibleTicks.put(child.hashCode(), child.visibleCycle());
+		try{
+			HashMap<Integer, Integer> widgetVisibleTicks = new HashMap<Integer, Integer>();
+			Widget[][] allWidgets = Client.widgets;
+			if(allWidgets!=null){
+				for(Widget[] widgets : allWidgets){
+					if(widgets!=null){
+						for(Widget widget : widgets){
+							if(widget!=null){
+								widgetVisibleTicks.put(widget.hashCode(), widget.visibleCycle());
+								Widget[] children = widget.children;
+								if(children!=null){
+									for(Widget child : children){
+										if(child!=null){
+											widgetVisibleTicks.put(child.hashCode(), child.visibleCycle());
+										}
 									}
 								}
 							}
@@ -65,43 +67,47 @@ public class GameShell extends Applet implements org.osrs.api.wrappers.GameShell
 					}
 				}
 			}
-		}
-		
-		Object predicate = Client.clientInstance.getMethodPredicate("GameShell", "processEngine", "(?)V", false);
-		if(predicate instanceof Integer)
-			_processEngine((int)predicate);
-		if(predicate instanceof Byte)
-			_processEngine((byte)predicate);
-		if(predicate instanceof Short)
-			_processEngine((short)predicate);
-
-		if(allWidgets!=null){
-			for(Widget[] widgets : allWidgets){
-				if(widgets!=null){
-					for(Widget widget : widgets){
-						if(widget!=null){
-							Object oldTick = widgetVisibleTicks.get(widget.hashCode());
-							widget.setVisible(oldTick==null || (int)oldTick!=widget.visibleCycle());
-							Widget[] children = widget.children;
-							if(children!=null){
-								for(Widget child : children){
-									if(child!=null){
-										oldTick = widgetVisibleTicks.get(child.hashCode());
-										child.setVisible(oldTick==null || (int)oldTick!=child.visibleCycle());
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			Client.clientInstance.getMethodContext().inventory.updateInventoryItems();
-		}
+			
+			Object predicate = Client.clientInstance.getMethodPredicate("GameShell", "processEngine", "(?)V", false);
+			if(predicate instanceof Integer)
+				_processEngine((int)predicate);
+			if(predicate instanceof Byte)
+				_processEngine((byte)predicate);
+			if(predicate instanceof Short)
+				_processEngine((short)predicate);
 	
-		if(Data.currentScript!=null){
-			if(Data.currentScript instanceof org.osrs.script.listeners.CycleListener){
-				((org.osrs.script.listeners.CycleListener)Data.currentScript).gameCycle();
+			if(allWidgets!=null){
+				for(Widget[] widgets : allWidgets){
+					if(widgets!=null){
+						for(Widget widget : widgets){
+							if(widget!=null){
+								Object oldTick = widgetVisibleTicks.get(widget.hashCode());
+								widget.setVisible(oldTick==null || (int)oldTick!=widget.visibleCycle());
+								Widget[] children = widget.children;
+								if(children!=null){
+									for(Widget child : children){
+										if(child!=null){
+											oldTick = widgetVisibleTicks.get(child.hashCode());
+											child.setVisible(oldTick==null || (int)oldTick!=child.visibleCycle());
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				Client.clientInstance.getMethodContext().inventory.updateInventoryItems();
+				Client.clientInstance.getMethodContext().bank.updateBankWidgets();
 			}
+		
+			if(Data.currentScript!=null){
+				if(Data.currentScript instanceof org.osrs.script.listeners.CycleListener){
+					((org.osrs.script.listeners.CycleListener)Data.currentScript).gameCycle();
+				}
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
 		}
 	}
 }
