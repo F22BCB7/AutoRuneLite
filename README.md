@@ -1,4 +1,4 @@
-# Join our discord! https://discord.gg/w9cUCgx8
+# Join our discord! https://discord.gg/ZD3DGwh7tD
 #
 # AutoRuneLite
  Free & open source OSRS bot. Uses NaturalMouse. Detouring bytecode manipulation.
