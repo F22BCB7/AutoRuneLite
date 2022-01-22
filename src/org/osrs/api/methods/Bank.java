@@ -1,5 +1,6 @@
 package org.osrs.api.methods;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import org.osrs.api.objects.BankItem;
 import org.osrs.api.objects.BankTab;
@@ -11,8 +12,24 @@ public class Bank extends MethodDefinition{
 	private RSWidget bankWindow=null;
 	private RSWidget bankItemCount=null;
 	private RSWidget bankMaxSpace=null;
-	private RSWidget bankTabs=null;
 	private RSWidget bankExitButton=null;
+	private RSWidget bankPlaceholderButton=null;
+	private RSWidget bankSwapButton=null;
+	private RSWidget bankInsertButton=null;
+	private RSWidget bankWidthdrawAsItemButton=null;
+	private RSWidget bankWidthdrawAsNoteButton=null;
+	private RSWidget bankItemQuantity1Button=null;
+	private RSWidget bankItemQuantity5Button=null;
+	private RSWidget bankItemQuantity10Button=null;
+	private RSWidget bankItemQuantityXButton=null;
+	private RSWidget enterAmountDialog=null;
+	private RSWidget bankItemQuantityAllButton=null;
+	private RSWidget bankDepositInventoryButton=null;
+	private RSWidget bankDepositEquipmentButton=null;
+	private RSWidget bankShowEquipmentButton=null;
+	private RSWidget bankShowMenuButton=null;
+	private RSInterface bankTutorialParent=null;
+	private RSWidget bankTutorialExitButton=null;
 	private BankItem[] bankItems = new BankItem[1200];
 	private BankTab mainTab = null;
 	private BankTab[] additionalTabs = new BankTab[9];
@@ -26,6 +43,40 @@ public class Bank extends MethodDefinition{
 		if(isOpen() && bankExitButton!=null)
 			return bankExitButton.click();
 		return false;
+	}
+	public boolean depositInventory(){
+		int count = methods.inventory.getCount();
+		if(count>0){
+			if(bankDepositInventoryButton!=null){
+				if(bankDepositInventoryButton.click()){
+					for(int i=0;i<20;++i){
+						sleep(random(100, 200));
+						if(methods.inventory.getCount()!=count)
+							break;
+					}
+				}
+			}
+			else
+				return false;
+		}
+		return methods.inventory.getCount()==0;
+	}
+	public boolean depositEquipment(){
+		int count = methods.equipment.getCount();
+		if(count>0){
+			if(bankDepositEquipmentButton!=null){
+				if(bankDepositEquipmentButton.click()){
+					for(int i=0;i<20;++i){
+						sleep(random(100, 200));
+						if(methods.equipment.getCount()!=count)
+							break;
+					}
+				}
+			}
+			else
+				return false;
+		}
+		return methods.equipment.getCount()==0;
 	}
 	/**
 	 * Grabs a specified item by id from the bank.
@@ -42,7 +93,7 @@ public class Bank extends MethodDefinition{
 	public int getItemCount(){
 		if(bankItemCount!=null){
 			String s = bankItemCount.disabledText();
-			if(s!=null)
+			if(s!=null && !s.equals(""))
 				cachedItemCount = Integer.parseInt(s);
 		}
 		return cachedItemCount;
@@ -80,7 +131,7 @@ public class Bank extends MethodDefinition{
 	public int getMaxBankSize(){
 		if(bankMaxSpace!=null){
 			String s = bankMaxSpace.disabledText();
-			if(s!=null)
+			if(s!=null && !s.equals(""))
 				cachedMaxSpace = Integer.parseInt(s);
 		}
 		return cachedMaxSpace;
@@ -95,6 +146,16 @@ public class Bank extends MethodDefinition{
 			tabs.add(addTab);
 		return tabs.toArray(new BankTab[]{});
 	}
+	public int getSelectedTabIndex(){
+		return methods.game.client().invoke_getVarp(4150);
+	}
+	public BankTab getSelectedBankTab(){
+		for(BankTab tab : getTabs()){
+			if(tab.isSelected())
+				return tab;
+		}
+		return null;
+	}
 	/**
 	 * Grabs the bank size (how many items your bank has).
 	 * Returns -1 if widget not found (outdated).
@@ -102,9 +163,149 @@ public class Bank extends MethodDefinition{
 	 */
 	public int getUsedBankspaceCount(){
 		if(bankItemCount!=null){
-			return Integer.parseInt(bankItemCount.disabledText());
+			String s = bankItemCount.disabledText();
+			if(s!=null && !s.equals(""))
+				return Integer.parseInt(bankItemCount.disabledText());
 		}
 		return -1;
+	}
+	public int getQuantityAmountSetting(){
+		int setting = getQuantitySetting();
+		if(setting==0)
+			return 1;
+		else if(setting==4)
+			return 5;
+		else if(setting==8)
+			return 10;
+		else if(setting==12)
+			return methods.varps.get(304)/2;
+		else if(setting==16)
+			return Integer.MAX_VALUE;
+		return 1;
+	}
+	/**
+	 * Sets quantity to work with in bank.
+	 * If wanting ALL, use Integer.MAX_VALUE.
+	 * @param amount
+	 * @return
+	 */
+	public boolean setQuantityAmountSetting(int amount){
+		int currentAmount = getQuantityAmountSetting();
+		int currentSetting = getQuantitySetting();
+		RSWidget button = null;
+		if(amount!=currentAmount){
+			if(amount==1){
+				if(bankItemQuantity1Button!=null){
+					button = bankItemQuantity1Button;
+				}
+			}
+			else if(amount==5){
+				if(bankItemQuantity5Button!=null){
+					button = bankItemQuantity5Button;
+				}
+			}
+			else if(amount==10){
+				if(bankItemQuantity10Button!=null){
+					button = bankItemQuantity10Button;
+				}
+			}
+			else if(amount==Integer.MAX_VALUE){
+				if(bankItemQuantityAllButton!=null){
+					button = bankItemQuantityAllButton;
+				}
+			}
+			else{
+				if(bankItemQuantityAllButton!=null){
+					button = bankItemQuantityXButton;
+					if(button!=null){
+						if(button.click("Set custom quantity")){
+							for(int i=0;i<20;++i){
+								sleep(random(100, 200));
+								if(enterAmountDialog!=null && enterAmountDialog.isDisplayed()){
+									methods.keyboard.sendKeys(""+amount);
+									methods.keyboard.sendKey((char)KeyEvent.VK_ENTER);
+									for(i=0;i<20;++i){
+										sleep(random(100, 200));
+										if(getQuantitySetting()!=currentSetting)
+											break;
+									}
+									break;
+								}
+							}
+						}
+					}
+					return 12==getQuantitySetting();
+				}
+			}
+			if(button!=null){
+				if(button.click()){
+					for(int i=0;i<20;++i){
+						sleep(random(100, 200));
+						if(currentAmount!=getQuantityAmountSetting())
+							break;
+					}
+				}
+			}
+		}
+		return amount==getQuantityAmountSetting();
+	}
+	/**
+	 * @param setting - should be...
+	 * 0 - widthdraw 1, 
+	 * 4 - widthdraw 5, 
+	 * 8 - widthdraw 10, 
+	 * or 16 - widthdraw all.
+	 * 
+	 * 12, for widthdraw X/custom amount, 
+	 * should be set via setQuantityAmountSetting(int amount) instead.
+	 * @return
+	 */
+	public boolean setQuantitySetting(int setting){
+		int currentSetting = getQuantitySetting();
+		if(currentSetting!=setting){
+			RSWidget button = null;
+			if(setting==0){
+				if(bankItemQuantity1Button!=null){
+					button = bankItemQuantity1Button;
+				}
+			}
+			else if(setting==4){
+				if(bankItemQuantity5Button!=null){
+					button = bankItemQuantity5Button;
+				}
+			}
+			else if(setting==8){
+				if(bankItemQuantity10Button!=null){
+					button = bankItemQuantity10Button;
+				}
+			}
+			else if(setting==16){
+				if(bankItemQuantityAllButton!=null){
+					button = bankItemQuantityAllButton;
+				}
+			}
+			if(button!=null){
+				if(button.click()){
+					for(int i=0;i<20;++i){
+						sleep(random(100, 200));
+						if(currentSetting!=getQuantitySetting())
+							break;
+					}
+				}
+			}
+		}
+		return setting==getQuantitySetting();
+	}
+	/**
+	 * @return 
+	 * 0 = Setting '1'
+	 * 4 = Setting '5'
+	 * 8 = Setting '10'
+	 * 12 = Setting 'X'/Custom amount
+	 * 16 = All
+	 */
+	public int getQuantitySetting(){
+		return methods.varps.get(1666);
 	}
 	/**
 	 * Checks to see if the bank is full
@@ -112,6 +313,152 @@ public class Bank extends MethodDefinition{
 	 */
 	public boolean isBankFull(){
 		return getUsedBankspaceCount()>=getMaxBankSize();
+	}
+	public boolean isNoteMode(){
+		return methods.varps.get(115)==1;
+	}
+	public boolean setNoteMode(boolean val){
+		if(val!=isNoteMode()){
+			if(val && bankWidthdrawAsNoteButton!=null){
+				if(bankWidthdrawAsNoteButton.click()){
+					for(int i=0;i<20;++i){
+						sleep(random(100, 200));
+						if(val==isNoteMode())
+							break;
+					}
+				}
+			}
+			else if(!val && bankWidthdrawAsItemButton!=null){
+				if(bankWidthdrawAsItemButton.click()){
+					for(int i=0;i<20;++i){
+						sleep(random(100, 200));
+						if(val==isNoteMode())
+							break;
+					}
+				}
+			}
+		}
+		return val==isNoteMode();
+	}
+	public boolean isInsertMode(){
+		return (methods.varps.get(304)%2)==1;
+	}
+	public boolean setInsertMode(boolean val){
+		if(val!=isInsertMode()){
+			if(val && bankInsertButton!=null){
+				if(bankInsertButton.click()){
+					for(int i=0;i<20;++i){
+						sleep(random(100, 200));
+						if(val==isInsertMode())
+							break;
+					}
+				}
+			}
+			else if(!val && bankSwapButton!=null){
+				if(bankSwapButton.click()){
+					for(int i=0;i<20;++i){
+						sleep(random(100, 200));
+						if(val==isInsertMode())
+							break;
+					}
+				}
+			}
+		}
+		return val==isInsertMode();
+	}
+	public boolean isPlaceholdersEnabled(){
+		if(bankPlaceholderButton!=null){
+			return bankPlaceholderButton.spriteID()==179;
+		}
+		return false;
+	}
+	public boolean setPlaceholderSetting(boolean val){
+		if(bankPlaceholderButton!=null){
+			if(bankPlaceholderButton.spriteID()==179){
+				if(!val){
+					if(bankPlaceholderButton.click()){
+						for(int i=0;i<20;++i){
+							sleep(random(100, 200));
+							if(bankPlaceholderButton.spriteID()!=179)
+								break;
+						}
+						return val==(bankPlaceholderButton.spriteID()!=179);
+					}
+				}
+				else
+					return val==(bankPlaceholderButton.spriteID()==179);
+			}
+			else{
+				if(val){
+					if(bankPlaceholderButton.click()){
+						for(int i=0;i<20;++i){
+							sleep(random(100, 200));
+							if(bankPlaceholderButton.spriteID()==179)
+								break;
+						}
+						return val==(bankPlaceholderButton.spriteID()==179);
+					}
+				}
+				else
+					return val==(bankPlaceholderButton.spriteID()!=179);
+			}
+		}
+		return false;
+	}
+	public boolean isShowingWornItems(){
+		if(bankShowEquipmentButton!=null){
+			for(RSWidget w : bankShowEquipmentButton.getChildren())
+				if(w.spriteID()==196)
+					return true;
+		}
+		return false;
+	}
+	public boolean closeWornItems(){
+		if(isShowingWornItems()){
+			if(bankShowEquipmentButton.click()){
+				for(int i=0;i<20;++i){
+					sleep(random(100, 200));
+					if(!isShowingWornItems())
+						break;
+				}
+			}
+		}
+		return !isShowingWornItems();
+	}
+	public boolean isShowingBankMenu(){
+		if(bankShowMenuButton!=null){
+			for(RSWidget w : bankShowMenuButton.getChildren())
+				if(w.spriteID()==196)
+					return true;
+		}
+		return false;
+	}
+	public boolean closeBankMenu(){
+		if(isShowingBankMenu()){
+			if(bankShowMenuButton.click()){
+				for(int i=0;i<20;++i){
+					sleep(random(100, 200));
+					if(!isShowingBankMenu())
+						break;
+				}
+			}
+		}
+		return !isShowingBankMenu();
+	}
+	public boolean isBankTutorialOpen(){
+		return bankTutorialExitButton!=null;
+	}
+	public boolean closeBankTutorial(){
+		if(isBankTutorialOpen()){
+			if(bankTutorialExitButton.click()){
+				for(int i=0;i<20;++i){
+					sleep(random(100, 200));
+					if(!isBankTutorialOpen())
+						break;
+				}
+			}
+		}
+		return !isBankTutorialOpen();
 	}
 	/**
 	 * Checks to see if the bank is open
@@ -123,15 +470,17 @@ public class Bank extends MethodDefinition{
 		return false;
 	}
 	public void updateBankWidgets(){
-		if(bankParent==null){
-			findBankLoop:for(RSInterface i : methods.widgets.getAll()){
-				if(i!=null){
-					for(RSWidget w : i.getChildren()){
-						if(w!=null){
-							if(w.isDisplayed() && w.disabledText().equals("The Bank of Gielinor")){
+		for(RSInterface i : methods.widgets.getAll()){
+			if(i!=null){
+				for(RSWidget w : i.getChildren()){
+					if(w!=null){
+						if(w.isDisplayed()){
+							if(w.spriteID()==2524){
+								bankTutorialParent = i;
+							}
+							else if(w.disabledText().equals("The Bank of Gielinor")){
 								bankParent = i;
 								bankWindow = methods.widgets.getChild(w.getParentID());
-								break findBankLoop;
 							}
 						}
 					}
@@ -141,12 +490,47 @@ public class Bank extends MethodDefinition{
 		if(bankParent!=null){
 			for(RSWidget w : bankParent.getChildren()){
 				if(w!=null){
-					if(w.isDisplayed() && w.fontID()==494){
-						//item count and max space
-						if(w.verticalMargin()==0)
-							bankItemCount=w;
-						else if(w.verticalMargin()==2)
-							bankMaxSpace=w;
+					if(w.isDisplayed()){
+						if(w.fontID()==494){
+							if(w.verticalMargin()==0)
+								bankItemCount=w;
+							else if(w.verticalMargin()==2)
+								bankMaxSpace=w;
+						}
+						else if(w.fontID()==496){
+							if(w.disabledText().equals("Enter amount:"))
+								enterAmountDialog = w;
+						}
+					}
+					if(w.isVisible()){
+						if(w.opbase().equals("<col=ff9040>Always set placeholders</col>"))
+							bankPlaceholderButton = w;
+						else if(w.containsAction("Swap"))
+							bankSwapButton = w;
+						else if(w.containsAction("Insert"))
+							bankInsertButton = w;
+						else if(w.containsAction("Item"))
+							bankWidthdrawAsItemButton = w;
+						else if(w.containsAction("Note"))
+							bankWidthdrawAsNoteButton = w;
+						else if(w.containsAction("Set custom quantity"))
+							bankItemQuantityXButton = w;
+						else if(w.containsAction("Default quantity: 1"))
+							bankItemQuantity1Button = w;
+						else if(w.containsAction("Default quantity: 5"))
+							bankItemQuantity5Button = w;
+						else if(w.containsAction("Default quantity: 10"))
+							bankItemQuantity10Button = w;
+						else if(w.containsAction("Default quantity: All"))
+							bankItemQuantityAllButton = w;
+						else if(w.containsAction("Deposit inventory"))
+							bankDepositInventoryButton = w;
+						else if(w.containsAction("Deposit worn items"))
+							bankDepositEquipmentButton = w;
+						else if(w.containsAction("Show worn items") || w.containsAction("Hide worn items"))
+							bankShowEquipmentButton = w;
+						else if(w.containsAction("Show menu") || w.containsAction("Hide menu"))
+							bankShowMenuButton = w;
 					}
 					RSWidget[] children = w.getChildren();
 					if(children==null)
@@ -165,21 +549,41 @@ public class Bank extends MethodDefinition{
 						for(RSWidget child : children){
 							if(child!=null){
 								if(child.isVisible()){
-									if(child.containsAction("View all items")){
-										bankTabs = w;
-										mainTab = new BankTab(child, -1);
+									if(child.spriteID()==535){
+										bankExitButton = child;
+									}
+									else if(child.containsAction("View all items")){
+										RSWidget texture = children[0];
+										mainTab = new BankTab(child, -1, texture);
 									}
 									else if(child.containsAction("View tab")){
-										additionalTabs[child.index()-mainTab.getWidget().index()-1] = new BankTab(child, child.index()-mainTab.getWidget().index()-1);
+										RSWidget texture = children[child.index()-mainTab.getWidget().index()];
+										additionalTabs[child.index()-mainTab.getWidget().index()-1] = new BankTab(child, child.index()-mainTab.getWidget().index()-1, texture);
 									}
 									else if(child.containsAction("New tab")){
-										addTab = new BankTab(child, -2);
+										RSWidget texture = children[child.index()-mainTab.getWidget().index()];
+										addTab = new BankTab(child, -2, texture);
 										for(int i=child.index()-mainTab.getWidget().index()-1;i<9;++i)
 											additionalTabs[i] = null;
 									}
-									else if(child.spriteID()==535)
-										bankExitButton = child;
 								}
+							}
+						}
+					}
+				}
+			}
+			if(bankTutorialExitButton!=null && !bankTutorialExitButton.isDisplayed())
+				bankTutorialExitButton = null;
+			if(bankTutorialParent!=null){
+				for(RSWidget w : bankTutorialParent.getChildren()){
+					if(w!=null){
+						RSWidget[] children = w.getChildren();
+						if(children==null)
+							continue;
+						for(RSWidget child : children){
+							if(child!=null){
+								if(child.isDisplayed() && child.spriteID()==535)
+									bankTutorialExitButton = child;
 							}
 						}
 					}

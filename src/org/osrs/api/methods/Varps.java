@@ -43,6 +43,6 @@ public class Varps extends MethodDefinition{
 	 * @return
 	 */
 	public int[] getAll(){
-		return ((Client)methods.botInstance).varps();
+		return methods.game.varps();
 	}
 }

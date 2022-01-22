@@ -31,11 +31,11 @@ public class BankDebug {
 			Rectangle r = tab.getBounds();
 			g.drawRect(r.x, r.y, r.width, r.height);
 			if(tab.isMainTab())
-				g.drawString("Main", r.x, r.y+28);
+				g.drawString((tab.isSelected()?"*":"")+"Main", r.x, r.y+28);
 			else if(tab.isAddTab())
-				g.drawString("Add", r.x, r.y+28);
+				g.drawString((tab.isSelected()?"*":"")+"Add", r.x, r.y+28);
 			else
-				g.drawString("Tab "+(tab.getIndex()+1), r.x, r.y+28);
+				g.drawString((tab.isSelected()?"*":"")+"Tab "+(tab.getIndex()+1), r.x, r.y+28);
 		}
 		return g;
 	}

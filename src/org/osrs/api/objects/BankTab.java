@@ -8,14 +8,19 @@ import org.osrs.util.Data;
 
 public class BankTab extends Interactable{
 	private RSWidget tabWidget;
+	private RSWidget backgroundTextureWidget;
 	private int index;
-	public BankTab(RSWidget widget, int i){
+	public BankTab(RSWidget widget, int i, RSWidget texture){
 		methods = ((Client)Data.clientInstance).getMethodContext();
 		tabWidget = widget;
 		index = i;
+		backgroundTextureWidget = texture;
 	}
 	public int getIndex(){
 		return index;
+	}
+	public int getItemCount(){
+		return methods.game.client().invoke_getVarp(4171+index);
 	}
 	public Rectangle getBounds(){
 		return tabWidget.getBounds();
@@ -34,6 +39,11 @@ public class BankTab extends Interactable{
 	}
 	public boolean isDisplayed(){
 		return tabWidget.isDisplayed();
+	}
+	public boolean isSelected(){
+		if(backgroundTextureWidget!=null)
+			return backgroundTextureWidget.spriteID()==1079;
+		return false;
 	}
 	public boolean isVisible(){
 		return tabWidget.isVisible();
