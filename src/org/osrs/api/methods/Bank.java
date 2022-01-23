@@ -78,6 +78,9 @@ public class Bank extends MethodDefinition{
 		}
 		return methods.equipment.getCount()==0;
 	}
+	public RSInterface getBankParentInterface(){
+		return bankParent;
+	}
 	/**
 	 * Grabs a specified item by id from the bank.
 	 * Will be NULL if none found.

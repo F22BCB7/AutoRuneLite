@@ -4,6 +4,7 @@ import org.osrs.api.methods.MethodContext;
 import org.osrs.debug.BankDebug;
 import org.osrs.debug.BoundaryObjDebug;
 import org.osrs.debug.CameraDebug;
+import org.osrs.debug.EquipmentDebug;
 import org.osrs.debug.FloorDecDebug;
 import org.osrs.debug.GroundItemDebug;
 import org.osrs.debug.InteractableObjDebug;
@@ -224,6 +225,15 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 		if(bankDebug==null)
 			bankDebug = new BankDebug(Client.clientInstance.getMethodContext());
 		return bankDebug;
+	}
+	@BVar
+	public EquipmentDebug equipmentDebug;
+	@BFunction
+	@Override
+	public EquipmentDebug getEquipmentDebug(){
+		if(equipmentDebug==null)
+			equipmentDebug = new EquipmentDebug(Client.clientInstance.getMethodContext());
+		return equipmentDebug;
 	}
 
 	@BField

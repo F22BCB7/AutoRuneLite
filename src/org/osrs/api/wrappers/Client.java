@@ -6,6 +6,7 @@ import org.osrs.api.methods.MethodContext;
 import org.osrs.debug.BankDebug;
 import org.osrs.debug.BoundaryObjDebug;
 import org.osrs.debug.CameraDebug;
+import org.osrs.debug.EquipmentDebug;
 import org.osrs.debug.FloorDecDebug;
 import org.osrs.debug.GroundItemDebug;
 import org.osrs.debug.InteractableObjDebug;
@@ -45,6 +46,7 @@ public interface Client extends GameShell{
 	public WallDecDebug getWallDecDebug();
 	public GroundItemDebug getGroundItemDebug();
 	public BankDebug getBankDebug();
+	public EquipmentDebug getEquipmentDebug();
 
 	public Client clientInstance();
 	
