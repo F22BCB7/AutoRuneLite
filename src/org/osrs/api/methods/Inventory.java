@@ -5,19 +5,23 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.osrs.api.objects.EquipmentItem;
 import org.osrs.api.objects.InventoryItem;
 import org.osrs.api.objects.RSInterface;
 import org.osrs.api.objects.RSWidget;
 import org.osrs.api.objects.WidgetItem;
 import org.osrs.api.wrappers.Client;
+import org.osrs.api.wrappers.ItemStorage;
 import org.osrs.util.Data;
 
 public class Inventory extends MethodDefinition{
 	private RSWidget inventoryWidget = null;
 	private InventoryItem[] inventoryItems = null;
-	//TODO use ItemContainer instead of widgets - itemContainer.bucket[30].next.ids[equipIndex]
 	public Inventory(MethodContext context){
 		super(context);
+	}
+	public ItemStorage getInventoryItemStorage(){
+		return methods.game.getItemStorages()[29];
 	}
 	/**
 	 * Called after a gameCycle has passed, and will
@@ -27,24 +31,28 @@ public class Inventory extends MethodDefinition{
 		try{
 			if(inventoryItems==null)
 				inventoryItems = new InventoryItem[28];
-			RSWidget inventory = getInventoryItemsWidget();
-			int[] ids = new int[28];
-			int[] counts = new int[28];
-			if(inventory!=null){
-				ids = inventory.itemIDs();
-				counts = inventory.itemQuantities();
+			int index=0;
+			ItemStorage items = getInventoryItemStorage();
+			if(items!=null){
+				int[] ids = items.ids();
+				int[] sizes = items.stackSizes();
+				for(int i=0;i<Math.min(ids.length, sizes.length);i++){
+					if(inventoryItems[index]==null){
+						inventoryItems[index] = new InventoryItem(ids[i], sizes[i], index);
+					}
+					else{
+						inventoryItems[index].updateInfo(ids[i], sizes[i]);
+					} 
+					index++;
+				}
 			}
-			else{
-				Arrays.fill(ids, -1);
-				Arrays.fill(counts, 0);
-			}
-			for(int i=0;i<28;++i){
-				if(inventoryItems[i]==null)
+			for(int i=index;i<inventoryItems.length;i++){
+				if(inventoryItems[i]==null){
 					inventoryItems[i] = new InventoryItem(-1, 0, i);
-				if(methods.grandExchange.isGEInventoryOpen())
-					inventoryItems[i].updateInfo(ids[i]+1, counts[i]);
-				else
-					inventoryItems[i].updateInfo(ids[i]-1, counts[i]);
+				}
+				else{
+					inventoryItems[i].updateInfo(-1, 0);
+				}
 			}
 		}
 		catch(NullPointerException e){

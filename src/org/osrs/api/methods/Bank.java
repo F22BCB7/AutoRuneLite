@@ -8,24 +8,27 @@ import org.osrs.api.objects.RSInterface;
 import org.osrs.api.objects.RSWidget;
 
 public class Bank extends MethodDefinition{
+	private RSInterface depositBoxParent=null;
+	private RSWidget depositBoxWindow=null;
 	private RSInterface bankParent=null;
 	private RSWidget bankWindow=null;
 	private RSWidget bankItemCount=null;
 	private RSWidget bankMaxSpace=null;
-	private RSWidget bankExitButton=null;
+	private RSWidget exitButton=null;
 	private RSWidget bankPlaceholderButton=null;
 	private RSWidget bankSwapButton=null;
 	private RSWidget bankInsertButton=null;
 	private RSWidget bankWidthdrawAsItemButton=null;
 	private RSWidget bankWidthdrawAsNoteButton=null;
-	private RSWidget bankItemQuantity1Button=null;
-	private RSWidget bankItemQuantity5Button=null;
-	private RSWidget bankItemQuantity10Button=null;
-	private RSWidget bankItemQuantityXButton=null;
+	private RSWidget itemQuantity1Button=null;
+	private RSWidget itemQuantity5Button=null;
+	private RSWidget itemQuantity10Button=null;
+	private RSWidget itemQuantityXButton=null;
 	private RSWidget enterAmountDialog=null;
-	private RSWidget bankItemQuantityAllButton=null;
-	private RSWidget bankDepositInventoryButton=null;
-	private RSWidget bankDepositEquipmentButton=null;
+	private RSWidget itemQuantityAllButton=null;
+	private RSWidget depositInventoryButton=null;
+	private RSWidget depositEquipmentButton=null;
+	private RSWidget depositLootbagButton=null;
 	private RSWidget bankShowEquipmentButton=null;
 	private RSWidget bankShowMenuButton=null;
 	private RSInterface bankTutorialParent=null;
@@ -40,15 +43,15 @@ public class Bank extends MethodDefinition{
 		super(context);
 	}
 	public boolean close(){
-		if(isOpen() && bankExitButton!=null)
-			return bankExitButton.click();
+		if(isOpen() && exitButton!=null)
+			return exitButton.click();
 		return false;
 	}
 	public boolean depositInventory(){
 		int count = methods.inventory.getCount();
 		if(count>0){
-			if(bankDepositInventoryButton!=null){
-				if(bankDepositInventoryButton.click()){
+			if(depositInventoryButton!=null){
+				if(depositInventoryButton.click()){
 					for(int i=0;i<20;++i){
 						sleep(random(100, 200));
 						if(methods.inventory.getCount()!=count)
@@ -64,8 +67,8 @@ public class Bank extends MethodDefinition{
 	public boolean depositEquipment(){
 		int count = methods.equipment.getCount();
 		if(count>0){
-			if(bankDepositEquipmentButton!=null){
-				if(bankDepositEquipmentButton.click()){
+			if(depositEquipmentButton!=null){
+				if(depositEquipmentButton.click()){
 					for(int i=0;i<20;++i){
 						sleep(random(100, 200));
 						if(methods.equipment.getCount()!=count)
@@ -198,28 +201,28 @@ public class Bank extends MethodDefinition{
 		RSWidget button = null;
 		if(amount!=currentAmount){
 			if(amount==1){
-				if(bankItemQuantity1Button!=null){
-					button = bankItemQuantity1Button;
+				if(itemQuantity1Button!=null){
+					button = itemQuantity1Button;
 				}
 			}
 			else if(amount==5){
-				if(bankItemQuantity5Button!=null){
-					button = bankItemQuantity5Button;
+				if(itemQuantity5Button!=null){
+					button = itemQuantity5Button;
 				}
 			}
 			else if(amount==10){
-				if(bankItemQuantity10Button!=null){
-					button = bankItemQuantity10Button;
+				if(itemQuantity10Button!=null){
+					button = itemQuantity10Button;
 				}
 			}
 			else if(amount==Integer.MAX_VALUE){
-				if(bankItemQuantityAllButton!=null){
-					button = bankItemQuantityAllButton;
+				if(itemQuantityAllButton!=null){
+					button = itemQuantityAllButton;
 				}
 			}
 			else{
-				if(bankItemQuantityAllButton!=null){
-					button = bankItemQuantityXButton;
+				if(itemQuantityAllButton!=null){
+					button = itemQuantityXButton;
 					if(button!=null){
 						if(button.click("Set custom quantity")){
 							for(int i=0;i<20;++i){
@@ -268,23 +271,23 @@ public class Bank extends MethodDefinition{
 		if(currentSetting!=setting){
 			RSWidget button = null;
 			if(setting==0){
-				if(bankItemQuantity1Button!=null){
-					button = bankItemQuantity1Button;
+				if(itemQuantity1Button!=null){
+					button = itemQuantity1Button;
 				}
 			}
 			else if(setting==4){
-				if(bankItemQuantity5Button!=null){
-					button = bankItemQuantity5Button;
+				if(itemQuantity5Button!=null){
+					button = itemQuantity5Button;
 				}
 			}
 			else if(setting==8){
-				if(bankItemQuantity10Button!=null){
-					button = bankItemQuantity10Button;
+				if(itemQuantity10Button!=null){
+					button = itemQuantity10Button;
 				}
 			}
 			else if(setting==16){
-				if(bankItemQuantityAllButton!=null){
-					button = bankItemQuantityAllButton;
+				if(itemQuantityAllButton!=null){
+					button = itemQuantityAllButton;
 				}
 			}
 			if(button!=null){
@@ -463,6 +466,12 @@ public class Bank extends MethodDefinition{
 		}
 		return !isBankTutorialOpen();
 	}
+	public boolean isDepositBoxOpen(){
+		return depositBoxWindow!=null && depositBoxWindow.isVisible();
+	}
+	public boolean closeDepositBox(){
+		return close();
+	}
 	/**
 	 * Checks to see if the bank is open
 	 * @return bankOpen
@@ -484,6 +493,19 @@ public class Bank extends MethodDefinition{
 							else if(w.disabledText().equals("The Bank of Gielinor")){
 								bankParent = i;
 								bankWindow = methods.widgets.getChild(w.getParentID());
+							}
+						}
+						RSWidget[] children = w.getChildren();
+						if(children==null)
+							continue;
+						for(RSWidget child : children){
+							if(child!=null){
+								if(child.isDisplayed()){
+									if(child.disabledText().equals("The Bank of Gielinor")){
+										depositBoxWindow = methods.widgets.getChild(w.getParentID());
+										depositBoxParent = i;
+									}
+								}
 							}
 						}
 					}
@@ -517,19 +539,19 @@ public class Bank extends MethodDefinition{
 						else if(w.containsAction("Note"))
 							bankWidthdrawAsNoteButton = w;
 						else if(w.containsAction("Set custom quantity"))
-							bankItemQuantityXButton = w;
+							itemQuantityXButton = w;
 						else if(w.containsAction("Default quantity: 1"))
-							bankItemQuantity1Button = w;
+							itemQuantity1Button = w;
 						else if(w.containsAction("Default quantity: 5"))
-							bankItemQuantity5Button = w;
+							itemQuantity5Button = w;
 						else if(w.containsAction("Default quantity: 10"))
-							bankItemQuantity10Button = w;
+							itemQuantity10Button = w;
 						else if(w.containsAction("Default quantity: All"))
-							bankItemQuantityAllButton = w;
+							itemQuantityAllButton = w;
 						else if(w.containsAction("Deposit inventory"))
-							bankDepositInventoryButton = w;
+							depositInventoryButton = w;
 						else if(w.containsAction("Deposit worn items"))
-							bankDepositEquipmentButton = w;
+							depositEquipmentButton = w;
 						else if(w.containsAction("Show worn items") || w.containsAction("Hide worn items"))
 							bankShowEquipmentButton = w;
 						else if(w.containsAction("Show menu") || w.containsAction("Hide menu"))
@@ -553,7 +575,7 @@ public class Bank extends MethodDefinition{
 							if(child!=null){
 								if(child.isVisible()){
 									if(child.spriteID()==535){
-										bankExitButton = child;
+										exitButton = child;
 									}
 									else if(child.containsAction("View all items")){
 										RSWidget texture = children[0];
@@ -587,6 +609,44 @@ public class Bank extends MethodDefinition{
 							if(child!=null){
 								if(child.isDisplayed() && child.spriteID()==535)
 									bankTutorialExitButton = child;
+							}
+						}
+					}
+				}
+			}
+		}
+		if(depositBoxParent!=null){
+			for(RSWidget w : depositBoxParent.getChildren()){
+				if(w!=null){
+					if(w.isDisplayed()){
+						if(w.containsAction("Deposit inventory"))
+							depositInventoryButton = w;
+						else if(w.containsAction("Deposit worn items"))
+							depositEquipmentButton = w;
+						else if(w.containsAction("Deposit loot"))
+							depositLootbagButton = w;
+					}
+					if(w.isVisible()){
+						if(w.containsAction("Set custom quantity"))
+							itemQuantityXButton = w;
+						else if(w.containsAction("Default quantity: <col=ff9040>1</col>"))
+							itemQuantity1Button = w;
+						else if(w.containsAction("Default quantity: <col=ff9040>5</col>"))
+							itemQuantity5Button = w;
+						else if(w.containsAction("Default quantity: <col=ff9040>10</col>"))
+							itemQuantity10Button = w;
+						else if(w.containsAction("Default quantity: All"))
+							itemQuantityAllButton = w;
+					}
+					RSWidget[] children = w.getChildren();
+					if(children==null)
+						continue;
+					for(RSWidget child : children){
+						if(child!=null){
+							if(child.isVisible()){
+								if(child.spriteID()==535){
+									exitButton = child;
+								}
 							}
 						}
 					}
