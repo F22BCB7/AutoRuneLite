@@ -96,6 +96,7 @@ public class GameShell extends Applet implements org.osrs.api.wrappers.GameShell
 						}
 					}
 				}
+				Client.clientInstance.getMethodContext().chatbox.updateChatboxWidgets();
 				Client.clientInstance.getMethodContext().inventory.updateInventoryItems();
 				Client.clientInstance.getMethodContext().equipment.updateEquipmentItems();
 				Client.clientInstance.getMethodContext().bank.updateBankWidgets();

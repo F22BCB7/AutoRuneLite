@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.HashTable;
@@ -834,6 +836,28 @@ public class RSWidget extends Interactable{
 		}
 		return null;
 	}
+	/**
+	 * Checks to see if param is found within
+	 * an action. Different from containsAction, as that is
+	 * exact match.
+	 * @param action
+	 * @return
+	 */
+	public boolean actionContains(String action){
+		String[] actions = actions();
+		for(int i=0;actions!=null && i<actions.length;++i){
+			if(actions[i]!=null && actions[i].contains(action))
+				return true;
+		}
+		return false;
+	}
+	/**
+	 * Checks to see if this contains an action.
+	 * Different from actionContains; this is exact match, 
+	 * actionContains is if an action contains a string.
+	 * @param action
+	 * @return
+	 */
 	public boolean containsAction(String action){
 		String[] actions = actions();
 		for(int i=0;actions!=null && i<actions.length;++i){
@@ -951,6 +975,28 @@ public class RSWidget extends Interactable{
 		}
 		return null;
 	}
+	/**
+	 * Checks to see if param is found within
+	 * an configAction. Different from containsConfigAction, as that is
+	 * exact match.
+	 * @param action
+	 * @return
+	 */
+	public boolean configActionContains(String action){
+		String[] actions = configActions();
+		for(int i=0;actions!=null && i<actions.length;++i){
+			if(actions[i]!=null && actions[i].contains(action))
+				return true;
+		}
+		return false;
+	}
+	/**
+	 * Checks to see if this contains an configAction.
+	 * Different from configActionContains; this is exact match, 
+	 * configActionContains is if an action contains a string.
+	 * @param action
+	 * @return
+	 */
 	public boolean containsConfigAction(String action){
 		String[] actions = configActions();
 		for(int i=0;actions!=null && i<actions.length;++i){
