@@ -3,7 +3,7 @@ package org.osrs.api.methods;
 import java.util.ArrayList;
 
 import org.osrs.api.objects.RSNpc;
-import org.osrs.api.wrappers.Client;
+import org.osrs.api.objects.RSPlayer;
 import org.osrs.api.wrappers.NPCDefinition;
 import org.osrs.api.wrappers.Npc;
 
@@ -17,30 +17,12 @@ public class NPCs extends MethodDefinition{
 	 * @return npc
 	 */
 	public RSNpc get(int id) {
-		Npc[] npcs = ((Client)methods.botInstance).npcs();
+		Npc[] npcs = methods.game.npcs();
 		for(int i=0;i<npcs.length;++i) {
 			Npc n = npcs[i];
 			if(n != null){
 				NPCDefinition def = n.definition();
 				if(def!=null && def.id()==id)
-					return new RSNpc(n, i);
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Grab an NPC from the loaded array by Name
-	 * @param name
-	 * @return npc
-	 */
-	public RSNpc get(String name) {
-		Npc[] npcs = ((Client)methods.botInstance).npcs();
-		for(int i=0;i<npcs.length;++i) {
-			Npc n = npcs[i];
-			if(n != null){
-				NPCDefinition def = n.definition();
-				if(def!=null && def.name().equals(name))
 					return new RSNpc(n, i);
 			}
 		}
@@ -54,7 +36,7 @@ public class NPCs extends MethodDefinition{
 	 * @return npc
 	 */
 	public RSNpc get(int...ids) {
-		Npc[] npcs = ((Client)methods.botInstance).npcs();
+		Npc[] npcs = methods.game.npcs();
 		for(int i=0;i<npcs.length;++i) {
 			Npc n = npcs[i];
 			if(n != null){
@@ -70,6 +52,23 @@ public class NPCs extends MethodDefinition{
 		return null;
 	}
 	/**
+	 * Grab an NPC from the loaded array by Name
+	 * @param name
+	 * @return npc
+	 */
+	public RSNpc get(String name) {
+		Npc[] npcs = methods.game.npcs();
+		for(int i=0;i<npcs.length;++i) {
+			Npc n = npcs[i];
+			if(n != null){
+				NPCDefinition def = n.definition();
+				if(def!=null && def.name().equals(name))
+					return new RSNpc(n, i);
+			}
+		}
+		return null;
+	}
+	/**
 	 * Grabs a loaded NPC by a given name(s)
 	 * This is only first in the array, not
 	 * by any other means.
@@ -77,7 +76,7 @@ public class NPCs extends MethodDefinition{
 	 * @return npc
 	 */
 	public RSNpc get(String...names) {
-		Npc[] npcs = ((Client)methods.botInstance).npcs();
+		Npc[] npcs = methods.game.npcs();
 		for(int i=0;i<npcs.length;++i) {
 			Npc n = npcs[i];
 			if(n != null){
@@ -98,7 +97,7 @@ public class NPCs extends MethodDefinition{
 	 */
 	public RSNpc[] getAll() {
 		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
-		Npc[] npcs = ((Client)methods.botInstance).npcs();
+		Npc[] npcs = methods.game.npcs();
 		for(int i=0;i<npcs.length;++i) {
 			Npc n = npcs[i];
 			if(n != null)
@@ -113,7 +112,7 @@ public class NPCs extends MethodDefinition{
 	 */
 	public RSNpc[] getAllByID(int id) {
 		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
-		Npc[] npcs = ((Client)methods.botInstance).npcs();
+		Npc[] npcs = methods.game.npcs();
 		for(int i=0;i<npcs.length;++i) {
 			Npc n = npcs[i];
 			if(n != null){
@@ -134,7 +133,7 @@ public class NPCs extends MethodDefinition{
 	 */
 	public RSNpc[] getAllByID(int...ids) {
 		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
-		Npc[] npcs = ((Client)methods.botInstance).npcs();
+		Npc[] npcs = methods.game.npcs();
 		for(int i=0;i<npcs.length;++i) {
 			Npc n = npcs[i];
 			if(n != null){
@@ -158,7 +157,7 @@ public class NPCs extends MethodDefinition{
 	 */
 	public RSNpc[] getAllByName(String name) {
 		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
-		Npc[] npcs = ((Client)methods.botInstance).npcs();
+		Npc[] npcs = methods.game.npcs();
 		for(int i=0;i<npcs.length;++i) {
 			Npc n = npcs[i];
 			if(n != null){
@@ -179,7 +178,7 @@ public class NPCs extends MethodDefinition{
 	 */
 	public RSNpc[] getAllByName(String...names) {
 		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
-		Npc[] npcs = ((Client)methods.botInstance).npcs();
+		Npc[] npcs = methods.game.npcs();
 		for(int i=0;i<npcs.length;++i) {
 			Npc n = npcs[i];
 			if(n != null){
@@ -215,24 +214,6 @@ public class NPCs extends MethodDefinition{
 		}
 		return temp;
 	}
-	public RSNpc getNextNearestByID(int id) {
-		RSNpc temp = null;
-		double dist1 = Double.MAX_VALUE;
-		double dist2 = Double.MAX_VALUE;
-		for (RSNpc npc : getAllByID(id)) {
-			if(npc==null)
-				continue;
-			double distance = methods.calculations.distanceTo(npc.getLocation());
-			if (distance < dist1) {
-				dist1 = distance;
-			}
-			else if(distance < dist2){
-				dist2=distance;
-				temp=npc;
-			}
-		}
-		return temp;
-	}
 	/**
 	 * Grabs the closest NPC with a given id(s)
 	 * @param id(s)
@@ -248,24 +229,6 @@ public class NPCs extends MethodDefinition{
 			if (distance < dist) {
 				dist = distance;
 				temp = npc;
-			}
-		}
-		return temp;
-	}
-	public RSNpc getNextNearestByID(int...ids) {
-		RSNpc temp = null;
-		double dist1 = Double.MAX_VALUE;
-		double dist2 = Double.MAX_VALUE;
-		for (RSNpc npc : getAllByID(ids)) {
-			if(npc==null)
-				continue;
-			double distance = methods.calculations.distanceTo(npc.getLocation());
-			if (distance < dist1) {
-				dist1 = distance;
-			}
-			else if(distance < dist2){
-				dist2=distance;
-				temp=npc;
 			}
 		}
 		return temp;
@@ -308,13 +271,49 @@ public class NPCs extends MethodDefinition{
 		}
 		return temp;
 	}
+	public RSNpc getNextNearestByID(int id) {
+		RSNpc temp = null;
+		double dist1 = Double.MAX_VALUE;
+		double dist2 = Double.MAX_VALUE;
+		for (RSNpc npc : getAllByID(id)) {
+			if(npc==null)
+				continue;
+			double distance = methods.calculations.distanceTo(npc.getLocation());
+			if (distance < dist1) {
+				dist1 = distance;
+			}
+			else if(distance < dist2){
+				dist2=distance;
+				temp=npc;
+			}
+		}
+		return temp;
+	}
+	public RSNpc getNextNearestByID(int...ids) {
+		RSNpc temp = null;
+		double dist1 = Double.MAX_VALUE;
+		double dist2 = Double.MAX_VALUE;
+		for (RSNpc npc : getAllByID(ids)) {
+			if(npc==null)
+				continue;
+			double distance = methods.calculations.distanceTo(npc.getLocation());
+			if (distance < dist1) {
+				dist1 = distance;
+			}
+			else if(distance < dist2){
+				dist2=distance;
+				temp=npc;
+			}
+		}
+		return temp;
+	}
 	/**
 	 * Gets all loaded NPCs not in combat
 	 * @return NPC Array
 	 */
 	public RSNpc[] getAllNotInCombat() {
 		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
-		Npc[] npcs = ((Client)methods.botInstance).npcs();
+		Npc[] npcs = methods.game.npcs();
 		for(int i=0;i<npcs.length;++i) {
 			Npc n = npcs[i];
 			if(n != null){
@@ -494,6 +493,313 @@ public class NPCs extends MethodDefinition{
 		}
 		if(temp != null)
 			return temp;
+		return null;
+	}
+	public RSNpc[] getNPCsTargetingLocalPlayer() {
+		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
+		RSPlayer pl = methods.players.getLocalPlayer();
+		if(pl!=null){
+			Npc[] npcs = methods.game.npcs();
+			for(int i=0;i<npcs.length;++i) {
+				Npc n = npcs[i];
+				if(n != null){
+					int id = n.interactingID();
+					if(id!=-1 && id>=32768){
+						id-=32768;
+						if(id==pl.indice)
+							npc_list.add(new RSNpc(n, i));
+					}
+				}
+			}
+		}
+		return npc_list.toArray(new RSNpc[]{});
+	}
+	public RSNpc[] getNPCsTargetingLocalPlayerByID(int id) {
+		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
+		RSPlayer pl = methods.players.getLocalPlayer();
+		if(pl!=null){
+			Npc[] npcs = methods.game.npcs();
+			for(int i=0;i<npcs.length;++i) {
+				Npc n = npcs[i];
+				if(n != null){
+					int id2 = n.interactingID();
+					if(id2!=-1 && id2>=32768){
+						id2-=32768;
+						if(id2==pl.indice){
+							RSNpc npc = new RSNpc(n, i);
+							if(npc.getID()==id)
+								npc_list.add(npc);
+						}
+					}
+				}
+			}
+		}
+		return npc_list.toArray(new RSNpc[]{});
+	}
+	public RSNpc[] getNPCsTargetingLocalPlayerByID(int...ids) {
+		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
+		RSPlayer pl = methods.players.getLocalPlayer();
+		if(pl!=null){
+			Npc[] npcs = methods.game.npcs();
+			for(int i=0;i<npcs.length;++i) {
+				Npc n = npcs[i];
+				if(n != null){
+					int id2 = n.interactingID();
+					if(id2!=-1 && id2>=32768){
+						id2-=32768;
+						if(id2==pl.indice){
+							RSNpc npc = new RSNpc(n, i);
+							for(int id3 : ids){
+								if(npc.getID()==id3){
+									npc_list.add(npc);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return npc_list.toArray(new RSNpc[]{});
+	}
+	public RSNpc[] getNPCsTargetingLocalPlayerByName(String name) {
+		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
+		RSPlayer pl = methods.players.getLocalPlayer();
+		if(pl!=null){
+			Npc[] npcs = methods.game.npcs();
+			for(int i=0;i<npcs.length;++i) {
+				Npc n = npcs[i];
+				if(n != null){
+					int id2 = n.interactingID();
+					if(id2!=-1 && id2>=32768){
+						id2-=32768;
+						if(id2==pl.indice){
+							RSNpc npc = new RSNpc(n, i);
+							if(npc.getName().equals(name))
+								npc_list.add(npc);
+						}
+					}
+				}
+			}
+		}
+		return npc_list.toArray(new RSNpc[]{});
+	}
+	public RSNpc[] getNPCsTargetingLocalPlayerByName(String...names) {
+		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
+		RSPlayer pl = methods.players.getLocalPlayer();
+		if(pl!=null){
+			Npc[] npcs = methods.game.npcs();
+			for(int i=0;i<npcs.length;++i) {
+				Npc n = npcs[i];
+				if(n != null){
+					int id2 = n.interactingID();
+					if(id2!=-1 && id2>=32768){
+						id2-=32768;
+						if(id2==pl.indice){
+							RSNpc npc = new RSNpc(n, i);
+							for(String name : names){
+								if(npc.getName().equals(name)){
+									npc_list.add(npc);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return npc_list.toArray(new RSNpc[]{});
+	}
+	public RSNpc getNearestNPCTargetingLocalPlayer() {
+		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
+		double distance = Double.MAX_VALUE;
+		RSPlayer pl = methods.players.getLocalPlayer();
+		if(pl!=null){
+			Npc[] npcs = methods.game.npcs();
+			for(int i=0;i<npcs.length;++i) {
+				Npc n = npcs[i];
+				if(n != null){
+					int id2 = n.interactingID();
+					if(id2!=-1 && id2>=32768){
+						id2-=32768;
+						if(id2==pl.indice){
+							RSNpc npc = new RSNpc(n, i);
+							double dist = methods.calculations.distanceTo(npc.getLocation());
+							if(dist<distance){
+								npc_list.clear();
+								distance = dist;
+								npc_list.add(npc);
+							}
+							else if(dist==distance){
+								npc_list.add(npc);
+							}
+						}
+					}
+				}
+			}
+		}
+		if(npc_list.size()==1)
+			return npc_list.get(0);
+		else if(npc_list.size()>1)
+			return npc_list.get(random(npc_list.size()));
+		return null;
+	}
+	public RSNpc getNearestNPCTargetingLocalPlayerByID(int id) {
+		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
+		double distance = Double.MAX_VALUE;
+		RSPlayer pl = methods.players.getLocalPlayer();
+		if(pl!=null){
+			Npc[] npcs = methods.game.npcs();
+			for(int i=0;i<npcs.length;++i) {
+				Npc n = npcs[i];
+				if(n != null){
+					int id2 = n.interactingID();
+					if(id2!=-1 && id2>=32768){
+						id2-=32768;
+						if(id2==pl.indice){
+							RSNpc npc = new RSNpc(n, i);
+							if(npc.getID()!=id)
+								continue;
+							double dist = methods.calculations.distanceTo(npc.getLocation());
+							if(dist<distance){
+								npc_list.clear();
+								distance = dist;
+								npc_list.add(npc);
+							}
+							else if(dist==distance){
+								npc_list.add(npc);
+							}
+						}
+					}
+				}
+			}
+		}
+		if(npc_list.size()==1)
+			return npc_list.get(0);
+		else if(npc_list.size()>1)
+			return npc_list.get(random(npc_list.size()));
+		return null;
+	}
+	public RSNpc getNearestNPCTargetingLocalPlayerByID(int...ids) {
+		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
+		double distance = Double.MAX_VALUE;
+		RSPlayer pl = methods.players.getLocalPlayer();
+		if(pl!=null){
+			Npc[] npcs = methods.game.npcs();
+			for(int i=0;i<npcs.length;++i) {
+				Npc n = npcs[i];
+				if(n != null){
+					int id2 = n.interactingID();
+					if(id2!=-1 && id2>=32768){
+						id2-=32768;
+						if(id2==pl.indice){
+							RSNpc npc = new RSNpc(n, i);
+							boolean flag = false;
+							for(int id3 : ids){
+								if(npc.getID()==id3){
+									flag=true;
+									break;
+								}
+							}
+							if(!flag)
+								continue;
+							double dist = methods.calculations.distanceTo(npc.getLocation());
+							if(dist<distance){
+								npc_list.clear();
+								distance = dist;
+								npc_list.add(npc);
+							}
+							else if(dist==distance){
+								npc_list.add(npc);
+							}
+						}
+					}
+				}
+			}
+		}
+		if(npc_list.size()==1)
+			return npc_list.get(0);
+		else if(npc_list.size()>1)
+			return npc_list.get(random(npc_list.size()));
+		return null;
+	}
+	public RSNpc getNearestNPCTargetingLocalPlayerByName(String name) {
+		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
+		double distance = Double.MAX_VALUE;
+		RSPlayer pl = methods.players.getLocalPlayer();
+		if(pl!=null){
+			Npc[] npcs = methods.game.npcs();
+			for(int i=0;i<npcs.length;++i) {
+				Npc n = npcs[i];
+				if(n != null){
+					int id2 = n.interactingID();
+					if(id2!=-1 && id2>=32768){
+						id2-=32768;
+						if(id2==pl.indice){
+							RSNpc npc = new RSNpc(n, i);
+							if(!npc.getName().equals(name))
+								continue;
+							double dist = methods.calculations.distanceTo(npc.getLocation());
+							if(dist<distance){
+								npc_list.clear();
+								distance = dist;
+								npc_list.add(npc);
+							}
+							else if(dist==distance){
+								npc_list.add(npc);
+							}
+						}
+					}
+				}
+			}
+		}
+		if(npc_list.size()==1)
+			return npc_list.get(0);
+		else if(npc_list.size()>1)
+			return npc_list.get(random(npc_list.size()));
+		return null;
+	}
+	public RSNpc getNearestNPCTargetingLocalPlayerByName(String...names) {
+		ArrayList<RSNpc> npc_list = new ArrayList<RSNpc>();
+		double distance = Double.MAX_VALUE;
+		RSPlayer pl = methods.players.getLocalPlayer();
+		if(pl!=null){
+			Npc[] npcs = methods.game.npcs();
+			for(int i=0;i<npcs.length;++i) {
+				Npc n = npcs[i];
+				if(n != null){
+					int id2 = n.interactingID();
+					if(id2!=-1 && id2>=32768){
+						id2-=32768;
+						if(id2==pl.indice){
+							RSNpc npc = new RSNpc(n, i);
+							boolean flag = false;
+							for(String name : names){
+								if(npc.getName().equals(name)){
+									flag=true;
+									break;
+								}
+							}
+							if(!flag)
+								continue;
+							double dist = methods.calculations.distanceTo(npc.getLocation());
+							if(dist<distance){
+								npc_list.clear();
+								distance = dist;
+								npc_list.add(npc);
+							}
+							else if(dist==distance){
+								npc_list.add(npc);
+							}
+						}
+					}
+				}
+			}
+		}
+		if(npc_list.size()==1)
+			return npc_list.get(0);
+		else if(npc_list.size()>1)
+			return npc_list.get(random(npc_list.size()));
 		return null;
 	}
 }

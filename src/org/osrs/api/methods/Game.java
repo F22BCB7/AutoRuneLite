@@ -2,6 +2,8 @@ package org.osrs.api.methods;
 
 import java.util.Arrays;
 
+import org.osrs.api.objects.RSInterface;
+import org.osrs.api.objects.RSWidget;
 import org.osrs.api.wrappers.*;
 import org.osrs.api.wrappers.Region;
 
@@ -224,5 +226,106 @@ public class Game extends MethodDefinition{
 	}
 	public void runScriptEvent(Object[] args){
 		client.runScriptEvent(args);
+	}
+	
+	public void updateWidgets(){
+		RSInterface autocastSelectionParent=null;
+		RSWidget autocastSelectionWindow=null;
+		RSInterface depositBoxParent=null;
+		RSWidget depositBoxWindow=null;
+		RSInterface bankParent=null;
+		RSWidget bankWindow=null;
+		RSInterface bankTutorialParent=null;
+		RSInterface chatboxParent=null;
+		RSWidget chatboxWindow=null;
+		RSInterface equipmentParent = null;
+		RSWidget equipmentWindow = null;
+		RSInterface equipmentStatsParent = null;
+		RSWidget equipmentStatsWindow = null;
+		RSInterface priceCheckerParent = null;
+		RSWidget priceCheckerWindow = null;
+		RSInterface itemsKeptOnDeathParent = null;
+		RSWidget itemsKeptOnDeathWindow = null;
+		
+		//Find all parent interfaces, and cuts early once parent is found, 
+		//so the entire parents children is not iterated through this.
+		for(RSInterface i : methods.widgets.getAll()){
+			if(i!=null){
+				parentchilds:for(RSWidget w : i.getChildren()){
+					if(w!=null){
+						if(w.containsAction("View equipment stats")){//finds button
+							equipmentParent = i;
+							equipmentWindow = methods.widgets.getChild(w.getParentID());
+							break parentchilds;
+						}
+						if(w.isDisplayed()){
+							if(w.spriteID()==2524){
+								bankTutorialParent = i;
+								break parentchilds;
+							}
+							else if(w.disabledText().equals("The Bank of Gielinor")){
+								bankParent = i;
+								bankWindow = methods.widgets.getChild(w.getParentID());
+								break parentchilds;
+							}
+							else if(w.clickMask()==0 && w.spriteID()==297 && w.alpha()==0 && w.boundsIndex()==1){
+								equipmentStatsParent = i;
+								equipmentStatsWindow = w;
+								break parentchilds;
+							}
+						}
+						RSWidget[] children = w.getChildren();
+						if(children==null)
+							continue;
+						for(RSWidget child : children){
+							if(child!=null){
+								if(child.isDisplayed()){
+									if(child.spriteID()==1017){
+										chatboxParent = i;
+										RSWidget parent1 = methods.widgets.getChild(w.getParentID());
+										if(parent1!=null){
+											RSWidget parent2 = methods.widgets.getChild(parent1.getParentID());
+											if(parent2!=null && parent2.isVisible()){
+												chatboxWindow = parent2;
+												break parentchilds;
+											}
+										}
+									}
+									else if(child.disabledText().equals("Select a Combat Spell")){
+										autocastSelectionWindow = child;
+										autocastSelectionParent = i;
+										break parentchilds;
+									}
+									else if(child.disabledText().equals("Grand Exchange guide prices")){
+										priceCheckerParent = i;
+										priceCheckerWindow = w;
+										break parentchilds;
+									}
+									else if(child.disabledText().equals("Items Kept on Death")){
+										itemsKeptOnDeathParent = i;
+										itemsKeptOnDeathWindow = w;
+										break parentchilds;
+									}
+									else if(child.disabledText().equals("The Bank of Gielinor")){
+										depositBoxWindow = methods.widgets.getChild(w.getParentID());
+										depositBoxParent = i;
+										break parentchilds;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		//Then update the various method API.
+		//Finds children specific to the parent interfaces.
+		//Prevents false-positives/duplicates (like exit buttons).
+		methods.bank.updateBankWidgets(bankParent, bankWindow, bankTutorialParent, depositBoxParent, depositBoxWindow);
+		methods.combat.updateCombatWidgets(autocastSelectionParent, autocastSelectionWindow);
+		methods.chatbox.updateChatboxWidgets(chatboxParent, chatboxWindow);
+		methods.equipment.updateEquipmentWidgets(equipmentParent, equipmentWindow, equipmentStatsParent, equipmentStatsWindow, priceCheckerParent, priceCheckerWindow, itemsKeptOnDeathParent, itemsKeptOnDeathWindow);
+		
 	}
 }

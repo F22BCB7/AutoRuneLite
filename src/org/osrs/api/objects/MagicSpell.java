@@ -1,9 +1,7 @@
 package org.osrs.api.objects;
 
-import java.util.HashMap;
-
 import org.osrs.api.methods.MethodContext;
-import org.osrs.util.Data;
+import org.osrs.api.methods.Skills;
 
 public class MagicSpell {
 	private MethodContext methods;
@@ -11,17 +9,25 @@ public class MagicSpell {
 	public int level;
 	public double experience;
 	private RSWidget widget;
-	public MagicSpell(MethodContext context, String spellName, int lvl, double exp){
+	private int varbitValue;
+	public MagicSpell(MethodContext context, String spellName, int lvl, double exp, int varpbit){
+		methods = context;
 		name = spellName;
 		level = lvl;
 		experience = exp;
-		methods = context;
+		varbitValue = varpbit;
 	}
 	public String getName(){
 		return name;
 	}
 	public int getLevel(){
 		return level;
+	}
+	public boolean hasLevel(){
+		return methods.skills.getSkillLevel(Skills.MAGIC_INDEX)>=level;
+	}
+	public int getVarbitID(){
+		return varbitValue;
 	}
 	/*
 	 * In the case of combat spells (such as wind strike),
@@ -102,14 +108,30 @@ public class MagicSpell {
 		return false;
 	}
 	public RSWidget getWidget(){
-		if(widget!=null)
-			return widget;
+		if(widget!=null){
+			if(widget.isDisplayed())
+				return widget;
+		}
 		for(RSInterface iface : methods.widgets.getAll()){
 			if(iface!=null){
 				for(RSWidget w : iface.getChildren()){
-					if(w!=null && w.opbase().equals("<col=00ff00>"+name+"</col>")){
-						widget = w; 
-						return widget;
+					if(w!=null){
+						if(w.isDisplayed()){
+							if(w.opbase().equals("<col=00ff00>"+name+"</col>")){
+								widget = w; 
+								return widget;
+							}
+						}
+					}
+					for(RSWidget w2 : w.getChildren()){
+						if(w2!=null){
+							if(w2.isDisplayed()){
+								if(w2.containsAction(name)){
+									widget = w2;
+									return widget;
+								}
+							}
+						}
 					}
 				}
 			}

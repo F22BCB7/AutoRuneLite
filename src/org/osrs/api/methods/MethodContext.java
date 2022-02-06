@@ -7,6 +7,7 @@ public class MethodContext {
 	public Calculations calculations;
 	public Camera camera;
 	public Chatbox chatbox;
+	public Combat combat;
 	public Equipment equipment;
 	public Game game;
 	public GrandExchange grandExchange;
@@ -36,6 +37,7 @@ public class MethodContext {
 		calculations = new Calculations(this);
 		camera = new Camera(this);
 		chatbox = new Chatbox(this);
+		combat = new Combat(this);
 		equipment = new Equipment(this);
 		game = new Game(this);
 		grandExchange = new GrandExchange(this);

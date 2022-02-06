@@ -74,134 +74,6 @@ public class Equipment extends MethodDefinition{
 					equipmentItems[i].updateInfo(-1, 0);
 				}
 			}
-			for(RSInterface i : methods.widgets.getAll()){
-				if(i!=null){
-					childloop:for(RSWidget w : i.getChildren()){
-						if(w!=null){
-							if(w.containsAction("View equipment stats")){//finds button
-								equipmentParent = i;
-								equipmentWindow = methods.widgets.getChild(w.getParentID());
-								break childloop;
-							}
-							else if(w.isDisplayed() && w.clickMask()==0 && w.spriteID()==297 && w.alpha()==0 && w.boundsIndex()==1){
-								equipmentStatsParent = i;
-								equipmentStatsWindow = w;
-								break childloop;
-							}
-							RSWidget[] children = w.getChildren();
-							if(children!=null){
-								for(RSWidget child : children){
-									if(child!=null){
-										if(child.isDisplayed()){
-											if(child.disabledText().equals("Grand Exchange guide prices")){
-												priceCheckerParent = i;
-												priceCheckerWindow = w;
-												break childloop;
-											}
-											else if(child.disabledText().equals("Items Kept on Death")){
-												itemsKeptOnDeathParent = i;
-												itemsKeptOnDeathWindow = w;
-												break childloop;
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			index=0;
-			if(equipmentParent!=null){
-				for(RSWidget w : equipmentParent.getChildren()){
-					if(w!=null){
-						if(w.isVisible()){
-							if(w.clickMask()==2046)
-								equipmentItems[equipmentIndices[index++]].updateWidget(w);
-							else if(w.containsAction("View equipment stats"))
-								equipmentStatsButton = w;
-							else if(w.containsAction("View guide prices"))
-								priceCheckerButton = w;
-							else if(w.containsAction("View items kept on death"))
-								itemsKeptOnDeathButton = w;
-							else if(w.containsAction("Call follower"))
-								callFollowerButton = w;
-						}
-					}
-				}
-			}
-			index=0;
-			if(equipmentStatsParent!=null){
-				for(RSWidget w : equipmentStatsParent.getChildren()){
-					if(w!=null){
-						if(w.isDisplayed()){
-							if(w.clickMask()==2046){
-								equipmentItems[equipmentIndices[index++]].updateWidget(w);
-							}
-						}
-						RSWidget[] children = w.getChildren();
-						if(children!=null){
-							for(RSWidget child : children){
-								if(child!=null){
-									if(child.isDisplayed()){
-										if(child.spriteID()==535)
-											equipmentStatsExitButton = w;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			index=0;
-			if(methods.bank.isShowingWornItems()){
-				RSInterface parent = methods.bank.getBankParentInterface();
-				if(parent!=null){
-					for(RSWidget w : parent.getChildren()){
-						if(w!=null){
-							if(w.isDisplayed()){
-								if(w.clickMask()==1030){
-									equipmentItems[equipmentIndices[index++]].updateWidget(w);
-								}
-							}
-						}
-					}
-				}
-			}
-			if(priceCheckerParent!=null){
-				for(RSWidget w : priceCheckerParent.getChildren()){
-					if(w!=null){
-						RSWidget[] children = w.getChildren();
-						if(children!=null){
-							for(RSWidget child : children){
-								if(child!=null){
-									if(child.isDisplayed()){
-										if(child.spriteID()==535)
-											priceCheckerExitButton = w;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(itemsKeptOnDeathParent!=null){
-				for(RSWidget w : itemsKeptOnDeathParent.getChildren()){
-					if(w!=null){
-						RSWidget[] children = w.getChildren();
-						if(children!=null){
-							for(RSWidget child : children){
-								if(child!=null){
-									if(child.isDisplayed()){
-										if(child.spriteID()==535)
-											itemsKeptOnDeathExitButton = w;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
 		}
 		catch(Exception e){
 			//Can be thrown even with null checks; 
@@ -495,5 +367,107 @@ public class Equipment extends MethodDefinition{
 			}
 		}
 		return false;
+	}
+	public void updateEquipmentWidgets(RSInterface equipParent, RSWidget equipWindow, RSInterface equipStatParent, RSWidget equipStatWindow,
+			RSInterface pricerParent, RSWidget pricerWindow, RSInterface deathParent, RSWidget deathWindow){
+		equipmentParent = equipParent;
+		equipmentWindow = equipWindow;
+		equipmentStatsParent = equipStatParent;
+		equipmentStatsWindow = equipStatWindow;
+		priceCheckerParent = pricerParent;
+		priceCheckerWindow = pricerWindow;
+		itemsKeptOnDeathParent = deathParent;
+		itemsKeptOnDeathWindow = deathWindow;
+		int index=0;
+		if(equipmentParent!=null){
+			for(RSWidget w : equipmentParent.getChildren()){
+				if(w!=null){
+					if(w.isVisible()){
+						if(w.clickMask()==2046)
+							equipmentItems[equipmentIndices[index++]].updateWidget(w);
+						else if(w.containsAction("View equipment stats"))
+							equipmentStatsButton = w;
+						else if(w.containsAction("View guide prices"))
+							priceCheckerButton = w;
+						else if(w.containsAction("View items kept on death"))
+							itemsKeptOnDeathButton = w;
+						else if(w.containsAction("Call follower"))
+							callFollowerButton = w;
+					}
+				}
+			}
+		}
+		index=0;
+		if(equipmentStatsParent!=null){
+			for(RSWidget w : equipmentStatsParent.getChildren()){
+				if(w!=null){
+					if(w.isDisplayed()){
+						if(w.clickMask()==2046){
+							equipmentItems[equipmentIndices[index++]].updateWidget(w);
+						}
+					}
+					RSWidget[] children = w.getChildren();
+					if(children!=null){
+						for(RSWidget child : children){
+							if(child!=null){
+								if(child.isDisplayed()){
+									if(child.spriteID()==535)
+										equipmentStatsExitButton = w;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		index=0;
+		if(methods.bank.isShowingWornItems()){
+			RSInterface parent = methods.bank.getBankParentInterface();
+			if(parent!=null){
+				for(RSWidget w : parent.getChildren()){
+					if(w!=null){
+						if(w.isDisplayed()){
+							if(w.clickMask()==1030){
+								equipmentItems[equipmentIndices[index++]].updateWidget(w);
+							}
+						}
+					}
+				}
+			}
+		}
+		if(priceCheckerParent!=null){
+			for(RSWidget w : priceCheckerParent.getChildren()){
+				if(w!=null){
+					RSWidget[] children = w.getChildren();
+					if(children!=null){
+						for(RSWidget child : children){
+							if(child!=null){
+								if(child.isDisplayed()){
+									if(child.spriteID()==535)
+										priceCheckerExitButton = w;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if(itemsKeptOnDeathParent!=null){
+			for(RSWidget w : itemsKeptOnDeathParent.getChildren()){
+				if(w!=null){
+					RSWidget[] children = w.getChildren();
+					if(children!=null){
+						for(RSWidget child : children){
+							if(child!=null){
+								if(child.isDisplayed()){
+									if(child.spriteID()==535)
+										itemsKeptOnDeathExitButton = w;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }

@@ -556,6 +556,7 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 		return mouseIdleTicks;
 	}
 
+	//TODO rename to getVarbit
 	@BMethod(name="getVarp")
 	public static int _getVarp(int a, int b){return -1;}
 	@BMethod(name="getVarp")

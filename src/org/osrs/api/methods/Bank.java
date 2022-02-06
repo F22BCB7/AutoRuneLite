@@ -481,37 +481,12 @@ public class Bank extends MethodDefinition{
 			return true;
 		return false;
 	}
-	public void updateBankWidgets(){
-		for(RSInterface i : methods.widgets.getAll()){
-			if(i!=null){
-				for(RSWidget w : i.getChildren()){
-					if(w!=null){
-						if(w.isDisplayed()){
-							if(w.spriteID()==2524){
-								bankTutorialParent = i;
-							}
-							else if(w.disabledText().equals("The Bank of Gielinor")){
-								bankParent = i;
-								bankWindow = methods.widgets.getChild(w.getParentID());
-							}
-						}
-						RSWidget[] children = w.getChildren();
-						if(children==null)
-							continue;
-						for(RSWidget child : children){
-							if(child!=null){
-								if(child.isDisplayed()){
-									if(child.disabledText().equals("The Bank of Gielinor")){
-										depositBoxWindow = methods.widgets.getChild(w.getParentID());
-										depositBoxParent = i;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+	public void updateBankWidgets(RSInterface bParent, RSWidget bWindow, RSInterface btutParent, RSInterface depoParent, RSWidget depoWindow){
+		bankParent = bParent;
+		bankWindow = bWindow;
+		bankTutorialParent = btutParent;
+		depositBoxParent = depoParent;
+		depositBoxWindow = depoWindow;
 		if(bankParent!=null){
 			for(RSWidget w : bankParent.getChildren()){
 				if(w!=null){

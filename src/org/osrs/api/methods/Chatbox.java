@@ -35,35 +35,9 @@ public class Chatbox extends MethodDefinition{
 		}
 		return null;
 	}
-	public void updateChatboxWidgets(){
-		findchatbox:for(RSInterface i : methods.widgets.getAll()){
-			if(i!=null){
-				for(RSWidget w : i.getChildren()){
-					if(w!=null){
-						RSWidget[] children = w.getChildren();
-						if(children==null)
-							continue;
-						for(RSWidget child : children){
-							if(child!=null){
-								if(child.isDisplayed()){
-									if(child.spriteID()==1017){
-										chatboxParent = i;
-										RSWidget parent1 = methods.widgets.getChild(w.getParentID());
-										if(parent1!=null){
-											RSWidget parent2 = methods.widgets.getChild(parent1.getParentID());
-											if(parent2!=null && parent2.isVisible()){
-												chatboxWindow = parent2;
-												break findchatbox;
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+	public void updateChatboxWidgets(RSInterface parent, RSWidget window){
+		chatboxParent = parent;
+		chatboxWindow = window;
 		if(chatboxParent!=null){
 			RSWidget[] chatboxWidgets = chatboxParent.getChildren();
 			for(int i=0;i<chatboxWidgets.length;++i){
@@ -85,14 +59,6 @@ public class Chatbox extends MethodDefinition{
 							tradeChannel.updateWidget(w, w2);
 						else if(w.actionContains("Set chat mode:"))
 							allChannel.updateWidget(w, w2);
-					}
-					RSWidget[] children = w.getChildren();
-					if(children==null)
-						continue;
-					for(RSWidget child : children){
-						if(child!=null){
-							
-						}
 					}
 				}
 			}
