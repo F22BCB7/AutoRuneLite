@@ -160,4 +160,7 @@ public class Skills extends MethodDefinition{
 		}
 		return SKILL_NAMES[index];
 	}
+	public boolean skillsTabSelected(){
+		return methods.tabs.skills.isSelected();
+	}
 }

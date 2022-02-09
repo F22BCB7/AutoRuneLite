@@ -3,6 +3,7 @@ package org.osrs.api.methods;
 import org.osrs.api.objects.CombatType;
 import org.osrs.api.objects.CombatXPType;
 import org.osrs.api.objects.MagicSpell;
+import org.osrs.api.objects.PrayerAbility;
 import org.osrs.api.objects.RSInterface;
 import org.osrs.api.objects.RSNpc;
 import org.osrs.api.objects.RSPlayer;
@@ -209,6 +210,12 @@ public class Combat extends MethodDefinition{
 	}
 	public RSNpc getNearestNPCTargetingLocalPlayerByName(String...names) {
 		return methods.npcs.getNearestNPCTargetingLocalPlayerByName(names);
+	}
+	public int getActivatedPrayerCount(){
+		return methods.prayer.getActivatedPrayerCount();
+	}
+	public PrayerAbility[] getActivatedPrayers(){
+		return methods.prayer.getActivatedPrayers();
 	}
 	public void updateCombatWidgets(RSInterface parent, RSWidget window){
 		autocastSelectionParent = parent;

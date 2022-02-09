@@ -2,6 +2,7 @@ package org.osrs.api.objects;
 
 import java.lang.ref.SoftReference;
 
+import org.osrs.api.constants.HeadIcon;
 import org.osrs.api.wrappers.Actor;
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.NPCDefinition;
@@ -28,6 +29,22 @@ public class RSNpc extends RSActor{
 			return def.combatLevel();
 		}
 		return -1;
+	}
+	public int getOverheadIcon(){
+		NPCDefinition def = getDefinition();
+		if(def!=null){
+			return def.headIcon();
+		}
+		return -1;
+	}
+	public boolean isProtectMelee(){
+		return getOverheadIcon()==HeadIcon.PROTECT_FROM_MELEE;
+	}
+	public boolean isProtectMagic(){
+		return getOverheadIcon()==HeadIcon.PROTECT_FROM_MAGIC;
+	}
+	public boolean isProtectRange(){
+		return getOverheadIcon()==HeadIcon.PROTECT_FROM_RANGE;
 	}
 	public int getID(){
 		Npc npc = getAccessor();

@@ -23,6 +23,7 @@ public class MethodContext {
 	public NPCs npcs;
 	public Objects objects;
 	public Players players;
+	public Prayer prayer;
 	public Region region;
 	public Skills skills;
 	public Tabs tabs;
@@ -53,6 +54,7 @@ public class MethodContext {
 		npcs = new NPCs(this);
 		objects = new Objects(this);
 		players = new Players(this);
+		prayer = new Prayer(this);
 		region = new Region(this);
 		skills = new Skills(this);
 		tabs = new Tabs(this);

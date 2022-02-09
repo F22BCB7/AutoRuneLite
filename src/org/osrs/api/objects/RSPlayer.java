@@ -1,6 +1,9 @@
 package org.osrs.api.objects;
 
 import java.lang.ref.SoftReference;
+
+import org.osrs.api.constants.HeadIcon;
+import org.osrs.api.constants.SkullIcon;
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.Player;
 import org.osrs.api.wrappers.PlayerDefinition;
@@ -31,6 +34,32 @@ public class RSPlayer extends RSActor{
 	}
 	public int getPlane(){
 		return getAccessor().plane();
+	}
+	public int getSkullIcon(){
+		return getAccessor().skullIcon();
+	}
+	/**
+	 * Wilderness skulled (PK'ing)
+	 * @return
+	 */
+	public boolean isSkulled(){
+		return getSkullIcon()==SkullIcon.SKULL;
+	}
+	/**
+	 * See org.osrs.api.constants.HeadIcon
+	 * @return
+	 */
+	public int getOverheadIcon(){
+		return getAccessor().overheadIcon();
+	}
+	public boolean isProtectMelee(){
+		return getOverheadIcon()==HeadIcon.PROTECT_FROM_MELEE;
+	}
+	public boolean isProtectMagic(){
+		return getOverheadIcon()==HeadIcon.PROTECT_FROM_MAGIC;
+	}
+	public boolean isProtectRange(){
+		return getOverheadIcon()==HeadIcon.PROTECT_FROM_RANGE;
 	}
 	@Override
 	public RSTile getLocation(){

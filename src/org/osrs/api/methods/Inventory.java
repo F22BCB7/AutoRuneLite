@@ -454,4 +454,7 @@ public class Inventory extends MethodDefinition{
 		}
 		return new Rectangle(-1, -1, -1, -1);
 	}
+	public boolean inventoryTabSelected(){
+		return methods.tabs.inventory.isSelected();
+	}
 }

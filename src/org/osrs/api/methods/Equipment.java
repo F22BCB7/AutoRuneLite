@@ -368,6 +368,9 @@ public class Equipment extends MethodDefinition{
 		}
 		return false;
 	}
+	public boolean equipmentTabSelected(){
+		return methods.tabs.equipment.isSelected();
+	}
 	public void updateEquipmentWidgets(RSInterface equipParent, RSWidget equipWindow, RSInterface equipStatParent, RSWidget equipStatWindow,
 			RSInterface pricerParent, RSWidget pricerWindow, RSInterface deathParent, RSWidget deathWindow){
 		equipmentParent = equipParent;

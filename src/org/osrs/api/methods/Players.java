@@ -2,6 +2,7 @@ package org.osrs.api.methods;
 
 import java.util.ArrayList;
 
+import org.osrs.api.constants.SkullIcon;
 import org.osrs.api.objects.RSNpc;
 import org.osrs.api.objects.RSPlayer;
 import org.osrs.api.wrappers.Client;
@@ -22,6 +23,19 @@ public class Players extends MethodDefinition{
 			for(int i=0;i<ps.length;++i){
 				Player p = ps[i];
 				if(p!=null)
+					ret.add(new RSPlayer(p, i));
+			}
+			return ret.toArray(new RSPlayer[]{});
+		}
+		return new RSPlayer[]{};
+	}
+	public RSPlayer[] getSkulledPlayers(){
+		Player[] ps =  methods.game.players();
+		if(ps!=null){
+			ArrayList<RSPlayer> ret = new ArrayList<RSPlayer>();
+			for(int i=0;i<ps.length;++i){
+				Player p = ps[i];
+				if(p!=null && p.skullIcon()==SkullIcon.SKULL)
 					ret.add(new RSPlayer(p, i));
 			}
 			return ret.toArray(new RSPlayer[]{});

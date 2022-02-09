@@ -207,6 +207,9 @@ public class Game extends MethodDefinition{
 		client.setPreventIdleMouse(val);
 	}
 	
+	public int getVarbit(int id){
+		return client.invoke_getVarp(id);
+	}
 	public ItemDefinition getItemDefinition(int id){
 		return client.invoke_getItemDefinition(id);
 	}

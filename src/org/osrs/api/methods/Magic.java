@@ -64,6 +64,9 @@ public class Magic extends MethodDefinition{
 		}
 		return null;
 	}
+	public boolean magicTabSelected(){
+		return methods.tabs.magic.isSelected();
+	}
 	private void createSpellObjects(){
 		allSpells = new MagicSpell[]{
 				//Standard spell book
