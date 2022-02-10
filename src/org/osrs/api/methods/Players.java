@@ -3,14 +3,9 @@ package org.osrs.api.methods;
 import java.util.ArrayList;
 
 import org.osrs.api.constants.SkullIcon;
-import org.osrs.api.objects.RSNpc;
 import org.osrs.api.objects.RSPlayer;
-import org.osrs.api.wrappers.Client;
-import org.osrs.api.wrappers.NPCDefinition;
-import org.osrs.api.wrappers.Npc;
 import org.osrs.api.wrappers.Player;
 import org.osrs.api.wrappers.NameComposite;
-import org.osrs.util.Data;
 
 public class Players extends MethodDefinition{
 	public Players(MethodContext context){

@@ -57,7 +57,7 @@ public class Modscript {
 
 
 		/**Hotfix hooks**/
-		for(ClassHook ch : classHooks){
+		/*for(ClassHook ch : classHooks){
 			if(ch.refactoredName.equals("Widget")){
 				for(FieldHook fh : ch.fieldHooks){
 					if(fh.refactoredName.equals("spriteID"))
@@ -70,7 +70,7 @@ public class Modscript {
 		for(FieldHook fh : staticFields){
 			if(fh.refactoredName.equals("widgetVisibleCycle"))
 				fh.multiplier = (int)-837735965;
-		}
+		}*/
 		/****************/
 			
 		System.out.println("Loaded modscript r"+modscriptRevision+" in "+(System.currentTimeMillis()-start)+"ms");
