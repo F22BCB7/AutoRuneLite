@@ -249,6 +249,8 @@ public class Game extends MethodDefinition{
 		RSWidget priceCheckerWindow = null;
 		RSInterface itemsKeptOnDeathParent = null;
 		RSWidget itemsKeptOnDeathWindow = null;
+		RSInterface quickPrayerParent = null;
+		RSWidget quickPrayerWindow = null;
 		
 		//Find all parent interfaces, and cuts early once parent is found, 
 		//so the entire parents children is not iterated through this.
@@ -294,6 +296,11 @@ public class Game extends MethodDefinition{
 											}
 										}
 									}
+									else if(child.spriteID()==115 && child.alpha()==50){
+										quickPrayerWindow = methods.widgets.getChild(w.getParentID());
+										quickPrayerParent = i;
+										break parentchilds;
+									}
 									else if(child.disabledText().equals("Select a Combat Spell")){
 										autocastSelectionWindow = child;
 										autocastSelectionParent = i;
@@ -329,6 +336,7 @@ public class Game extends MethodDefinition{
 		methods.combat.updateCombatWidgets(autocastSelectionParent, autocastSelectionWindow);
 		methods.chatbox.updateChatboxWidgets(chatboxParent, chatboxWindow);
 		methods.equipment.updateEquipmentWidgets(equipmentParent, equipmentWindow, equipmentStatsParent, equipmentStatsWindow, priceCheckerParent, priceCheckerWindow, itemsKeptOnDeathParent, itemsKeptOnDeathWindow);
+		methods.prayer.updatePrayerWidgets(quickPrayerParent, quickPrayerWindow);
 		
 	}
 }

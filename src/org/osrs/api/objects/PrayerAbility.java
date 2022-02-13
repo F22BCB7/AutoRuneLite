@@ -9,11 +9,13 @@ public class PrayerAbility {
 	private int varbitID;
 	private RSWidget widget;
 	private int level;
-	public PrayerAbility(MethodContext context, String n, int id, int minlvl){
+	private int index;
+	public PrayerAbility(MethodContext context, String n, int varbit, int minlvl, int idx){
 		methods = context;
 		name = n;
-		varbitID = id;
+		varbitID = varbit;
 		level = minlvl;
+		index = idx;
 	}
 	public int getID(){
 		return varbitID;
@@ -23,6 +25,9 @@ public class PrayerAbility {
 	}
 	public int getLevel(){
 		return level;
+	}
+	public int getIndex(){
+		return index;
 	}
 	public boolean hasLevel(){
 		return methods.skills.getSkillLevel(Skills.PRAYER_INDEX)>=level;
@@ -107,6 +112,17 @@ public class PrayerAbility {
 							if(w.opbase().equals("<col=ff9040>"+name+"</col>")){
 								widget = w; 
 								return widget;
+							}
+						}
+						RSWidget[] children = w.getChildren();
+						if(children!=null){
+							for(RSWidget w2 : children){
+								if(w2.isVisible()){
+									if(w2.opbase().equals("<col=ff9040>"+name)){
+										widget = w; 
+										return widget;
+									}
+								}
 							}
 						}
 					}

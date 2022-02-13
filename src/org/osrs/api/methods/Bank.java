@@ -43,8 +43,18 @@ public class Bank extends MethodDefinition{
 		super(context);
 	}
 	public boolean close(){
-		if(isOpen() && exitButton!=null)
-			return exitButton.click();
+		if(isOpen()){
+			if(exitButton!=null && exitButton.isVisible()){
+				if(exitButton.click()){
+					for(int i=0;i<20;++i){
+						sleep(random(100, 200));
+						if(!isOpen())
+							break;
+					}
+					return !isOpen();
+				}
+			}
+		}
 		return false;
 	}
 	public boolean depositInventory(){
