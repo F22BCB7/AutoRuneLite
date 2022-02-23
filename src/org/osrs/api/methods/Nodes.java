@@ -1,7 +1,6 @@
 package org.osrs.api.methods;
 
 import org.osrs.api.wrappers.FixedSizeDeque;
-import org.osrs.api.wrappers.HashTable;
 import org.osrs.api.wrappers.Node;
 
 public class Nodes extends MethodDefinition{

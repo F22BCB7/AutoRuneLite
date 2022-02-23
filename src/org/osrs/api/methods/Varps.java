@@ -1,7 +1,5 @@
 package org.osrs.api.methods;
 
-import org.osrs.api.wrappers.Client;
-
 public class Varps extends MethodDefinition{
 	public Varps(MethodContext context){
 		super(context);

@@ -22,7 +22,7 @@ public class RSArea {
 		for(RSTile tile : tiles){
 			if(this.plane==-1){
 				this.plane=tile.getPlane();
-				System.out.println("Set RSArea plane : "+this.plane);
+				//System.out.println("Set RSArea plane : "+this.plane);
 			}
 			else if(this.plane!=tile.getPlane())
 				System.out.println("Multiple planes detected in RSArea.");
@@ -40,7 +40,7 @@ public class RSArea {
 	}
 	public void addTile(RSTile tile){
 		tileArea.addPoint(tile.getX(), tile.getY());
-		System.out.println("Added tile coordinate : "+tile.toString());
+		//System.out.println("Added tile coordinate : "+tile.toString());
 	}
 	public void addTiles(RSTile...tiles){
 		for(RSTile tile : tiles)

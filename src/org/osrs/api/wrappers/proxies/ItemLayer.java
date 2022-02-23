@@ -1,14 +1,13 @@
 package org.osrs.api.wrappers.proxies;
 
+import org.osrs.api.objects.RSModel;
+import org.osrs.api.wrappers.proxies.Item;
+import org.osrs.api.wrappers.ItemDefinition;
+import org.osrs.api.wrappers.proxies.RenderableNode;
 import org.osrs.injection.bytescript.BClass;
-import org.osrs.injection.bytescript.BDetour;
 import org.osrs.injection.bytescript.BField;
 import org.osrs.injection.bytescript.BFunction;
-import org.osrs.injection.bytescript.BMethod;
 import org.osrs.injection.bytescript.BGetter;
-import org.osrs.injection.bytescript.BVar;
-import java.util.HashMap;
-import java.util.Map;
 
 @BClass(name="ItemLayer")
 public class ItemLayer implements org.osrs.api.wrappers.ItemLayer{
@@ -54,4 +53,37 @@ public class ItemLayer implements org.osrs.api.wrappers.ItemLayer{
 	@Override
 	public int height(){return height;}
 	
+	@BFunction
+	@Override
+	public RSModel getModel(){
+		RSModel model = null;
+		if(bottom!=null){
+			Item item = (Item)bottom;
+			ItemDefinition modelDef = Client.clientInstance.invoke_getItemDefinition(item.id());
+			if(modelDef!=null){
+				model = modelDef.getCachedModel();
+			}
+		}
+		if(middle!=null){
+			Item item = (Item)middle;
+			ItemDefinition modelDef = Client.clientInstance.invoke_getItemDefinition(item.id());
+			if(modelDef!=null){
+				if(model==null)
+					model = modelDef.getCachedModel();
+				else
+					model.appendModel(modelDef.getCachedModel());
+			}
+		}
+		if(top!=null){
+			Item item = (Item)top;
+			ItemDefinition modelDef = Client.clientInstance.invoke_getItemDefinition(item.id());
+			if(modelDef!=null){
+				if(model==null)
+					model = modelDef.getCachedModel();
+				else
+					model.appendModel(modelDef.getCachedModel());
+			}
+		}
+		return model;
+	}
 }

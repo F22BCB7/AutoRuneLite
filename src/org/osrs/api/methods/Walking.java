@@ -197,6 +197,20 @@ public class Walking extends MethodDefinition{
 		}
 		return false;
 	}
+	/**
+	 * Grabs the next visible tile we should walk to
+	 * within a path.
+	 * @param path
+	 * @return nextTile
+	 */
+	public RSTile nextTile(RSTile[] path) {
+		for (int i = path.length - 1; i >= 0; i--) {
+			if (methods.calculations.onMap(path[i])) {
+				return path[i];
+			}
+		}
+		return new RSTile(-1,-1);
+	}
 
 	/**
 	 * Used to draw the current walking data to
@@ -226,7 +240,7 @@ public class Walking extends MethodDefinition{
 					}
 				}
 			}
-			RSTile next = walker.nextTile(path);
+			RSTile next = nextTile(path);
 			Point tile = methods.calculations.locationToMinimap(next);
 			g.setColor(Color.RED);
 			if (tile.x != -1 && tile.y != -1) {
@@ -320,20 +334,6 @@ public class Walking extends MethodDefinition{
 			}
 			this.stop();
 			return true;
-		}
-		/**
-		 * Grabs the next visible tile we should walk to
-		 * within a path.
-		 * @param path
-		 * @return nextTile
-		 */
-		public RSTile nextTile(RSTile[] path) {
-			for (int i = path.length - 1; i >= 0; i--) {
-				if (methods.calculations.onMap(path[i])) {
-					return path[i];
-				}
-			}
-			return new RSTile(-1,-1);
 		}
 	
 	}

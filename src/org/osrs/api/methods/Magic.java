@@ -1,8 +1,6 @@
 package org.osrs.api.methods;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.osrs.api.objects.MagicSpell;
 
 public class Magic extends MethodDefinition{

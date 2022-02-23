@@ -13,4 +13,5 @@ public interface Region{
 	public int maxX();
 	public int[][] tileMasks();
 	public org.osrs.api.wrappers.Tile getHoveringTile();
+	public int invoke_getObjectFlags(int plane, int localX, int localY, long hash);
 }

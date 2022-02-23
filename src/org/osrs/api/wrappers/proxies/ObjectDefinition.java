@@ -3,6 +3,7 @@ package org.osrs.api.wrappers.proxies;
 import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BDetour;
 import org.osrs.injection.bytescript.BField;
+import org.osrs.injection.bytescript.BFunction;
 import org.osrs.injection.bytescript.BMethod;
 import org.osrs.injection.bytescript.BGetter;
 import org.osrs.injection.bytescript.BVar;
@@ -212,4 +213,24 @@ public class ObjectDefinition extends EntityNode implements org.osrs.api.wrapper
 	@BGetter
 	@Override
 	public int id(){return id;}
+	
+	@BMethod(name="getChildDefinition")
+	public ObjectDefinition _getChildDefinition(int a){return null;}
+	@BMethod(name="getChildDefinition")
+	public ObjectDefinition _getChildDefinition(byte a){return null;}
+	@BMethod(name="getChildDefinition")
+	public ObjectDefinition _getChildDefinition(short a){return null;}
+	@BFunction
+	@Override
+	public org.osrs.api.wrappers.ObjectDefinition invoke_getChildDefinition(){
+		org.osrs.api.wrappers.ObjectDefinition def = null;
+		Object predicate = Client.clientInstance.getMethodPredicate("ObjectDefinition", "getChildDefinition", "(?)L*;", false);
+		if(predicate instanceof Integer)
+			def = _getChildDefinition((int)predicate);
+		if(predicate instanceof Byte)
+			def = _getChildDefinition((byte)predicate);
+		if(predicate instanceof Short)
+			def = _getChildDefinition((short)predicate);
+		return def;
+	}
 }

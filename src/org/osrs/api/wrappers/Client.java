@@ -1,8 +1,10 @@
 package org.osrs.api.wrappers;
 
-import java.util.ArrayList;
-
 import org.osrs.api.methods.MethodContext;
+import org.osrs.api.objects.GameObject;
+import org.osrs.api.objects.GroundItem;
+import org.osrs.api.objects.RSNpc;
+import org.osrs.api.objects.RSPlayer;
 import org.osrs.debug.BankDebug;
 import org.osrs.debug.BoundaryObjDebug;
 import org.osrs.debug.CameraDebug;
@@ -85,6 +87,7 @@ public interface Client extends GameShell{
 	public Player[] players();
 	public Player localPlayer();
 	public Npc[] npcs();
+	public Deque[][][] itemPileDeque();
 	public int currentPlane();
 	
 	public int[] currentSkillLevels();
@@ -103,6 +106,21 @@ public interface Client extends GameShell{
 	public int menuWidth();
 	public int menuY();
 	public int menuX();
+	public int[] menuOpcodes();
+	public int[] menuPrimaryArgs();
+	public int[] menuSecondaryArgs();
+	public int[] menuTertiaryArgs();
+	public boolean[] menuShiftClickActions();
+	public int onCursorUIDCount();
+	public long[] onCursorUIDs();
+	public int[] getHoveringPlayerIndexs();
+	public RSPlayer[] getHoveringPlayers();
+	public int[] getHoveringNPCIndexs();
+	public RSNpc[] getHoveringNPCs();
+	public long[] getHoveringObjectUIDs();
+	public GameObject[] getHoveringObjects();
+	public long getHoveringGroundItemsUID();
+	public GroundItem[] getHoveringGroundItems();
 	
 	public int[] varps();
 	

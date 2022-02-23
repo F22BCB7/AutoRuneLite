@@ -802,4 +802,7 @@ public class NPCs extends MethodDefinition{
 			return npc_list.get(random(npc_list.size()));
 		return null;
 	}
+	public RSNpc[] getHoveringNPCs(){
+		return methods.game.getHoveringNPCs();
+	}
 }

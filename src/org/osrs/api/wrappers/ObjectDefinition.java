@@ -41,4 +41,6 @@ public interface ObjectDefinition extends EntityNode{
 	public short[] recolorToFind();
 	public String[] actions();
 	public int id();
+	
+	public ObjectDefinition invoke_getChildDefinition();
 }

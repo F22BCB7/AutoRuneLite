@@ -34,7 +34,7 @@ public class Mouse extends MethodDefinition{
 	}    
 	public void click(){
 		press(LEFT_BUTTON);
-		sleep(new Random().nextInt(100)+50);
+		sleep(new Random().nextInt(50)+1);
 		release(LEFT_BUTTON);
 	}
 	public Point getLocation(){
@@ -81,7 +81,7 @@ public class Mouse extends MethodDefinition{
 	}
 	public void rightClick(){
 		press(RIGHT_BUTTON);
-		sleep(new Random().nextInt(100)+50);
+		sleep(new Random().nextInt(50)+1);
 		release(RIGHT_BUTTON);
 	}
 	private Component getTarget(){

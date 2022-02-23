@@ -1,9 +1,13 @@
 package org.osrs.api.objects;
 
+import java.awt.Point;
+import java.awt.Rectangle;
+
 import org.osrs.api.methods.MethodContext;
 import org.osrs.api.methods.Skills;
+import org.osrs.api.objects.type.Graphical;
 
-public class PrayerAbility {
+public class PrayerAbility extends Interactable implements Graphical{
 	private MethodContext methods;
 	private String name;
 	private int varbitID;
@@ -130,5 +134,26 @@ public class PrayerAbility {
 			}
 		}
 		return null;
+	}
+	public Rectangle getBounds(){
+		RSWidget widget = getWidget();
+		if(widget!=null){
+			return new Rectangle(widget.getAbsoluteX(), widget.getAbsoluteY(), widget.width(), widget.height());
+		}
+		return new Rectangle(-1, -1, 0, 0);
+	}
+	@Override
+	public Point getCenterPoint() {
+		Rectangle bounds = getBounds();
+		if(bounds.x!=-1 && bounds.y!=-1 && bounds.width!=0 && bounds.height!=0)
+			return new Point(bounds.x+(bounds.width/2), bounds.y+(bounds.height/2));
+		return new Point(-1, -1);
+	}
+	@Override
+	public Point getRandomPoint() {
+		Rectangle bounds = getBounds();
+		if(bounds.x!=-1 && bounds.y!=-1 && bounds.width!=0 && bounds.height!=0)
+			return new Point(bounds.x+(bounds.width/2), bounds.y+(bounds.height/2));
+		return new Point(-1, -1);
 	}
 }

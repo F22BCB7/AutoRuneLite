@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import org.osrs.api.objects.GroundItem;
 import org.osrs.api.objects.RSPlayer;
 import org.osrs.api.objects.RSTile;
-import org.osrs.api.wrappers.Client;
+import org.osrs.api.wrappers.Deque;
 import org.osrs.api.wrappers.Item;
 import org.osrs.api.wrappers.ItemLayer;
+import org.osrs.api.wrappers.Node;
 import org.osrs.api.wrappers.Region;
 import org.osrs.api.wrappers.Tile;
 
@@ -61,28 +62,28 @@ public class GroundItems extends MethodDefinition{
      * @return all GroundItems at the tile.
      */
 	public GroundItem[] getItemsAt(int x, int y, int plane){
+		int localX = x-methods.game.mapBaseX();
+		int localY = y-methods.game.mapBaseY();
+		ArrayList<GroundItem> items = new ArrayList<GroundItem>();
 		try{
-			int localX = x-((Client)methods.botInstance).mapBaseX();
-			int localY = y-((Client)methods.botInstance).mapBaseY();
-			ArrayList<GroundItem> items = new ArrayList<GroundItem>();
-			Region region = ((Client)methods.botInstance).region();
+			Region region = methods.game.region();
+			if(region==null)
+				return new GroundItem[]{};
 			Tile t = region.tiles()[plane][localX][localY];
 			if(t==null)
 				return new GroundItem[]{};
 			ItemLayer layer = t.itemLayer();
 			if(layer==null)
 				return new GroundItem[]{};
-			Item item = (Item) layer.top();
-			if(item!=null){
-				items.add(new GroundItem(new RSTile(x, y, plane), item, layer.height()));
-			}
-			item = (Item) layer.middle();
-			if(item!=null){
-				items.add(new GroundItem(new RSTile(x, y, plane), item, layer.height()));
-			}
-			item = (Item) layer.bottom();
-			if(item!=null){
-				items.add(new GroundItem(new RSTile(x, y, plane), item, layer.height()));
+			Deque[][][] itemDeque = methods.game.itemPileDeque();
+			if(itemDeque!=null){
+				Deque pile = itemDeque[plane][localX][localY];
+				if(pile!=null){
+					Node head = pile.head();
+					for(Node node=head.previous();node!=null && node.hashCode()!=head.hashCode();node=node.previous()){
+						items.add(new GroundItem(new RSTile(x, y, plane), (Item)node, layer));
+					}
+				}
 			}
 			return items.toArray(new GroundItem[]{});
 		}
@@ -848,5 +849,8 @@ public class GroundItems extends MethodDefinition{
     				return true;
     	}
     	return false;
+    }
+    public GroundItem[] getHoveringGroundItems(){
+    	return methods.game.getHoveringGroundItems();
     }
 }

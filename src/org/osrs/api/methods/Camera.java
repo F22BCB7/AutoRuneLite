@@ -1,9 +1,5 @@
 package org.osrs.api.methods;
 
-import java.applet.Applet;
-import java.awt.Component;
-import java.awt.event.KeyEvent;
-
 import org.osrs.util.Data;
 import org.osrs.api.objects.GameObject;
 import org.osrs.api.objects.GroundItem;

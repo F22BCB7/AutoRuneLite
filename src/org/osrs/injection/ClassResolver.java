@@ -3,7 +3,6 @@ package org.osrs.injection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.objectweb.asm.Wildcard;
 import org.osrs.loader.Modscript;
 
 public class ClassResolver {
@@ -89,7 +88,6 @@ public class ClassResolver {
      * @return obfuscatedType
      */
     public String getObfuscatedType(String refactoredType){
-    	//TODO determine array+dimension
 		String arg = "";
 		if(refactoredType.startsWith("[")){
 			arg = "[";

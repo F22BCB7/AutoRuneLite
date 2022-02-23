@@ -1,6 +1,13 @@
 package org.osrs.api.wrappers.proxies;
 
+import java.util.Arrays;
+
 import org.osrs.api.methods.MethodContext;
+import org.osrs.api.objects.GameObject;
+import org.osrs.api.objects.GroundItem;
+import org.osrs.api.objects.RSNpc;
+import org.osrs.api.objects.RSPlayer;
+import org.osrs.api.objects.RSTile;
 import org.osrs.debug.BankDebug;
 import org.osrs.debug.BoundaryObjDebug;
 import org.osrs.debug.CameraDebug;
@@ -18,7 +25,6 @@ import org.osrs.debug.PlayerDebug;
 import org.osrs.debug.TileDebug;
 import org.osrs.debug.WallDecDebug;
 import org.osrs.debug.WidgetDebug;
-import org.osrs.injection.MethodHook;
 import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BDetour;
 import org.osrs.injection.bytescript.BField;
@@ -26,7 +32,6 @@ import org.osrs.injection.bytescript.BFunction;
 import org.osrs.injection.bytescript.BGetter;
 import org.osrs.injection.bytescript.BGetterDetour;
 import org.osrs.injection.bytescript.BMethod;
-import org.osrs.injection.bytescript.BSetterDetour;
 import org.osrs.injection.bytescript.BVar;
 import org.osrs.util.Data;
 
@@ -395,6 +400,11 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@Override
 	public org.osrs.api.wrappers.Npc[] npcs(){return npcs;}
 	@BField
+	public static Deque[][][] itemPileDeque;
+	@BGetter
+	@Override
+	public org.osrs.api.wrappers.Deque[][][] itemPileDeque(){return itemPileDeque;}
+	@BField
 	public static int currentPlane;
 	@BGetter
 	@Override
@@ -472,7 +482,210 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@BGetter
 	@Override
 	public int menuX(){return menuX;}
-	
+	@BField
+	public static int[] menuOpcodes;
+	@BGetter
+	@Override
+	public int[] menuOpcodes(){return menuOpcodes;}
+	@BField
+	public static int[] menuPrimaryArgs;
+	@BGetter
+	@Override
+	public int[] menuPrimaryArgs(){return menuPrimaryArgs;}
+	@BField
+	public static int[] menuSecondaryArgs;
+	@BGetter
+	@Override
+	public int[] menuSecondaryArgs(){return menuSecondaryArgs;}
+	@BField
+	public static int[] menuTertiaryArgs;
+	@BGetter
+	@Override
+	public int[] menuTertiaryArgs(){return menuTertiaryArgs;}
+	@BField
+	public static boolean[] menuShiftClickActions;
+	@BGetter
+	@Override
+	public boolean[] menuShiftClickActions(){return menuShiftClickActions;}
+	@BField
+	public static int onCursorUIDCount;
+	@BGetter
+	@Override
+	public int onCursorUIDCount(){return onCursorUIDCount;}
+	@BField
+	public static long[] onCursorUIDs;
+	@BGetter
+	@Override
+	public long[] onCursorUIDs(){return onCursorUIDs;}
+	@BFunction
+	@Override
+	public int[] getHoveringPlayerIndexs(){
+		int[] uids = new int[onCursorUIDCount()];
+		for(int i=0, k=0;;++i){
+			if(i==onCursorUIDCount()){
+				if(k>0)
+					return Arrays.copyOfRange(uids, 0, k);
+				return new int[]{};
+			}
+			long uid = onCursorUIDs()[i];
+			int uidType = (int)(uid >>> 14 & 3L);//entity type; 0=player, 1=npc, 2=object, 3=groundItem
+			int idIndex = (int)(uid >>> 17 & 4294967295L);//objectID, npc/player index
+			if(uidType==0){
+				uids[k++]=idIndex;
+			}
+		}
+	}
+	@BFunction
+	@Override
+	public RSPlayer[] getHoveringPlayers(){
+		int[] indexs = getHoveringPlayerIndexs();
+		RSPlayer[] rsp = new RSPlayer[indexs.length];
+		for(int i=0;i<indexs.length;++i){
+			rsp[i] = new RSPlayer(Client.players[indexs[i]], indexs[i]);
+		}
+		return rsp;
+	}
+	@BFunction
+	@Override
+	public int[] getHoveringNPCIndexs(){
+		int[] uids = new int[onCursorUIDCount()];
+		for(int i=0, k=0;;++i){
+			if(i==onCursorUIDCount()){
+				if(k>0)
+					return Arrays.copyOfRange(uids, 0, k);
+				return new int[]{};
+			}
+			long uid = onCursorUIDs()[i];
+			int uidType = (int)(uid >>> 14 & 3L);//entity type; 0=player, 1=npc, 2=object, 3=groundItem
+			int idIndex = (int)(uid >>> 17 & 4294967295L);//objectID, npc/player index
+			if(uidType==1){
+				uids[k++]=idIndex;
+			}
+		}
+	}
+	@BFunction
+	@Override
+	public RSNpc[] getHoveringNPCs(){
+		int[] indexs = getHoveringNPCIndexs();
+		RSNpc[] rsn = new RSNpc[indexs.length];
+		for(int i=0;i<indexs.length;++i){
+			rsn[i] = new RSNpc(Client.npcs[indexs[i]], indexs[i]);
+		}
+		return rsn;
+	}
+	@BFunction
+	@Override
+	public long[] getHoveringObjectUIDs(){
+		long[] uids = new long[onCursorUIDCount()];
+		for(int i=0,k=0;;++i){
+			if(i==onCursorUIDCount()){
+				if(k>0)
+					return Arrays.copyOfRange(uids, 0, k);
+				return new long[]{};
+			}
+			long uid = onCursorUIDs()[i];
+			int uidType = (int)(uid >>> 14 & 3L);//entity type; 0=player, 1=npc, 2=object, 3=groundItem
+			if(uidType==2){
+				uids[k++]=uid;
+			}
+		}
+	}
+	@BFunction
+	@Override
+	public GameObject[] getHoveringObjects(){
+		long[] uids = getHoveringObjectUIDs();
+		GameObject[] objects = new GameObject[uids.length];
+		uidloop:for(int i=0;i<uids.length;++i){
+			long uid = uids[i];
+			int localX = (int)(uid >>> 0 & 127L);//localX
+			int localY = (int)(uid >>> 7 & 127L);//localY
+			int id = (int)(uid >>> 17 & 4294967295L);//objectID, npc/player index
+			for(int plane=0;plane<4;++plane){
+				Tile tile = region.tiles[plane][localX][localY];
+				if(tile!=null){
+					for(InteractableObject io : tile.objects){
+						if(io==null)
+							continue;
+						long hash = io.hash() >>> 17 & 0xFFFFFFFF;
+						if(hash==id){
+							objects[i] = new GameObject(io, new RSTile(localX+mapBaseX(), localY+mapBaseY(), plane));
+							continue uidloop;
+						}
+					}
+					BoundaryObject bo = tile.boundary;
+					if(bo!=null){
+						long hash = bo.id() >>> 17 & 0xFFFFFFFF;
+						if(hash==id){
+							objects[i] = new GameObject(bo, new RSTile(localX+mapBaseX(), localY+mapBaseY(), plane));
+							continue uidloop;
+						}
+					}
+					FloorDecoration fo = tile.floor;
+					if(fo!=null){
+						long hash = fo.hash() >>> 17 & 0xFFFFFFFF;
+						if(hash==id){
+							objects[i] = new GameObject(fo, new RSTile(localX+mapBaseX(), localY+mapBaseY(), plane));
+							continue uidloop;
+						}
+					}
+					WallDecoration wo = tile.wall;
+					if(wo!=null){
+						long hash = wo.hash() >>> 17 & 0xFFFFFFFF;
+						if(hash==id){
+							objects[i] = new GameObject(wo, new RSTile(localX+mapBaseX(), localY+mapBaseY(), plane));
+							continue uidloop;
+						}
+					}
+				}
+			}
+			if(objects[i]==null)
+				System.out.println("Failed to get object : "+id);
+		}
+		return objects;
+	}
+	@BFunction
+	@Override
+	public long getHoveringGroundItemsUID(){
+		for(int i=0;i<onCursorUIDCount();++i){
+			long uid = onCursorUIDs()[i];
+			int uidType = (int)(uid >>> 14 & 3L);//entity type; 0=player, 1=npc, 2=object, 3=groundItem
+			if(uidType==3){
+				return uid;
+			}
+		}
+		return -1;
+	}
+	@BFunction
+	@Override
+	public GroundItem[] getHoveringGroundItems(){
+		long uid = getHoveringGroundItemsUID();
+		int localX = (int)(uid >>> 0 & 127L);//localX
+		int localY = (int)(uid >>> 7 & 127L);//localY
+		if(region==null || localX<0 || localX>104 || localY<0 || localY>104)
+			return new GroundItem[]{};
+		Tile t = region.tiles[currentPlane()][localX][localY];
+		if(t==null)
+			return new GroundItem[]{};
+		ItemLayer layer = t.itemLayer;
+		if(layer==null)
+			return new GroundItem[]{};
+		Deque[][][] itemDeque = itemPileDeque;
+		if(itemDeque!=null){
+			Deque pile = itemDeque[currentPlane()][localX][localY];
+			if(pile!=null){
+				GroundItem[] gi1 = new GroundItem[0];
+				GroundItem[] gi2 = new GroundItem[1];
+				Node head = pile.head;
+				for(Node node=head.previous;node!=null && node.hashCode()!=head.hashCode();node=node.previous){
+					gi2[gi1.length] = new GroundItem(new RSTile(localX+mapBaseX(), localY+mapBaseY(), currentPlane()), (org.osrs.api.wrappers.Item)node, layer);
+					gi1 = gi2;
+					gi2 = new GroundItem[gi1.length+1];
+				}
+				return gi1;
+			}
+		}
+		return new GroundItem[]{};
+	}
 
 	@BField
 	public static int[] varps;

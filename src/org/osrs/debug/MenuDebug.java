@@ -14,15 +14,25 @@ public class MenuDebug {
 	}
 	public Graphics paint(Graphics g){
 		if(Data.clientFrame.menuDebugOption.getState()){
+			int x = 30;
+			int y = 60;
 			Menu menu = methods.menu;
-			g.drawString("Is Open : "+menu.isOpen(), 30, 60);
-			g.drawString("Position : "+menu.getX()+","+menu.getY(), 30, 75);
-			g.drawString("Bounds : "+menu.getWidth()+":"+menu.getHeight(), 30, 90);
-			g.drawString("Top Text : "+menu.getTopText(), 30, 105);
-			g.drawString("Item Count : "+menu.getItemCount(), 30, 120);
-			g.drawString("Hovering Index : "+menu.getHoveringIndex(), 30, 135);
-			g.drawString("Actions : "+Arrays.toString(menu.getActions()), 30, 150);
-			g.drawString("Options : "+Arrays.toString(menu.getOptions()), 30, 165);
+			g.drawString("Is Open : "+menu.isOpen(), x, y);
+			y+=15;
+			g.drawString("Position : "+menu.getX()+","+menu.getY(), x, y);
+			y+=15;
+			g.drawString("Bounds : "+menu.getWidth()+":"+menu.getHeight(), x, y);
+			y+=15;
+			g.drawString("Top Text : "+menu.getTopText(), x, y);
+			y+=15;
+			g.drawString("Item Count : "+menu.getItemCount(), x, y);
+			y+=15;
+			g.drawString("Hovering Index : "+menu.getHoveringIndex(), x, y);
+			y+=15;
+			g.drawString("Actions : "+Arrays.toString(menu.getActions()), x, y);
+			y+=15;
+			g.drawString("Options : "+Arrays.toString(menu.getOptions()), x, y);
+			y+=15;
 		}
 		return g;
 	}

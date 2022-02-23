@@ -2,11 +2,13 @@ package org.osrs.api.objects;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+
+import org.osrs.api.objects.type.Graphical;
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.ItemDefinition;
 import org.osrs.util.Data;
 
-public class InventoryItem extends Interactable{
+public class InventoryItem extends Interactable implements Graphical{
 	private int id;
 	private int inventoryIndex;
 	private int stacksize;
@@ -124,48 +126,6 @@ public class InventoryItem extends Interactable{
 			}
 		}
 		return new Rectangle(-1, -1, -1, -1);
-	}
-	@Override
-	public boolean click() {
-		if(!methods.tabs.inventory.isSelected()){
-			methods.tabs.inventory.click();
-		}
-		return super.click();
-	}
-	@Override
-	public boolean click(String action) {
-		if(!methods.tabs.inventory.isSelected()){
-			methods.tabs.inventory.click();
-		}
-		return super.click(action);
-	}
-	@Override
-	public boolean click(String action, String option) {
-		if(!methods.tabs.inventory.isSelected()){
-			methods.tabs.inventory.click();
-		}
-		return super.click(action, option);
-	}
-	@Override
-	public boolean hover() {
-		if(!methods.tabs.inventory.isSelected()){
-			methods.tabs.inventory.click();
-		}
-		return super.hover();
-	}
-	@Override
-	public boolean hover(String action) {
-		if(!methods.tabs.inventory.isSelected()){
-			methods.tabs.inventory.click();
-		}
-		return super.hover(action);
-	}
-	@Override
-	public boolean hover(String action, String option) {
-		if(!methods.tabs.inventory.isSelected()){
-			methods.tabs.inventory.click();
-		}
-		return super.hover(action, option);
 	}
 	@Override
 	public Point getCenterPoint() {

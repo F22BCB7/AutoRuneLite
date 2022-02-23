@@ -1,8 +1,12 @@
 package org.osrs.api.methods;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
+import org.osrs.api.objects.GameObject;
+import org.osrs.api.objects.GroundItem;
 import org.osrs.api.objects.RSInterface;
+import org.osrs.api.objects.RSNpc;
+import org.osrs.api.objects.RSPlayer;
 import org.osrs.api.objects.RSWidget;
 import org.osrs.api.wrappers.*;
 import org.osrs.api.wrappers.Region;
@@ -167,7 +171,52 @@ public class Game extends MethodDefinition{
 	public int menuX(){
 		return client.menuX();
 	}
-	
+	public int[] menuOpcodes(){
+		return client.menuOpcodes();
+	}
+	public int[] menuPrimaryArgs(){
+		return client.menuPrimaryArgs();
+	}
+	public int[] menuSecondaryArgs(){
+		return client.menuSecondaryArgs();
+	}
+	public int[] menuTertiaryArgs(){
+		return client.menuTertiaryArgs();
+	}
+	public boolean[] menuShiftClickActions(){
+		return client.menuShiftClickActions();
+	}
+	public int onCursorUIDCount(){
+		return client.onCursorUIDCount();
+	}
+	public long[] onCursorUIDs(){
+		return client.onCursorUIDs();
+	}
+	public int[] getHoveringPlayerIndexs(){
+		return client.getHoveringPlayerIndexs();
+	}
+	public RSPlayer[] getHoveringPlayers(){
+		return client.getHoveringPlayers();
+	}
+	public int[] getHoveringNPCIndexs(){
+		return client.getHoveringNPCIndexs();
+	}
+	public RSNpc[] getHoveringNPCs(){
+		return client.getHoveringNPCs();
+	}
+	public long[] getHoveringObjectUIDs(){
+		return client.getHoveringObjectUIDs();
+	}
+	public GameObject[] getHoveringObjects(){
+		return client.getHoveringObjects();
+	}
+	public long getHoveringGroundItemsUID(){
+		return client.getHoveringGroundItemsUID();
+	}
+	public GroundItem[] getHoveringGroundItems(){
+		return client.getHoveringGroundItems();
+	}
+
 	public int[] varps(){
 		return client.varps();
 	}
@@ -337,6 +386,14 @@ public class Game extends MethodDefinition{
 		methods.chatbox.updateChatboxWidgets(chatboxParent, chatboxWindow);
 		methods.equipment.updateEquipmentWidgets(equipmentParent, equipmentWindow, equipmentStatsParent, equipmentStatsWindow, priceCheckerParent, priceCheckerWindow, itemsKeptOnDeathParent, itemsKeptOnDeathWindow);
 		methods.prayer.updatePrayerWidgets(quickPrayerParent, quickPrayerWindow);
-		
+	}
+	public Deque[][][] itemPileDeque(){
+		return client.itemPileDeque();
+	}
+	public int getObjectFlags(int plane, int localX, int localY, long hash){
+		Region r = client.region();
+		if(r!=null)
+			return r.invoke_getObjectFlags(plane, localX, localY, hash);
+		return 0;
 	}
 }

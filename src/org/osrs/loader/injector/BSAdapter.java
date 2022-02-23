@@ -97,6 +97,7 @@ public class BSAdapter extends RemappingClassAdapter{
 	    		if(fh!=null){
 	    			owner = fh.owner;
 	    			name = fh.obfuscatedName;
+	    			desc = fh.dataType;
 	    		}
 	    		else{
 	    			String temp = remapper.map(owner);
@@ -104,7 +105,8 @@ public class BSAdapter extends RemappingClassAdapter{
 	    				owner = temp;
 	    			else
 	    				owner = owner.replace("org/osrs/api/wrappers/proxies/", "");
-	    			desc = remapper.mapType(desc);
+	    			if(desc.contains("org/osrs/api/wrappers/proxies/"))
+	    				desc = remapper.mapType(desc);
 	    		}
 	    	}
 	    	else{

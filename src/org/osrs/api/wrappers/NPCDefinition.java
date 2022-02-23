@@ -34,4 +34,6 @@ public interface NPCDefinition extends EntityNode{
 	public int id();
 	public String[] actions();
 	public int[] additionalModels();
+	
+	public NPCDefinition invoke_getChildDefinition();
 }

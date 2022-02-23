@@ -3,6 +3,7 @@ package org.osrs.api.wrappers.proxies;
 import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BDetour;
 import org.osrs.injection.bytescript.BField;
+import org.osrs.injection.bytescript.BFunction;
 import org.osrs.injection.bytescript.BMethod;
 import org.osrs.injection.bytescript.BGetter;
 import org.osrs.injection.bytescript.BVar;
@@ -177,4 +178,24 @@ public class NPCDefinition extends EntityNode implements org.osrs.api.wrappers.N
 	@BGetter
 	@Override
 	public int[] additionalModels(){return additionalModels;}
+	
+	@BMethod(name="getChildDefinition")
+	public NPCDefinition _getChildDefinition(int a){return null;}
+	@BMethod(name="getChildDefinition")
+	public NPCDefinition _getChildDefinition(byte a){return null;}
+	@BMethod(name="getChildDefinition")
+	public NPCDefinition _getChildDefinition(short a){return null;}
+	@BFunction
+	@Override
+	public org.osrs.api.wrappers.NPCDefinition invoke_getChildDefinition(){
+		org.osrs.api.wrappers.NPCDefinition def = null;
+		Object predicate = Client.clientInstance.getMethodPredicate("NPCDefinition", "getChildDefinition", "(?)L*;", false);
+		if(predicate instanceof Integer)
+			def = _getChildDefinition((int)predicate);
+		if(predicate instanceof Byte)
+			def = _getChildDefinition((byte)predicate);
+		if(predicate instanceof Short)
+			def = _getChildDefinition((short)predicate);
+		return def;
+	}
 }

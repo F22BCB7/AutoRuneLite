@@ -33,4 +33,7 @@ public class Region extends MethodDefinition{
 			}
 		}
 	}
+	public int getObjectFlags(int plane, int localX, int localY, long hash){
+		return methods.game.getObjectFlags(plane, localX, localY, hash);
+	}
 }

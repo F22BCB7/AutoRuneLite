@@ -3,7 +3,6 @@ package org.osrs.api.objects;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
@@ -108,6 +107,63 @@ public class RSModel{
 		        centerPoint = new int[]{vertexX, vertexY, vertexZ};
 			}
 		}
+	}
+	public void appendModel(RSModel model){
+		if(model==null)
+			return;
+		int oldCount = Math.min(verticesX.length, Math.min(verticesY.length, verticesZ.length));
+		int newCount = oldCount + (Math.min(model.verticesX.length, Math.min(model.verticesY.length, model.verticesZ.length)));
+		int[] vx=new int[newCount];
+		int[] vy=new int[newCount];
+		int[] vz=new int[newCount];
+		for(int i=0;i<newCount;++i){
+			if(i<oldCount){
+				vx[i]=verticesX[i];
+				vy[i]=verticesY[i];
+				vz[i]=verticesZ[i];
+			}
+			else{
+				vx[i]=model.verticesX[i-oldCount];
+				vy[i]=model.verticesY[i-oldCount];
+				vz[i]=model.verticesZ[i-oldCount];
+			}
+		}
+        int vertexX = 0;
+		int vertexY = 0;
+		int vertexZ = 0;
+		for(int i : vx){
+			vertexX=(vertexX+i)/2;
+		}
+		for(int i : vy){
+			vertexY=(vertexY+i)/2;
+		}
+		for(int i : vz){
+			vertexZ=(vertexZ+i)/2;
+		}
+        centerPoint = new int[]{vertexX, vertexY, vertexZ};
+        verticesX = vx;
+        verticesY = vy;
+        verticesZ = vz;
+		int oldCount2 = Math.min(trianglesX.length, Math.min(trianglesY.length, trianglesZ.length));
+		int newCount2 = oldCount2 + (Math.min(model.trianglesX.length, Math.min(model.trianglesY.length, model.trianglesZ.length)));
+		int[] tx=new int[newCount2];
+		int[] ty=new int[newCount2];
+		int[] tz=new int[newCount2];
+		for(int i=0;i<newCount2;++i){
+			if(i<oldCount2){
+				tx[i]=trianglesX[i];
+				ty[i]=trianglesY[i];
+				tz[i]=trianglesZ[i];
+			}
+			else{
+				tx[i]=model.trianglesX[i-oldCount2]+oldCount;
+				ty[i]=model.trianglesY[i-oldCount2]+oldCount;
+				tz[i]=model.trianglesZ[i-oldCount2]+oldCount;
+			}
+		}
+		trianglesX = tx;
+		trianglesY = ty;
+		trianglesZ = tz;
 	}
 	public Point getCenterPoint(RSTile location){
 		return getCenterPoint(location, 0);

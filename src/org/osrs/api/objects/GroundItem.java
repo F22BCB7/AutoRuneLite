@@ -3,38 +3,38 @@ package org.osrs.api.objects;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import org.osrs.api.objects.type.Modelled;
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.Item;
 import org.osrs.api.wrappers.ItemDefinition;
+import org.osrs.api.wrappers.ItemLayer;
+import org.osrs.api.wrappers.NPCDefinition;
 import org.osrs.util.Data;
 
-public class GroundItem extends Interactable{
+public class GroundItem extends Interactable implements Modelled{
 	private RSTile location;
 	private int itemPileHeight;
 	private Item itemNode;
 	private ItemDefinition definition;
-	private RSModel model;
-	public GroundItem(RSTile t, Item item, int pileHeight){
+	private ItemLayer layer;
+	public GroundItem(RSTile t, Item item, ItemLayer pile){
 		methods = ((Client)Data.clientInstance).getMethodContext();
 		this.location=t;
 		this.itemNode=item;
-		definition = getDefinition();
-		itemPileHeight = pileHeight;
+		layer = pile;
+		itemPileHeight = pile.height();
 	}
 	public ItemDefinition getDefinition(){
 		if(definition!=null)
 			return definition;
-		definition = ((Client)Data.clientInstance).invoke_getItemDefinition(itemNode.id());
+		definition = methods.game.getItemDefinition(itemNode.id());
 		return definition;
 	}
 	public RSModel getModel(){
-		if(model!=null)
-			return model;
-		definition = getDefinition();
-		if(definition==null)
-			return null;
-		model = definition.getCachedModel();
-		return model;
+		if(layer!=null){
+			return layer.getModel();
+		}
+		return null;
 	}
 	public int getID(){
 		if(itemNode==null)
@@ -92,6 +92,13 @@ public class GroundItem extends Interactable{
 		}
 		return new Point[]{};
 	}
+	public Polygon getPolygon(){
+		RSModel model = getModel();
+		if(model!=null){
+			return model.getPolygon(location, 0, itemPileHeight);
+		}
+		return new Polygon();
+	}
 	public Polygon[] getWireframe(){
 		RSModel model = getModel();
 		if(model!=null){
@@ -119,9 +126,14 @@ public class GroundItem extends Interactable{
 	}
 	@Override
 	public boolean isHovering() {
-		RSModel m = getModel();
-		if(m!=null)
-			return m.containsPoint(methods.mouse.getLocation(), location, 0, itemPileHeight);
+		long uid = calculateMenuUID();
+		long[] uids = methods.game.onCursorUIDs();
+		for(int i=0;i<methods.game.onCursorUIDCount();++i)
+			if(uids[i]==uid)
+				return true;
 		return false;
+	}
+	public long calculateMenuUID() {
+		return (getLocalX() & 127) << 0 | (getLocalY() & 127) << 7 | (3 & 3) << 14 | (0 & 4294967295L) << 17;
 	}
 }

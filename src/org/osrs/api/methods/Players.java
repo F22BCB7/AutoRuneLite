@@ -56,4 +56,7 @@ public class Players extends MethodDefinition{
 		}
 		return null;
 	}
+	public RSPlayer[] getHoveringPlayers(){
+		return methods.game.getHoveringPlayers();
+	}
 }

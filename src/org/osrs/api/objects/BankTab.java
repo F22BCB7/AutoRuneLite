@@ -3,10 +3,11 @@ package org.osrs.api.objects;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import org.osrs.api.objects.type.Graphical;
 import org.osrs.api.wrappers.Client;
 import org.osrs.util.Data;
 
-public class BankTab extends Interactable{
+public class BankTab extends Interactable implements Graphical{
 	private RSWidget tabWidget;
 	private RSWidget backgroundTextureWidget;
 	private int index;

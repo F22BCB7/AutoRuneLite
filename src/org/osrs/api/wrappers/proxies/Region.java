@@ -97,4 +97,11 @@ public class Region implements org.osrs.api.wrappers.Region{
 	@BGetter
 	@Override
 	public int[][] tileMasks(){return tileMasks;}
+	@BMethod(name="getObjectFlags")
+	public int _getObjectFlags(int plane, int localX, int localY, long hash) {return -1;}
+	@BFunction
+	@Override
+	public int invoke_getObjectFlags(int plane, int localX, int localY, long hash) {
+		return _getObjectFlags(plane, localX, localY, hash);
+	}
 }

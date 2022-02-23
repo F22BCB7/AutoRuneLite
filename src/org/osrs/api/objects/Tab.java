@@ -5,9 +5,10 @@ import java.awt.Rectangle;
 
 import org.osrs.util.Data;
 import org.osrs.api.methods.MethodContext;
+import org.osrs.api.objects.type.Graphical;
 import org.osrs.api.wrappers.Client;
 
-public class Tab extends Interactable{
+public class Tab extends Interactable implements Graphical{
 	public String name=null;
 	public int index=-1;
 	private int[] resizeModeWidgetIndexs = new int[]{-1, -1};

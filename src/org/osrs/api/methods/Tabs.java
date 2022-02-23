@@ -1,8 +1,5 @@
 package org.osrs.api.methods;
 
-import java.util.HashMap;
-
-import org.osrs.api.objects.GroundItem;
 import org.osrs.api.objects.RSWidget;
 import org.osrs.api.objects.Tab;
 

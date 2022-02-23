@@ -3,6 +3,9 @@ package org.osrs.api.methods;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import org.osrs.api.objects.GameObject;
+import org.osrs.api.objects.GroundItem;
+import org.osrs.api.objects.RSActor;
 import org.osrs.api.objects.RSInterface;
 import org.osrs.api.objects.RSPlayer;
 import org.osrs.api.objects.RSTile;
@@ -20,12 +23,35 @@ public class Calculations extends MethodDefinition{
 	public Calculations(MethodContext context){
 		super(context);
 	}
+	public int angleTo(RSActor actor) {
+		return angleToTile(actor.getLocation());
+	}
+	public int angleTo(GameObject object) {
+		return angleToTile(object.getLocation());
+	}
+	public int angleTo(GroundItem item) {
+		return angleToTile(item.getLocation());
+	}
 	public int angleToTile(RSTile t) {
 		RSPlayer p = methods.players.getLocalPlayer();
 		if(p==null)return 0;
 		RSTile t2 = p.getLocation();
 		final int angle = (int) Math.toDegrees(Math.atan2(t.getY() - t2.getY(), t.getX() - t2.getX()));
 		return angle >= 0 ? angle : 360 + angle;
+	}
+	public boolean canTurnTo(RSActor actor) {
+		return canTurnTo(actor.getLocation());
+	}
+	public boolean canTurnTo(GameObject object) {
+		return canTurnTo(object.getLocation());
+	}
+	public boolean canTurnTo(GroundItem item) {
+		return canTurnTo(item.getLocation());
+	}
+	public boolean canTurnTo(RSTile tile){
+		//TODO add in pitch calculation
+		return (int)(methods.calculations.distanceTo(tile))<=
+				(int)((3132-methods.game.viewportScale())/174.0);
 	}
 	/**
 	 * Calculates the distance between two given points.
@@ -67,6 +93,15 @@ public class Calculations extends MethodDefinition{
 	public double distanceTo(RSTile tile) {
 		return distanceTo(tile.getX(), tile.getY());
 	}
+	public double distanceTo(RSActor actor) {
+		return distanceTo(actor.getLocation());
+	}
+	public double distanceTo(GameObject object) {
+		return distanceTo(object.getLocation());
+	}
+	public double distanceTo(GroundItem item) {
+		return distanceTo(item.getLocation());
+	}
 	/**
 	 * Calculates the distance to a given RSTile coordinate from the
 	 * local players' location.
@@ -83,6 +118,15 @@ public class Calculations extends MethodDefinition{
 			return Math.sqrt((tileX - x2) * (tileX - x2) + (tileY - y2) * (tileY - y2));
 		}
 		return -1.0;
+	}
+	public Point actorToMinimap(RSActor actor) {
+		return locationToMinimap(actor.getLocation());
+	}
+	public Point objectToMinimap(GameObject object) {
+		return locationToMinimap(object.getLocation());
+	}
+	public Point groundItemToMinimap(GroundItem item) {
+		return locationToMinimap(item.getLocation());
 	}
 	/**
 	 * Calculates the minimap 2D screen-space location 
@@ -242,13 +286,13 @@ public class Calculations extends MethodDefinition{
 						if(w!=null && w.isDisplayed() && (w.noClickThrough() || w.opbase().equals("<col=ff9040>XP drops</col>"))){
 							if(w.width()==viewport.width && w.height()==viewport.height)//resize mode viewport widget
 								continue;
-							if(w.isHovering())
+							if(w.getBounds().contains(p))
 								return false;
 						}
 						if(w!=null){
 							for(RSWidget w2 : w.getChildren()){
 								if(w2!=null && w2.isDisplayed() && w2.noClickThrough()){
-									if(w2.isHovering())
+									if(w2.getBounds().contains(p))
 										return false;
 								}
 							}

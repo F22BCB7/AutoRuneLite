@@ -1,4 +1,5 @@
 package org.osrs.api.objects;
+import org.osrs.api.objects.type.Modelled;
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.Tile;
 import org.osrs.util.Data;
@@ -8,7 +9,7 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.Comparator;
 
-public class RSTile extends Interactable implements Comparable<RSTile> {
+public class RSTile extends Interactable implements Comparable<RSTile>, Modelled {
 	public int x;
 	public int y;
 	public int plane;
@@ -127,6 +128,14 @@ public class RSTile extends Interactable implements Comparable<RSTile> {
 			return internal.getBounds();
 		}
 		return new Polygon();
+	}
+	@Override
+	public RSModel getModel(){
+		return null;//Modelling is done custom in proxy wrapper.
+	}
+	@Override
+	public Polygon getPolygon(){
+		return getBounds();
 	}
 	public Point[] projectVertices(){
 		Tile internal = getInternal();

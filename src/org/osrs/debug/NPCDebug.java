@@ -18,16 +18,12 @@ public class NPCDebug {
 		if(Data.clientFrame.npcDebugOption.getState()){
 			g.drawString("ID : NAME : COMBAT LEVEL : ANIMATION ID : ORIENTATION : LOCATION : INTERACTING ID : HP : HEIGHT", x, y);
 			y+=15;
-			for(RSNpc npc : methods.npcs.getAll()){
-				if(npc.getLocation().getPlane()!=methods.game.currentPlane())
-					continue;
-				if(npc.isHovering()){
-					for(Polygon p : npc.getWireframe()){
-						g.drawPolygon(p);
-					}
-					g.drawString(""+npc.getID()+" : "+npc.getName()+" : "+npc.getCombatLevel()+" : "+npc.getAnimationID()+" : "+npc.getOrientation()+" : "+npc.getLocation()+" : "+npc.getInteractingID()+" : "+npc.getHPPercent()+" : "+npc.getHeight(), x, y);
-					y+=15;
+			for(RSNpc npc : methods.game.getHoveringNPCs()){
+				for(Polygon p : npc.getWireframe()){
+					g.drawPolygon(p);
 				}
+				g.drawString(""+npc.getID()+" : "+npc.getName()+" : "+npc.getCombatLevel()+" : "+npc.getAnimationID()+" : "+npc.getOrientation()+" : "+npc.getLocation()+" : "+npc.getInteractingID()+" : "+npc.getHPPercent()+" : "+npc.getHeight(), x, y);
+				y+=15;
 			}
 		}
 		return g;

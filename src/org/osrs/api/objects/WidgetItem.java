@@ -3,11 +3,12 @@ package org.osrs.api.objects;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import org.osrs.api.objects.type.Graphical;
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.ItemDefinition;
 import org.osrs.util.Data;
 
-public class WidgetItem extends Interactable{
+public class WidgetItem extends Interactable implements Graphical{
 	private String itemName;
 	private int id;
 	private int itemStackSize;

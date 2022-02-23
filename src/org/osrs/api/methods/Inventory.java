@@ -3,9 +3,6 @@ package org.osrs.api.methods;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.osrs.api.objects.EquipmentItem;
 import org.osrs.api.objects.InventoryItem;
 import org.osrs.api.objects.RSInterface;
 import org.osrs.api.objects.RSWidget;

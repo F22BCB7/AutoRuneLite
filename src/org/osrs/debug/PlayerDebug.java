@@ -18,16 +18,12 @@ public class PlayerDebug {
 		if(Data.clientFrame.playerDebugOption.getState()){
 			g.drawString("NAME : COMBAT LEVEL : LOCATION  : ANIMATION ID : ORIENTATION: INTERACTING ID : HP : HEIGHT", x, y);
 			y+=15;
-			for(RSPlayer pl : methods.players.getAllPlayers()){
-				if(pl.getLocation().getPlane()!=methods.game.currentPlane())
-					continue;
-				if(pl.isHovering()){
-					for(Polygon p : pl.getWireframe()){
-						g.drawPolygon(p);
-					}
-					g.drawString(""+pl.getName()+" : "+pl.getCombatLevel()+" : "+pl.getLocation()+" : "+pl.getAnimationID()+" : "+pl.getOrientation()+" : "+pl.getInteractingID()+" : "+pl.getHPPercent()+" : "+pl.getHeight(), x, y);
-					y+=15;
+			for(RSPlayer pl : methods.game.getHoveringPlayers()){
+				for(Polygon p : pl.getWireframe()){
+					g.drawPolygon(p);
 				}
+				g.drawString(""+pl.getName()+" : "+pl.getCombatLevel()+" : "+pl.getLocation()+" : "+pl.getAnimationID()+" : "+pl.getOrientation()+" : "+pl.getInteractingID()+" : "+pl.getHPPercent()+" : "+pl.getHeight(), x, y);
+				y+=15;
 			}
 		}
 		return g;

@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.osrs.api.objects.type.Graphical;
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.HashTable;
 import org.osrs.api.wrappers.Node;
@@ -18,7 +19,7 @@ import org.osrs.api.wrappers.Widget;
 import org.osrs.api.wrappers.WidgetNode;
 import org.osrs.util.Data;
 
-public class RSWidget extends Interactable{
+public class RSWidget extends Interactable implements Graphical{
 	private int index;
 	private RSInterface parentInterface;
 	private RSWidget parentWidget;

@@ -18,17 +18,12 @@ public class GroundItemDebug {
 		if(Data.clientFrame.groundItemDebugOption.getState()){
 			g.drawString("ID : STACKSIZE : NAME", x, y);
 			y+=15;
-			for(GroundItem gi : methods.groundItems.getAllItems()){
-				if(gi.getPlane()!=methods.game.currentPlane())
-					continue;
-				if(gi.isHovering()){
-					for(Polygon p : gi.getWireframe()){
-						g.drawPolygon(p);
-					}
-					
-					g.drawString(""+gi.getID()+" : "+gi.getStackSize()+" : "+gi.getName(), x, y);
-					y+=15;
+			for(GroundItem gi : methods.game.getHoveringGroundItems()){
+				for(Polygon p : gi.getWireframe()){
+					g.drawPolygon(p);
 				}
+				g.drawString(""+gi.getID()+" : "+gi.getStackSize()+" : "+gi.getName(), x, y);
+				y+=15;
 			}
 		}
 		return g;

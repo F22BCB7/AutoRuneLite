@@ -5,8 +5,8 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.text.DecimalFormat;
 import org.osrs.api.methods.Skills;
+import org.osrs.api.objects.type.Modelled;
 import org.osrs.api.wrappers.Actor;
-import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.CombatBar;
 import org.osrs.api.wrappers.CombatBarData;
 import org.osrs.api.wrappers.Node;
@@ -15,7 +15,7 @@ import org.osrs.api.wrappers.Npc;
 import org.osrs.api.wrappers.Player;
 import org.osrs.util.Data;
 
-public abstract class RSActor extends RSRenderable{
+public abstract class RSActor extends RSRenderable implements Modelled{
 	public abstract Actor getAccessor();
 	public RSActor(){
 	}
@@ -41,7 +41,7 @@ public abstract class RSActor extends RSRenderable{
 	}
 	public CombatBarData getCombatData(){
 		if(Data.clientInstance!=null){
-			int gameCycle = ((Client)Data.clientInstance).gameCycle();
+			int gameCycle = methods.game.gameCycle();
 			Actor a = getAccessor();
 			if(a!=null){
 				NodeList nl = a.combatInfoList();
@@ -113,7 +113,7 @@ public abstract class RSActor extends RSRenderable{
 		Actor actor2 = null;
 		if(id>=32768){
 			id-=32768;
-			Player[] players = ((Client)Data.clientInstance).players();
+			Player[] players = methods.game.players();
 			if(players.length>id){
 				Player player = players[id];
 				if(player!=null)
@@ -121,7 +121,7 @@ public abstract class RSActor extends RSRenderable{
 			}
 		}
 		else{
-			Npc[] npcs = ((Client)Data.clientInstance).npcs();
+			Npc[] npcs = methods.game.npcs();
 			if(npcs.length>id){
 				Npc npc = npcs[id];
 				if(npc!=null)
@@ -137,7 +137,7 @@ public abstract class RSActor extends RSRenderable{
 		int id = getAccessor().interactingID();
 		if(id >= 32768){
 			id-=32768;
-			Player[] players = ((Client)Data.clientInstance).players();
+			Player[] players = methods.game.players();
 			if(players.length>id){
 				Player player = players[id];
 				if(player!=null)
@@ -154,7 +154,7 @@ public abstract class RSActor extends RSRenderable{
 		if(id==-1)
 			return null;
 		if(id < 32768){
-			Npc[] npcs = ((Client)Data.clientInstance).npcs();
+			Npc[] npcs = methods.game.npcs();
 			if(npcs.length>id){
 				Npc npc = npcs[id];
 				if(npc!=null)
@@ -166,7 +166,7 @@ public abstract class RSActor extends RSRenderable{
 	public RSTile getLocation(){
 		Actor p = getAccessor();
 		if(p!=null){
-			return new RSTile((((Client)Data.clientInstance).mapBaseX()+(p.x()>>7)), (((Client)Data.clientInstance).mapBaseY()+(p.y()>>7)));
+			return new RSTile((methods.game.mapBaseX()+(p.x()>>7)), (methods.game.mapBaseY()+(p.y()>>7)));
 		}
 		return new RSTile(-1, -1, -1);
 	}
@@ -183,6 +183,27 @@ public abstract class RSActor extends RSRenderable{
 			return p.y()>>7;
 		}
 		return -1;
+	}
+	public int getX(){
+		Actor p = getAccessor();
+		if(p!=null){
+			return p.x()>>7 + methods.game.mapBaseX();
+		}
+		return -1;
+	}
+	public int getY(){
+		Actor p = getAccessor();
+		if(p!=null){
+			return p.y()>>7 + methods.game.mapBaseY();
+		}
+		return -1;
+	}
+	public int getPlane(){
+		Actor p = getAccessor();
+		if(p!=null && p instanceof Player){
+			return ((Player)p).plane();
+		}
+		return methods.game.currentPlane();
 	}
 	public RSTile[] getPath(){
 		Actor p = getAccessor();
@@ -235,6 +256,17 @@ public abstract class RSActor extends RSRenderable{
 			}
 		}
 		return new Point[]{};
+	}
+	public Polygon getPolygon(){
+		Actor acc = getAccessor();
+		if(acc!=null){
+			RSModel model = getModel();
+			if(model!=null){
+				return model.getPolygon(getLocation(), 0, (int)((acc.orientation()/128)*22.5));
+			}
+			return new Polygon();
+		}
+		return new Polygon();
 	}
 	public Polygon[] getWireframe(){
 		Actor acc = getAccessor();

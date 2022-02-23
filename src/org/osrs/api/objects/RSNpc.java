@@ -3,7 +3,6 @@ package org.osrs.api.objects;
 import java.lang.ref.SoftReference;
 
 import org.osrs.api.constants.HeadIcon;
-import org.osrs.api.wrappers.Actor;
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.NPCDefinition;
 import org.osrs.api.wrappers.Npc;
@@ -20,7 +19,16 @@ public class RSNpc extends RSActor{
 		return accessor.get();
 	}
 	public NPCDefinition getDefinition(){
-		return getAccessor().definition();
+		Npc npc = getAccessor();
+		if(npc!=null){
+			NPCDefinition def = npc.definition();
+			if(def!=null){
+				if(def.childrenIDs()!=null)
+					def = def.invoke_getChildDefinition();
+			}
+			return def;
+		}
+		return null;
 	}
 	@Override
 	public int getCombatLevel(){
@@ -76,7 +84,21 @@ public class RSNpc extends RSActor{
 		}
 		return new RSTile(-1, -1, -1);
 	}
+	@Override
+	public boolean isHovering(){
+		long uid = calculateMenuUID();
+		long[] uids = methods.game.onCursorUIDs();
+		for(int i=0;i<methods.game.onCursorUIDCount();++i)
+			if(uids[i]==uid)
+				return true;
+		return false;
+	}
 	public long calculateMenuUID() {
-		return (0 & 127) << 0 | (0 & 127) << 7 | (1 & 3) << 14 | (indice & 4294967295L) << 17;
+		long val = (0 & 127) << 0 | (0 & 127) << 7 | (1 & 3) << 14 | (indice & 4294967295L) << 17;
+		NPCDefinition def = getDefinition();
+	    if(def!=null && !def.isClickable()) {
+	    	val |= 65536L;
+	    }
+		return val;
 	}
 }

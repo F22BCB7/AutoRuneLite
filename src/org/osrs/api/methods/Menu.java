@@ -101,7 +101,7 @@ public class Menu extends MethodDefinition{
 	public String[] getActions() {
 		try{
 			int itemCount = getItemCount();
-			String[] actions = ((Client)methods.botInstance).menuActions();
+			String[] actions = methods.game.menuActions();
 			String[] targets = new String[itemCount];
 			int real=0;
 			if(actions.length<itemCount)itemCount=actions.length;
@@ -141,7 +141,7 @@ public class Menu extends MethodDefinition{
 	public Rectangle getBounds() {
 		if(!isOpen())
 			return new Rectangle(-1, -1, 0, 0);
-		return new Rectangle(((Client)methods.botInstance).menuX(), ((Client)methods.botInstance).menuY(), ((Client)methods.botInstance).menuWidth(), ((Client)methods.botInstance).menuHeight());
+		return new Rectangle(methods.game.menuX(), methods.game.menuY(), methods.game.menuWidth(), methods.game.menuHeight());
 	}
 	/**
 	 * Returns the 2D screen-space bounds of a specified action/option index
@@ -175,7 +175,7 @@ public class Menu extends MethodDefinition{
 	public int getHeight(){
 		if(!isOpen())
 			return 0;
-		return ((Client)methods.botInstance).menuHeight();
+		return methods.game.menuHeight();
 	}
 	/**
 	 * Gets the index of the given action in the menu
@@ -218,7 +218,7 @@ public class Menu extends MethodDefinition{
 	 * @return itemCount
 	 */
 	public int getItemCount(){
-		return ((Client)methods.botInstance).menuItemCount();
+		return methods.game.menuItemCount();
 	}
 	public String[] getItems(){
 		String[] actions = getActions();
@@ -245,7 +245,7 @@ public class Menu extends MethodDefinition{
 	public String[] getOptions(){
 		try{
 			int itemCount = getItemCount();
-			String[] s = ((Client)methods.botInstance).menuTargets();
+			String[] s = methods.game.menuTargets();
 			String[] targets = new String[itemCount];
 			if(s.length<itemCount)itemCount=s.length;
 			int real=0;
@@ -275,7 +275,7 @@ public class Menu extends MethodDefinition{
 	 * @return topAction
 	 */
 	public String getTopAction(){
-		String[] actions = ((Client)methods.botInstance).menuActions();
+		String[] actions = methods.game.menuActions();
 		if(actions!=null && actions.length>0)
 			return actions[0];
 		return "";
@@ -285,7 +285,7 @@ public class Menu extends MethodDefinition{
 	 * @return topOption
 	 */
 	public String getTopOption(){
-		String[] options = ((Client)methods.botInstance).menuTargets();
+		String[] options = methods.game.menuTargets();
 		if(options!=null && options.length>0)
 			return options[0];
 		return "";
@@ -304,7 +304,7 @@ public class Menu extends MethodDefinition{
 	public int getWidth(){
 		if(!isOpen())
 			return 0;
-		return ((Client)methods.botInstance).menuWidth();
+		return methods.game.menuWidth();
 	}
 	/**
 	 * Gets the Menu screen locations' X coordinate.
@@ -313,7 +313,7 @@ public class Menu extends MethodDefinition{
 	public int getX(){
 		if(!isOpen())
 			return -1;
-		return ((Client)methods.botInstance).menuX();
+		return methods.game.menuX();
 	}
 	/**
 	 * Gets the Menu screen locations' Y coordinate.
@@ -322,7 +322,7 @@ public class Menu extends MethodDefinition{
 	public int getY(){
 		if(!isOpen())
 			return -1;
-		return ((Client)methods.botInstance).menuY();
+		return methods.game.menuY();
 	}
 	/**
 	 * Returns true if menu is open
@@ -351,6 +351,27 @@ public class Menu extends MethodDefinition{
 	 * @return true if menu is open
 	 */
 	public boolean isOpen(){
-		return ((Client)methods.botInstance).menuOpen();
+		return methods.game.menuOpen();
+	}
+	public int[] menuOpcodes(){
+		return methods.game.menuOpcodes();
+	}
+	public int[] menuPrimaryArgs(){
+		return methods.game.menuPrimaryArgs();
+	}
+	public int[] menuSecondaryArgs(){
+		return methods.game.menuSecondaryArgs();
+	}
+	public int[] menuTertiaryArgs(){
+		return methods.game.menuTertiaryArgs();
+	}
+	public boolean[] menuShiftClickActions(){
+		return methods.game.menuShiftClickActions();
+	}
+	public int onCursorUIDCount(){
+		return methods.game.onCursorUIDCount();
+	}
+	public long[] onCursorUIDs(){
+		return methods.game.onCursorUIDs();
 	}
 }

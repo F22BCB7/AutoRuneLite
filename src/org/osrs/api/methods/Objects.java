@@ -8,7 +8,6 @@ import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.FloorDecoration;
 import org.osrs.api.wrappers.InteractableObject;
 import org.osrs.api.wrappers.WallDecoration;
-import org.osrs.util.Data;
 import org.osrs.api.wrappers.Region;
 import org.osrs.api.wrappers.Tile;
 
@@ -509,5 +508,8 @@ public class Objects extends MethodDefinition{
     		}
     	}
 		return false;
+	}
+	public GameObject[] getHoveringObjects(){
+		return methods.game.getHoveringObjects();
 	}
 }

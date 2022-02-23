@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 
-import org.osrs.api.methods.MethodContext;
+import org.osrs.api.objects.type.Modelled;
 import org.osrs.api.wrappers.BoundaryObject;
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.FloorDecoration;
@@ -14,8 +14,9 @@ import org.osrs.api.wrappers.RenderableNode;
 import org.osrs.api.wrappers.WallDecoration;
 import org.osrs.util.Data;
 import org.osrs.api.wrappers.Model;
+import org.osrs.api.wrappers.NPCDefinition;
 
-public class GameObject extends Interactable{
+public class GameObject extends Interactable implements Modelled{
 	private Object reference = null;
 	private RSModel model = null;
 	private ObjectDefinition definition = null;
@@ -23,6 +24,7 @@ public class GameObject extends Interactable{
 	private int orientation = 0;
 	private long id = -1;
 	private long definitionHash = -1;
+	private int renderInfo = -1;
 	/**
 	 * ref must be a InteractableObject, FloorDecoration, WallDecoration, or BoundaryObject
 	 * @param ref
@@ -51,6 +53,7 @@ public class GameObject extends Interactable{
 			}
 			id = ((BoundaryObject) ref).id();
 			orientation = ((BoundaryObject) ref).orientation();
+			renderInfo = ((BoundaryObject)ref).renderInfo();
 		}
 		if (ref instanceof FloorDecoration) {
 			if(((FloorDecoration)ref).model() instanceof Model)
@@ -64,6 +67,7 @@ public class GameObject extends Interactable{
 			}
 			id = ((FloorDecoration) ref).hash();
 			orientation = 0;
+			renderInfo = ((FloorDecoration)ref).renderInfo();
 		}
 		if (ref instanceof InteractableObject) {
 			if(((InteractableObject)ref).model() instanceof Model)
@@ -77,6 +81,7 @@ public class GameObject extends Interactable{
 			}
 			id = ((InteractableObject) ref).hash();
 			orientation = ((InteractableObject) ref).orientation();
+			renderInfo = ((InteractableObject)ref).renderInfo();
 		}
 		if (ref instanceof WallDecoration) {
 			if(((WallDecoration)ref).model() instanceof Model)
@@ -90,6 +95,7 @@ public class GameObject extends Interactable{
 			}
 			id = ((WallDecoration) ref).hash();
 			orientation = ((WallDecoration) ref).orientation();
+			renderInfo = ((WallDecoration)ref).renderInfo();
 		}
 		definitionHash = id >>> 17 & 0xFFFFFFFF;
 		definition = getDefinition();
@@ -105,6 +111,10 @@ public class GameObject extends Interactable{
 		if(definition!=null)
 			return definition;
 		definition = ((Client)Data.clientInstance).invoke_getObjectDefinition((int)definitionHash);
+		if(definition!=null){
+			if(definition.childrenIDs()!=null)
+				definition = definition.invoke_getChildDefinition();
+		}
 		return definition;
 	}
 	/**
@@ -211,6 +221,12 @@ public class GameObject extends Interactable{
 		}
 		return new Point[]{};
 	}
+	public Polygon getPolygon(){
+		if(model!=null){
+			return model.getPolygon(location, orientation);
+		}
+		return new Polygon();
+	}
 	public Polygon[] getWireframe(){
 		if(model!=null){
 			double _x = -1;
@@ -254,8 +270,26 @@ public class GameObject extends Interactable{
 	}
 	@Override
 	public boolean isHovering() {
-		if(model!=null)
-			return model.containsPoint(methods.mouse.getLocation(), location, orientation);
+		long uid = calculateMenuUID();
+		ObjectDefinition def = getDefinition();
+		if(def!=null){
+			if(((int)(uid >>> 14 & 3L)!=2) || def.mapDoorFlag()>0){
+				long[] uids = methods.game.onCursorUIDs();
+				for(int i=0;i<methods.game.onCursorUIDCount();++i)
+					if(uids[i]==uid)
+						return true;
+			}
+			else if(model!=null)
+				return model.containsPoint(methods.mouse.getLocation(), location, orientation);
+		}
 		return false;
+	}
+	public long calculateMenuUID() {
+		long val = (getLocalX() & 127) << 0 | (getLocalY() & 127) << 7 | (2 & 3) << 14 | (definitionHash & 4294967295L) << 17;
+		ObjectDefinition def = getDefinition();
+	    if(def!=null && def.mapDoorFlag()==0) {
+	    	val |= 65536L;
+	    }
+		return val;
 	}
 }
