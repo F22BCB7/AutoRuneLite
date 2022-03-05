@@ -238,11 +238,7 @@ public abstract class RSActor extends RSRenderable implements Modelled{
 		return null;
 	}
 	public boolean isOnMap(){
-		Point p = methods.calculations.locationToMinimap(getLocation());
-		Rectangle bounds = methods.minimap.getMinimapBounds();
-		if(!p.equals(new Point(-1, -1)) && (bounds.contains(p)))
-			return true;
-		return false;
+		return methods.calculations.onMap(getLocation());
 	}
 	public boolean isVisible(){
 		return methods.calculations.onViewport(getLocation());

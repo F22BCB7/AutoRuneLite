@@ -124,8 +124,8 @@ public class FactoryTemplates {
     DefaultSpeedManager manager = new DefaultSpeedManager(flows);
     factory.setDeviationProvider(new SinusoidalDeviationProvider(SinusoidalDeviationProvider.DEFAULT_SLOPE_DIVIDER));
     factory.setNoiseProvider(new DefaultNoiseProvider(DefaultNoiseProvider.DEFAULT_NOISINESS_DIVIDER));
-    factory.getNature().setReactionTimeVariationMs(100);
-    manager.setMouseMovementBaseTimeMs(250);
+    factory.getNature().setReactionTimeVariationMs(150);
+    manager.setMouseMovementBaseTimeMs(10);
 
     DefaultOvershootManager overshootManager = (DefaultOvershootManager) factory.getOvershootManager();
     overshootManager.setOvershoots(4);

@@ -137,6 +137,12 @@ public class RSTile extends Interactable implements Comparable<RSTile>, Modelled
 	public Polygon getPolygon(){
 		return getBounds();
 	}
+	public boolean isVisible(){
+		return methods.calculations.onViewport(this);
+	}
+	public boolean isOnMap(){
+		return methods.calculations.onMap(this);
+	}
 	public Point[] projectVertices(){
 		Tile internal = getInternal();
 		if(internal!=null){

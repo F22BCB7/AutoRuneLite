@@ -188,11 +188,7 @@ public class GameObject extends Interactable implements Modelled{
 		return methods.calculations.worldToScreen(_x, _y, location.getPlane(), 0);
 	}
 	public boolean isOnMap(){
-		Point p = methods.calculations.locationToMinimap(getLocation());
-		Rectangle bounds = methods.minimap.getMinimapBounds();
-		if(!p.equals(new Point(-1, -1)) && (bounds.contains(p)))
-			return true;
-		return false;
+		return methods.calculations.onMap(getLocation());
 	}
 	public boolean isVisible(){
 		return methods.calculations.onViewport(getLocation());

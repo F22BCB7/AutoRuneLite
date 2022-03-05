@@ -427,7 +427,7 @@ public class Objects extends MethodDefinition{
 	}
 	public boolean isObjectAt(RSTile tile, long id){
     	int localX = tile.getLocalX();
-    	int localY = tile.getLocalX();
+    	int localY = tile.getLocalY();
     	if(localX<0 || localX>104 || localY<0 || localY>104)
     		return false;
     	Region region =((Client)methods.botInstance).region();
@@ -465,7 +465,7 @@ public class Objects extends MethodDefinition{
 	}
 	public boolean isObjectAt(RSTile tile, long...ids){
     	int localX = tile.getLocalX();
-    	int localY = tile.getLocalX();
+    	int localY = tile.getLocalY();
     	if(localX<0 || localX>104 || localY<0 || localY>104)
     		return false;
     	Region region =((Client)methods.botInstance).region();

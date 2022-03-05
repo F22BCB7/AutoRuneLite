@@ -76,11 +76,7 @@ public class GroundItem extends Interactable implements Modelled{
 		return methods.calculations.locationToScreen(location);
 	}
 	public boolean isOnMap(){
-		Point p = methods.calculations.locationToMinimap(location);
-		Rectangle bounds = methods.minimap.getMinimapBounds();
-		if(!p.equals(new Point(-1, -1)) && (bounds.contains(p)))
-			return true;
-		return false;
+		return methods.calculations.onMap(getLocation());
 	}
 	public boolean isVisible(){
 		return methods.calculations.onViewport(getLocation());
@@ -131,6 +127,9 @@ public class GroundItem extends Interactable implements Modelled{
 		for(int i=0;i<methods.game.onCursorUIDCount();++i)
 			if(uids[i]==uid)
 				return true;
+		RSModel model = getModel();
+		if(model!=null)
+			return model.containsPoint(methods.mouse.getLocation(), location);
 		return false;
 	}
 	public long calculateMenuUID() {

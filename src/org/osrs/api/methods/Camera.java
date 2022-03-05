@@ -154,7 +154,7 @@ public class Camera extends MethodDefinition{
 	public boolean isFacing(RSTile t){
 		int desiredAngle = (((methods.calculations.angleToTile(t)-90)+360)%360);
 		int angle = getAngle();
-		return angle-10<desiredAngle && angle+10>desiredAngle;
+		return angle-24<desiredAngle && angle+24>desiredAngle;
 	}
 	public boolean turnTo(RSActor actor){
 		return turnTo(actor.getLocation());
