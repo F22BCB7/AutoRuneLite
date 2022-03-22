@@ -15,117 +15,117 @@ public class RSProjectile extends RSRenderable{
 		accessor = projectile;
 	}
 	public int currentFrameIndex(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.currentFrameIndex();
 		return -1;
 	}
 	public int frameProgress(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.frameProgress();
 		return -1;
 	}
 	public int id(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.id();
 		return -1;
 	}
 	public int plane(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.plane();
 		return -1;
 	}
 	public int startRegionX(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.startRegionX();
 		return -1;
 	}
 	public int startRegionY(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.startRegionY();
 		return -1;
 	}
 	public int height(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.height();
 		return -1;
 	}
 	public int startCycle(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.startCycle();
 		return -1;
 	}
 	public int endCycle(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.endCycle();
 		return -1;
 	}
 	public int slope(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.slope();
 		return -1;
 	}
 	public int startHeight(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.startHeight();
 		return -1;
 	}
 	public int endHeight(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.endHeight();
 		return -1;
 	}
 	public boolean isLaunched(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.isLaunched();
 		return false;
 	}
 	public double worldX(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.x();
 		return -1;
 	}
 	public double velocityX(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.velocityX();
 		return -1;
 	}
 	public double worldY(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.y();
 		return -1;
 	}
 	public double velocityY(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.velocityY();
 		return -1;
 	}
 	public double worldZ(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.z();
 		return -1;
 	}
 	public double velocityZ(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.velocityZ();
 		return -1;
 	}
 	public double heightOffset(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.heightOffset();
 		return -1;
 	}
 	public double scalar(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.scalar();
 		return -1;
 	}
 	public int rotationX(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.rotationX();
 		return -1;
 	}
 	public int rotationY(){
-		if(accessor==null)
+		if(accessor!=null)
 			return accessor.rotationY();
 		return -1;
 	}
@@ -142,7 +142,7 @@ public class RSProjectile extends RSRenderable{
 		return (int)worldY()>>7 + methods.game.mapBaseY();
 	}
 	public RSTile getLocation(){
-		return new RSTile((int)worldX()>>7, (int)worldY()>>7, plane()); 
+		return new RSTile((int)worldX()>>7 + methods.game.mapBaseX(), (int)worldY()>>7 + methods.game.mapBaseY(), plane()); 
 	}
 	public boolean isInteractingWith(RSActor actor){
 		if(actor==null)
