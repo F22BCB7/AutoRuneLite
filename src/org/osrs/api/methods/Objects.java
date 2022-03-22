@@ -103,7 +103,7 @@ public class Objects extends MethodDefinition{
 			for(Node node=head.previous();node!=null && node.hashCode()!=head.hashCode();node=node.previous()){
 				if(node instanceof AnimableObject){
 					AnimableObject obj = (AnimableObject)node;
-					if(obj.x()>>7==x && obj.y()>>7==y && obj.plane()==plane)
+					if(obj.x()>>7==localX && obj.y()>>7==localY && obj.plane()==plane)
 						objects.add(new GameObject(obj, new RSTile((obj.x()>>7)+methods.game.mapBaseX(), (obj.y()>>7)+methods.game.mapBaseY(), obj.plane())));
 				}
 			}
@@ -159,6 +159,17 @@ public class Objects extends MethodDefinition{
     				return new GameObject(wo, new RSTile(x, y, plane));
     		}
     	}
+		Deque animableObjects = methods.game.animableObjectDeque();
+		if(animableObjects!=null){
+			Node head = animableObjects.head();
+			for(Node node=head.previous();node!=null && node.hashCode()!=head.hashCode();node=node.previous()){
+				if(node instanceof AnimableObject){
+					AnimableObject obj = (AnimableObject)node;
+					if(obj.x()>>7==localX && obj.y()>>7==localY && obj.plane()==plane)
+						return (new GameObject(obj, new RSTile((obj.x()>>7)+methods.game.mapBaseX(), (obj.y()>>7)+methods.game.mapBaseY(), obj.plane())));
+				}
+			}
+		}
         return null;
 	}
 	public GameObject[] getObjectsByID(long id){
@@ -200,6 +211,17 @@ public class Objects extends MethodDefinition{
 			}
 			x=0;
 			plane++;
+		}
+		Deque animableObjects = methods.game.animableObjectDeque();
+		if(animableObjects!=null){
+			Node head = animableObjects.head();
+			for(Node node=head.previous();node!=null && node.hashCode()!=head.hashCode();node=node.previous()){
+				if(node instanceof AnimableObject){
+					AnimableObject obj = (AnimableObject)node;
+					if(obj.id()==id)
+						objects.add(new GameObject(obj, new RSTile((obj.x()>>7)+methods.game.mapBaseX(), (obj.y()>>7)+methods.game.mapBaseY(), obj.plane())));
+				}
+			}
 		}
 		return objects.toArray(new GameObject[]{});
 	}
@@ -259,6 +281,21 @@ public class Objects extends MethodDefinition{
 			x=0;
 			plane++;
 		}
+		Deque animableObjects = methods.game.animableObjectDeque();
+		if(animableObjects!=null){
+			Node head = animableObjects.head();
+			for(Node node=head.previous();node!=null && node.hashCode()!=head.hashCode();node=node.previous()){
+				if(node instanceof AnimableObject){
+					AnimableObject obj = (AnimableObject)node;
+					for(long id : ids){
+						if(obj.id()==id){
+							objects.add(new GameObject(obj, new RSTile((obj.x()>>7)+methods.game.mapBaseX(), (obj.y()>>7)+methods.game.mapBaseY(), obj.plane())));
+							break;
+						}
+					}
+				}
+			}
+		}
 		return objects.toArray(new GameObject[]{});
 	}
 	public GameObject getNearestByID(long id){
@@ -279,6 +316,27 @@ public class Objects extends MethodDefinition{
 				}
 				for(GameObject go : getAllAt(tile)){
 					if(go.getID()==id){
+						closestObj=go;
+						closestTile=tile;
+						closestDistance = distance;
+					}
+				}
+			}
+		}
+		Deque animableObjects = methods.game.animableObjectDeque();
+		if(animableObjects!=null){
+			Node head = animableObjects.head();
+			for(Node node=head.previous();node!=null && node.hashCode()!=head.hashCode();node=node.previous()){
+				if(node instanceof AnimableObject){
+					AnimableObject obj = (AnimableObject)node;
+					if(obj.id()==id){
+						GameObject go = (new GameObject(obj, new RSTile((obj.x()>>7)+methods.game.mapBaseX(), (obj.y()>>7)+methods.game.mapBaseY(), obj.plane())));
+						RSTile tile = go.getLocation();
+						double distance = methods.calculations.distanceTo(tile);
+						if(closestTile!=null){
+							if(distance>=closestDistance)
+								continue;
+						}
 						closestObj=go;
 						closestTile=tile;
 						closestDistance = distance;
@@ -307,6 +365,30 @@ public class Objects extends MethodDefinition{
 				for(GameObject go : getAllAt(tile)){
 					for(long id : ids){
 						if(go.getID()==id){
+							closestObj=go;
+							closestTile=tile;
+							closestDistance = distance;
+							break;
+						}
+					}
+				}
+			}
+		}
+		Deque animableObjects = methods.game.animableObjectDeque();
+		if(animableObjects!=null){
+			Node head = animableObjects.head();
+			for(Node node=head.previous();node!=null && node.hashCode()!=head.hashCode();node=node.previous()){
+				if(node instanceof AnimableObject){
+					AnimableObject obj = (AnimableObject)node;
+					for(long id : ids){
+						if(obj.id()==id){
+							GameObject go = (new GameObject(obj, new RSTile((obj.x()>>7)+methods.game.mapBaseX(), (obj.y()>>7)+methods.game.mapBaseY(), obj.plane())));
+							RSTile tile = go.getLocation();
+							double distance = methods.calculations.distanceTo(tile);
+							if(closestTile!=null){
+								if(distance>=closestDistance)
+									break;
+							}
 							closestObj=go;
 							closestTile=tile;
 							closestDistance = distance;
@@ -374,6 +456,23 @@ public class Objects extends MethodDefinition{
 			}
 			x=0;
 			plane++;
+		}
+		Deque animableObjects = methods.game.animableObjectDeque();
+		if(animableObjects!=null){
+			Node head = animableObjects.head();
+			for(Node node=head.previous();node!=null && node.hashCode()!=head.hashCode();node=node.previous()){
+				if(node instanceof AnimableObject){
+					AnimableObject obj = (AnimableObject)node;
+					if(obj.id()==id){
+						GameObject go = (new GameObject(obj, new RSTile((obj.x()>>7)+methods.game.mapBaseX(), (obj.y()>>7)+methods.game.mapBaseY(), obj.plane())));
+						if(go.getLocation().equals(ignore))
+							continue;
+						if(closest==null || methods.calculations.distanceTo(go.getLocation())<methods.calculations.distanceTo(closest.getLocation())){
+							closest=go;
+						}
+					}
+				}
+			}
 		}
 		return closest;
 	}
@@ -447,6 +546,25 @@ public class Objects extends MethodDefinition{
 			x=0;
 			plane++;
 		}
+		Deque animableObjects = methods.game.animableObjectDeque();
+		if(animableObjects!=null){
+			Node head = animableObjects.head();
+			for(Node node=head.previous();node!=null && node.hashCode()!=head.hashCode();node=node.previous()){
+				if(node instanceof AnimableObject){
+					AnimableObject obj = (AnimableObject)node;
+					for(long id : ids){
+						if(obj.id()==id){
+							GameObject go = (new GameObject(obj, new RSTile((obj.x()>>7)+methods.game.mapBaseX(), (obj.y()>>7)+methods.game.mapBaseY(), obj.plane())));
+							if(go.getLocation().equals(ignore))
+								continue;
+							if(closest==null || methods.calculations.distanceTo(go.getLocation())<methods.calculations.distanceTo(closest.getLocation())){
+								closest=go;
+							}
+						}
+					}
+				}
+			}
+		}
 		return closest;
 	}
 	public boolean isObjectAt(RSTile tile, long id){
@@ -485,6 +603,17 @@ public class Objects extends MethodDefinition{
     			}
     		}
     	}
+		Deque animableObjects = methods.game.animableObjectDeque();
+		if(animableObjects!=null){
+			Node head = animableObjects.head();
+			for(Node node=head.previous();node!=null && node.hashCode()!=head.hashCode();node=node.previous()){
+				if(node instanceof AnimableObject){
+					AnimableObject obj = (AnimableObject)node;
+					if(obj.x()>>7==localX && obj.y()>>7==localY && obj.plane()==tile.plane && id==obj.id())
+						return true;
+				}
+			}
+		}
 		return false;
 	}
 	public boolean isObjectAt(RSTile tile, long...ids){
@@ -531,6 +660,21 @@ public class Objects extends MethodDefinition{
     			}
     		}
     	}
+		Deque animableObjects = methods.game.animableObjectDeque();
+		if(animableObjects!=null){
+			Node head = animableObjects.head();
+			for(Node node=head.previous();node!=null && node.hashCode()!=head.hashCode();node=node.previous()){
+				if(node instanceof AnimableObject){
+					AnimableObject obj = (AnimableObject)node;
+					if(obj.x()>>7==localX && obj.y()>>7==localY && obj.plane()==tile.plane){
+						for(long id : ids){
+							if(obj.id()==id)
+								return true;
+						}
+					}
+				}
+			}
+		}
 		return false;
 	}
 	public GameObject[] getHoveringObjects(){
