@@ -401,6 +401,22 @@ public class RSModel{
 		}
 		return p;
 	}
+	public Polygon getPolygon(int plane, double worldX, double worldY, int orientation){
+		Point[] points = getPolygonPoints(projectVertices(plane, worldX, worldY, orientation));
+		Polygon p = new Polygon();
+		for(int i = 0; i < points.length; i++) {
+			p.addPoint(points[i].x, points[i].y);
+		}
+		return p;
+	}
+	public Polygon getPolygon(int plane, double worldX, double worldY, int orientation, int heightOffset){
+		Point[] points = getPolygonPoints(projectVertices(plane, worldX, worldY, orientation, heightOffset));
+		Polygon p = new Polygon();
+		for(int i = 0; i < points.length; i++) {
+			p.addPoint(points[i].x, points[i].y);
+		}
+		return p;
+	}
 	/**
 	 * Returns the convex hull of the points created from the list
 	 * <code>points</code>. Note that the first and last point in the

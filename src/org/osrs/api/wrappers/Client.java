@@ -138,6 +138,8 @@ public interface Client extends GameShell{
 	public CollisionMap[] collisionMaps();
 
 	public boolean spellSelected();
+	public Deque animableObjectDeque();
+	public Deque projectileDeque();
 	
 	public void setPreventIdleMouse(boolean val);
 	public boolean getPreventIdleMouse();

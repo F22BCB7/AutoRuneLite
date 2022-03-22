@@ -3,10 +3,13 @@ package org.osrs.api.methods;
 import org.osrs.api.objects.GameObject;
 import org.osrs.api.objects.RSTile;
 import org.osrs.api.wrappers.Actor;
+import org.osrs.api.wrappers.AnimableObject;
 import org.osrs.api.wrappers.BoundaryObject;
 import org.osrs.api.wrappers.Client;
+import org.osrs.api.wrappers.Deque;
 import org.osrs.api.wrappers.FloorDecoration;
 import org.osrs.api.wrappers.InteractableObject;
+import org.osrs.api.wrappers.Node;
 import org.osrs.api.wrappers.WallDecoration;
 import org.osrs.api.wrappers.Region;
 import org.osrs.api.wrappers.Tile;
@@ -50,6 +53,16 @@ public class Objects extends MethodDefinition{
 			x=0;
 			plane++;
 		}
+		Deque animableObjects = methods.game.animableObjectDeque();
+		if(animableObjects!=null){
+			Node head = animableObjects.head();
+			for(Node node=head.previous();node!=null && node.hashCode()!=head.hashCode();node=node.previous()){
+				if(node instanceof AnimableObject){
+					AnimableObject obj = (AnimableObject)node;
+					objects.add(new GameObject(obj, new RSTile((obj.x()>>7)+methods.game.mapBaseX(), (obj.y()>>7)+methods.game.mapBaseY(), obj.plane())));
+				}
+			}
+		}
 		return objects.toArray(new GameObject[]{});
 	}
 	public GameObject[] getAllAt(RSTile t){
@@ -84,6 +97,17 @@ public class Objects extends MethodDefinition{
     				objects.add(new GameObject(wo, new RSTile(x, y, plane)));
     		}
     	}
+		Deque animableObjects = methods.game.animableObjectDeque();
+		if(animableObjects!=null){
+			Node head = animableObjects.head();
+			for(Node node=head.previous();node!=null && node.hashCode()!=head.hashCode();node=node.previous()){
+				if(node instanceof AnimableObject){
+					AnimableObject obj = (AnimableObject)node;
+					if(obj.x()>>7==x && obj.y()>>7==y && obj.plane()==plane)
+						objects.add(new GameObject(obj, new RSTile((obj.x()>>7)+methods.game.mapBaseX(), (obj.y()>>7)+methods.game.mapBaseY(), obj.plane())));
+				}
+			}
+		}
         return objects.toArray(new GameObject[]{});
 	}
 

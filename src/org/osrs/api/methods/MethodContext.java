@@ -8,6 +8,7 @@ public class MethodContext {
 	public Camera camera;
 	public Chatbox chatbox;
 	public Combat combat;
+	public Crafting crafting;
 	public Equipment equipment;
 	public Game game;
 	public GrandExchange grandExchange;
@@ -24,6 +25,7 @@ public class MethodContext {
 	public Objects objects;
 	public Players players;
 	public Prayer prayer;
+	public Projectiles projectiles;
 	public Region region;
 	public Skills skills;
 	public Tabs tabs;
@@ -39,6 +41,7 @@ public class MethodContext {
 		camera = new Camera(this);
 		chatbox = new Chatbox(this);
 		combat = new Combat(this);
+		crafting = new Crafting(this);
 		equipment = new Equipment(this);
 		game = new Game(this);
 		grandExchange = new GrandExchange(this);
@@ -55,6 +58,7 @@ public class MethodContext {
 		objects = new Objects(this);
 		players = new Players(this);
 		prayer = new Prayer(this);
+		projectiles = new Projectiles(this);
 		region = new Region(this);
 		skills = new Skills(this);
 		tabs = new Tabs(this);

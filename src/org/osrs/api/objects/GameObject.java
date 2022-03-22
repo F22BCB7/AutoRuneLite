@@ -5,6 +5,7 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 
 import org.osrs.api.objects.type.Modelled;
+import org.osrs.api.wrappers.AnimableObject;
 import org.osrs.api.wrappers.BoundaryObject;
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.FloorDecoration;
@@ -55,7 +56,7 @@ public class GameObject extends Interactable implements Modelled{
 			orientation = ((BoundaryObject) ref).orientation();
 			renderInfo = ((BoundaryObject)ref).renderInfo();
 		}
-		if (ref instanceof FloorDecoration) {
+		else if (ref instanceof FloorDecoration) {
 			if(((FloorDecoration)ref).model() instanceof Model)
 				model = new RSModel(((FloorDecoration)ref).model());
 			else{
@@ -69,7 +70,7 @@ public class GameObject extends Interactable implements Modelled{
 			orientation = 0;
 			renderInfo = ((FloorDecoration)ref).renderInfo();
 		}
-		if (ref instanceof InteractableObject) {
+		else if (ref instanceof InteractableObject) {
 			if(((InteractableObject)ref).model() instanceof Model)
 				model = new RSModel(((InteractableObject)ref).model());
 			else{
@@ -83,7 +84,7 @@ public class GameObject extends Interactable implements Modelled{
 			orientation = ((InteractableObject) ref).orientation();
 			renderInfo = ((InteractableObject)ref).renderInfo();
 		}
-		if (ref instanceof WallDecoration) {
+		else if (ref instanceof WallDecoration) {
 			if(((WallDecoration)ref).model() instanceof Model)
 				model = new RSModel(((WallDecoration)ref).model());
 			else{
@@ -96,6 +97,12 @@ public class GameObject extends Interactable implements Modelled{
 			id = ((WallDecoration) ref).hash();
 			orientation = ((WallDecoration) ref).orientation();
 			renderInfo = ((WallDecoration)ref).renderInfo();
+		}
+		else if(ref instanceof AnimableObject){
+			AnimableObject obj = (AnimableObject)ref;
+			model = ((RenderableNode)obj).getCachedModel();
+			id = obj.id();
+			orientation = 0;
 		}
 		definitionHash = id >>> 17 & 0xFFFFFFFF;
 		definition = getDefinition();
@@ -146,6 +153,9 @@ public class GameObject extends Interactable implements Modelled{
 	 * @return model
 	 */
 	public RSModel getModel() {
+		if(reference instanceof AnimableObject){
+			model = ((RenderableNode)reference).getCachedModel();
+		}
 		return model;
 	}
 	/**
@@ -194,6 +204,11 @@ public class GameObject extends Interactable implements Modelled{
 		return methods.calculations.onViewport(getLocation());
 	}
 	public Point[] projectVertices(){
+		if(reference instanceof AnimableObject){
+			model = ((RenderableNode)reference).getCachedModel();
+			if(model!=null)
+				return model.projectVertices(location.getPlane(), ((AnimableObject)reference).x(), ((AnimableObject)reference).y(), 0);
+		}
 		if(model!=null){
 			double _x = -1;
 			double _y = -1;
@@ -218,12 +233,22 @@ public class GameObject extends Interactable implements Modelled{
 		return new Point[]{};
 	}
 	public Polygon getPolygon(){
+		if(reference instanceof AnimableObject){
+			model = ((RenderableNode)reference).getCachedModel();
+			if(model!=null)
+				return model.getPolygon(location.getPlane(), ((AnimableObject)reference).x(), ((AnimableObject)reference).y(), 0);
+		}
 		if(model!=null){
 			return model.getPolygon(location, orientation);
 		}
 		return new Polygon();
 	}
 	public Polygon[] getWireframe(){
+		if(reference instanceof AnimableObject){
+			model = ((RenderableNode)reference).getCachedModel();
+			if(model!=null)
+				return model.getWireframe(location.getPlane(), ((AnimableObject)reference).x(), ((AnimableObject)reference).y(), 0);
+		}
 		if(model!=null){
 			double _x = -1;
 			double _y = -1;
@@ -249,6 +274,11 @@ public class GameObject extends Interactable implements Modelled{
 	}
 	@Override
 	public Point getCenterPoint() {
+		if(reference instanceof AnimableObject){
+			model = ((RenderableNode)reference).getCachedModel();
+			if(model!=null)
+				return model.getCenterPoint(location.getPlane(), ((AnimableObject)reference).x(), ((AnimableObject)reference).y(), 0);
+		}
 		if(model!=null)
 			return model.getCenterPoint(location, orientation);
 		return new Point(-1, -1);

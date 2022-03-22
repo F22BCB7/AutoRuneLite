@@ -744,6 +744,18 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@BGetter
 	@Override
 	public boolean spellSelected(){return spellSelected;}
+
+	@BField
+	public static Deque animableObjectDeque;
+	@BGetter
+	@Override
+	public org.osrs.api.wrappers.Deque animableObjectDeque(){return animableObjectDeque;}
+
+	@BField
+	public static Deque projectileDeque;
+	@BGetter
+	@Override
+	public org.osrs.api.wrappers.Deque projectileDeque(){return projectileDeque;}
 	
 	@BVar
 	public boolean preventIdleMouse;

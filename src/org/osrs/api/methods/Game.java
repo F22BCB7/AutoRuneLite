@@ -300,6 +300,7 @@ public class Game extends MethodDefinition{
 		RSWidget itemsKeptOnDeathWindow = null;
 		RSInterface quickPrayerParent = null;
 		RSWidget quickPrayerWindow = null;
+		RSInterface craftingMenuParent = null;
 		
 		//Find all parent interfaces, and cuts early once parent is found, 
 		//so the entire parents children is not iterated through this.
@@ -317,14 +318,22 @@ public class Game extends MethodDefinition{
 								bankTutorialParent = i;
 								break parentchilds;
 							}
-							else if(w.disabledText().equals("The Bank of Gielinor")){
-								bankParent = i;
-								bankWindow = methods.widgets.getChild(w.getParentID());
-								break parentchilds;
-							}
 							else if(w.clickMask()==0 && w.spriteID()==297 && w.alpha()==0 && w.boundsIndex()==1){
 								equipmentStatsParent = i;
 								equipmentStatsWindow = w;
+								break parentchilds;
+							}
+							else if(w.fontID()==496 && 
+									(
+										w.disabledText().equals("What would you like to spin?") ||
+										w.disabledText().equals("What would you like to fire in the oven?")
+									)){
+								craftingMenuParent = i;
+								break parentchilds;
+							}
+							else if(w.disabledText().equals("The Bank of Gielinor")){
+								bankParent = i;
+								bankWindow = methods.widgets.getChild(w.getParentID());
 								break parentchilds;
 							}
 						}
@@ -382,13 +391,20 @@ public class Game extends MethodDefinition{
 		//Finds children specific to the parent interfaces.
 		//Prevents false-positives/duplicates (like exit buttons).
 		methods.bank.updateBankWidgets(bankParent, bankWindow, bankTutorialParent, depositBoxParent, depositBoxWindow);
-		methods.combat.updateCombatWidgets(autocastSelectionParent, autocastSelectionWindow);
 		methods.chatbox.updateChatboxWidgets(chatboxParent, chatboxWindow);
+		methods.combat.updateCombatWidgets(autocastSelectionParent, autocastSelectionWindow);
+		methods.crafting.updateCraftingWidgets(craftingMenuParent);
 		methods.equipment.updateEquipmentWidgets(equipmentParent, equipmentWindow, equipmentStatsParent, equipmentStatsWindow, priceCheckerParent, priceCheckerWindow, itemsKeptOnDeathParent, itemsKeptOnDeathWindow);
 		methods.prayer.updatePrayerWidgets(quickPrayerParent, quickPrayerWindow);
 	}
 	public Deque[][][] itemPileDeque(){
 		return client.itemPileDeque();
+	}
+	public Deque animableObjectDeque(){
+		return client.animableObjectDeque();
+	}
+	public Deque projectileDeque(){
+		return client.projectileDeque();
 	}
 	public int getObjectFlags(int plane, int localX, int localY, long hash){
 		Region r = client.region();
