@@ -67,10 +67,6 @@ public class Modscript {
 				}
 			}
 		}*/
-		for(FieldHook fh : staticFields){
-			if(fh.refactoredName.equals("widgetVisibleCycle"))
-				fh.multiplier = (int)700634063;
-		}
 		/****************/
 			
 		System.out.println("Loaded modscript r"+modscriptRevision+" in "+(System.currentTimeMillis()-start)+"ms");

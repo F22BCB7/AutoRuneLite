@@ -55,7 +55,6 @@ public class RemappingMethodAdapter extends LocalVariablesSorter {
         super(api, access, desc, mv);
         this.remapper = remapper;
     }
-
     @Override
     public AnnotationVisitor visitAnnotationDefault() {
         AnnotationVisitor av = mv.visitAnnotationDefault();

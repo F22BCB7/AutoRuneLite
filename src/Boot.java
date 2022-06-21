@@ -11,6 +11,7 @@ import javax.swing.SwingUtilities;
 import org.objectweb.asm.Assembly;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Mask;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.IntInsnNode;
@@ -48,22 +49,21 @@ public class Boot {
 						if(classNode.name.equals("client")){
 							for (MethodNode mn : classNode.methods) {
 								if (mn.name.equals("init")) {
-									List<AbstractInsnNode> pattern = Assembly.find(mn,
-										Mask.SIPUSH.operand(765),//Applet width
-										Mask.SIPUSH.operand(503),//Applet height
-										//Client version
-										//Dummy parameter
-										Mask.INVOKEVIRTUAL.distance(3)//initializeApplet
-									);
-									if (pattern != null) {
-										IntInsnNode appHeight = (IntInsnNode)pattern.get(1);
-										AbstractInsnNode clientVersion = appHeight.getNext();
-										if(clientVersion instanceof IntInsnNode){
-											revision = ((IntInsnNode)clientVersion).operand;
-											break;
+									for(AbstractInsnNode insn : mn.instructions.toArray()){
+										if(insn.getOpcode()==Opcodes.SIPUSH){
+											AbstractInsnNode next = insn.getNext();
+											if(next.getOpcode()==Opcodes.SIPUSH){
+												IntInsnNode appletWidth = (IntInsnNode)insn;
+												IntInsnNode appletHeight = (IntInsnNode)next;
+												AbstractInsnNode clientRevision = appletHeight.getNext();
+												if(appletWidth.operand==765 && appletHeight.operand==503 && clientRevision.getOpcode()==Opcodes.SIPUSH){
+													revision = ((IntInsnNode)clientRevision).operand;
+													System.out.println(classNode.name+"."+mn.name+mn.desc+" : "+appletWidth.operand+">"+appletHeight.operand+" : "+revision);
+												}
+											}
 										}
 									}
-									break;
+									break;//only found in <init>
 								}
 							}
 						}

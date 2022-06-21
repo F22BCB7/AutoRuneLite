@@ -19,7 +19,7 @@ public class BSRemapper extends Remapper{
 			String newKey = resolver.getObfuscatedClassName(key.replace("org/osrs/api/wrappers/proxies/", ""));
 			return newKey;
 		}
-		return key;
+		return super.map(key);
 	}
 	@Override
 	public String mapType(String key){

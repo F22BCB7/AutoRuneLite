@@ -65,15 +65,21 @@ public class Compiler {
 			BSRemapper remapper = new BSRemapper(this);
 			ArrayList<ClassNode> newNodes = new ArrayList<ClassNode>();
 			for(ClassNode cn : classNodes){
-				ClassNode newClass = new ClassNode();
-				BSAdapter adapter = new BSAdapter(newClass, remapper);
-				adapter.linkCompiler(this);
-				cn.accept(adapter);
-				ClassHook hook = modscriptData.resolver.getObfusctedClassHook(cn.name);
-				if(hook!=null && classMapping.containsKey(hook.refactoredName)){
-					newClass.interfaces.add("org/osrs/api/wrappers/" + hook.refactoredName);
+				try{
+					ClassNode newClass = new ClassNode();
+					BSAdapter adapter = new BSAdapter(newClass, remapper);
+					adapter.linkCompiler(this);
+					cn.accept(adapter);
+					ClassHook hook = modscriptData.resolver.getObfusctedClassHook(cn.name);
+					if(hook!=null && classMapping.containsKey(hook.refactoredName)){
+						newClass.interfaces.add("org/osrs/api/wrappers/" + hook.refactoredName);
+					}
+					newNodes.add(newClass);
 				}
-				newNodes.add(newClass);
+				catch(Exception e){
+					e.printStackTrace();
+					System.out.println("Failed to compile class : "+cn.name);
+				}
 			}
 			classNodes.clear();
 			for(ClassNode cn : newNodes)
@@ -167,6 +173,7 @@ public class Compiler {
 				ClassHook ch = modscriptData.resolver.getClassHook(sourceName);
 				if(ch!=null){
 					classMapping.put(sourceName, ch);
+					System.out.println("Loaded BClass : "+sourceName);
 					ClassNode clientNode = getClientClassNode(ch.obfuscatedName);
 					if(clientNode!=null){
 						for(FieldNode fn : cn.fields){
@@ -180,6 +187,9 @@ public class Compiler {
 								FieldHook fh = modscriptData.resolver.getFieldHook(sourceName, fn.name, fn.isStatic());
 								if(fh!=null){
 									fieldMapping.put(ch.obfuscatedName+"."+fh.obfuscatedName, fh);
+								}
+								else{
+									System.out.println("Failed to load FieldHook : "+sourceName+"."+fn.name+" : "+(fn.isStatic()?"static":"nonstatic"));
 								}
 							}
 						}
@@ -210,6 +220,9 @@ public class Compiler {
 								MethodHook mh = modscriptData.resolver.getMethodHook(sourceName, mn.name.replace("_", ""), mn.desc, mn.isStatic());
 								if(mh!=null && mh.desc.charAt(mh.desc.indexOf(")")-1)==mn.desc.charAt(mn.desc.indexOf(")")-1)){
 									methodMapping.put(sourceName+"."+mh.refactoredName+mh.desc, mh);
+								}
+								else{
+									System.out.println("Failed to load MethodHook : "+sourceName+"."+mn.name.replace("_", "")+mn.desc+" : "+(mn.isStatic()?"static":"nonstatic"));
 								}
 							}
 							else if(hasAnnotation(mn, "Lorg/osrs/injection/bytescript/BDetour;")){
@@ -295,6 +308,9 @@ public class Compiler {
 							
 						}
 					}
+				}
+				else{
+					System.out.println("Failed to load ClassHook : "+sourceName);
 				}
 			}
 			else if(hasAnnotation(cn, "Lorg/osrs/injection/bytescript/BCustomClass;")){

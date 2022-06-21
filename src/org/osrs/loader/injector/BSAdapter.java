@@ -150,6 +150,8 @@ public class BSAdapter extends RemappingClassAdapter{
 		    			}
 		    		}
 		    	}
+		    	if(!owner.equals(newOwner))
+		    		System.out.println("Resolving MethodInsn owner : "+owner+" -> "+newOwner);
 		    	owner = newOwner;
 	    	}
 	    	else{
