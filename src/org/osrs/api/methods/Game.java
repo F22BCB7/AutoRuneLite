@@ -58,6 +58,9 @@ public class Game extends MethodDefinition{
 	public HashTable componentTable(){
 		return client.componentTable();
 	}
+	public HashTable widgetFlags(){
+		return client.widgetFlags();
+	}
 	public int widgetVisibleCycle(){
 		return client.widgetVisibleCycle();
 	}
@@ -246,8 +249,14 @@ public class Game extends MethodDefinition{
 	public CollisionMap[] collisionMaps(){
 		return client.collisionMaps();
 	}
-	public boolean spellSelected(){
-		return client.spellSelected();
+	public boolean componentSelected(){
+		return client.componentSelected();
+	}
+	public int selectedComponentType(){
+		return client.selectedComponentType();
+	}
+	public String selectedComponentMenuAction(){
+		return client.selectedComponentMenuAction();
 	}
 	public int mouseIdleTicks(){
 		return client.mouseIdleTicks();

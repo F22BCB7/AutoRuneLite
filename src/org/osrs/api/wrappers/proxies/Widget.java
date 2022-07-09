@@ -41,6 +41,11 @@ public class Widget extends Node implements org.osrs.api.wrappers.Widget{
 	@Override
 	public int id(){return id;}
 	@BField
+	public int widgetUID;
+	@BGetter
+	@Override
+	public int widgetUID(){return widgetUID;}
+	@BField
 	public int index;
 	@BGetter
 	@Override

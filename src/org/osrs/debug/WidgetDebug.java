@@ -31,6 +31,8 @@ import javax.swing.tree.TreeSelectionModel;
 import org.osrs.api.methods.MethodContext;
 import org.osrs.api.objects.RSInterface;
 import org.osrs.api.objects.RSWidget;
+import org.osrs.api.wrappers.IntegerNode;
+import org.osrs.api.wrappers.Node;
 import org.osrs.injection.FieldHook;
 import org.osrs.util.Data;
 
@@ -99,6 +101,10 @@ public class WidgetDebug {
 								g2.drawString(dataNames[i+currentDataIndex]+" : "+data+" : absoluteX:"+widgetToDisplay.getAbsoluteX(), x, y);
 							else if(dataNames[i+currentDataIndex].equals("relativeY"))
 								g2.drawString(dataNames[i+currentDataIndex]+" : "+data+" : absoluteY:"+widgetToDisplay.getAbsoluteY(), x, y);
+							else if(dataNames[i+currentDataIndex].equals("widgetUID")){
+								Node node = methods.game.widgetFlags().invoke_get(((long)widgetToDisplay.id()<<32)+(long)widgetToDisplay.index());
+								g2.drawString(dataNames[i+currentDataIndex]+" : "+data+" : widgetFlagUID:"+(((long)widgetToDisplay.id()<<32)+(long)widgetToDisplay.index())+" : widgetFlagValue"+(node!=null?(((IntegerNode)node).value()+" : "+((((IntegerNode)node).value() >> 21 & 1))):"null"), x, y);
+							}
 							else
 								g2.drawString(dataNames[i+currentDataIndex]+" : "+data, x, y);
 						}
@@ -588,6 +594,7 @@ public class WidgetDebug {
 		treeModel.reload();
 	}
 	private String[] dataNames = new String[]{
+			"widgetUID",
 			"id",
 			"type",
 			"parentID",

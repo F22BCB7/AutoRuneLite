@@ -2,6 +2,7 @@ package org.osrs.api.wrappers;
 
 public interface Widget extends Node{
 	public boolean hasScript();
+	public int widgetUID();
 	public int id();
 	public int index();
 	public int menuType();

@@ -3,6 +3,7 @@ package org.osrs.api.wrappers.proxies;
 import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BDetour;
 import org.osrs.injection.bytescript.BField;
+import org.osrs.injection.bytescript.BFunction;
 import org.osrs.injection.bytescript.BMethod;
 import org.osrs.injection.bytescript.BGetter;
 import org.osrs.injection.bytescript.BVar;
@@ -37,4 +38,14 @@ public class HashTable implements org.osrs.api.wrappers.HashTable{
 	@BGetter
 	@Override
 	public int index(){return index;}
+	
+	
+
+	@BMethod(name="get")
+	public Node _get(long a){return null;}
+	@BFunction
+	@Override
+	public org.osrs.api.wrappers.Node invoke_get(long a){
+		return _get(a);
+	}
 }

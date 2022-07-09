@@ -28,7 +28,10 @@ public class Magic extends MethodDefinition{
 		return methods.tabs.magic.isSelected();
 	}
 	public boolean isSpellSelected(){
-		return methods.game.spellSelected();
+		return methods.game.componentSelected() && 
+				(methods.game.client().selectedComponentType()==10 ||//combat target spells
+					methods.game.client().selectedComponentType()==32 ||//alch spells
+					methods.game.client().selectedComponentType()==36);//enchant spells
 	}
 	public MagicSpell getSelectedSpell(){
 		if(!isSpellSelected())

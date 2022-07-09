@@ -249,6 +249,13 @@ public class RSWidget extends Interactable implements Graphical{
 		}
 		return false;
 	}
+	public int widgetUID(){
+		Widget w = getInternal();
+		if(w!=null){
+			return w.widgetUID();
+		}
+		return -1;
+	}
 	public int id(){
 		Widget w = getInternal();
 		if(w!=null){

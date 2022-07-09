@@ -84,7 +84,7 @@ public class RSNpc extends RSActor{
 		}
 		return new RSTile(-1, -1, -1);
 	}
-	@Override
+	/*@Override
 	public boolean isHovering(){
 		long uid = calculateMenuUID();
 		long[] uids = methods.game.onCursorUIDs();
@@ -92,7 +92,7 @@ public class RSNpc extends RSActor{
 			if(uids[i]==uid)
 				return true;
 		return super.isHovering();
-	}
+	}*/
 	public long calculateMenuUID() {
 		long val = (0 & 127) << 0 | (0 & 127) << 7 | (1 & 3) << 14 | (indice & 4294967295L) << 17;
 		NPCDefinition def = getDefinition();

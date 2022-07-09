@@ -5,6 +5,7 @@ import org.osrs.api.objects.GameObject;
 import org.osrs.api.objects.GroundItem;
 import org.osrs.api.objects.RSNpc;
 import org.osrs.api.objects.RSPlayer;
+import org.osrs.api.wrappers.HashTable;
 import org.osrs.debug.BankDebug;
 import org.osrs.debug.BoundaryObjDebug;
 import org.osrs.debug.CameraDebug;
@@ -113,6 +114,7 @@ public interface Client extends GameShell{
 	public boolean[] menuShiftClickActions();
 	public int onCursorUIDCount();
 	public long[] onCursorUIDs();
+	public HashTable widgetFlags();
 	public int[] getHoveringPlayerIndexs();
 	public RSPlayer[] getHoveringPlayers();
 	public int[] getHoveringNPCIndexs();
@@ -137,7 +139,7 @@ public interface Client extends GameShell{
 	public int mouseCrosshairState();
 	public CollisionMap[] collisionMaps();
 
-	public boolean spellSelected();
+	public boolean componentSelected();
 	public Deque animableObjectDeque();
 	public Deque projectileDeque();
 	
@@ -151,4 +153,6 @@ public interface Client extends GameShell{
 	public void invoke_addChatMessage(int a, String b, String c, String d);
 	public void runScriptEvent(Object[] args);
 	public void invoke_fireScriptEvent(ScriptEvent a);
+	public int selectedComponentType();
+	public String selectedComponentMenuAction();
 }

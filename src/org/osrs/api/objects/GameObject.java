@@ -296,7 +296,7 @@ public class GameObject extends Interactable implements Modelled{
 	}
 	@Override
 	public boolean isHovering() {
-		long uid = calculateMenuUID();
+		/*long uid = calculateMenuUID();
 		ObjectDefinition def = getDefinition();
 		if(def!=null){
 			if(((int)(uid >>> 14 & 3L)!=2) || def.mapDoorFlag()>0){
@@ -307,7 +307,9 @@ public class GameObject extends Interactable implements Modelled{
 			}
 			else if(model!=null)
 				return model.containsPoint(methods.mouse.getLocation(), location, orientation);
-		}
+		}*/
+		if(model!=null)
+			return model.containsPoint(methods.mouse.getLocation(), location, orientation);
 		return false;
 	}
 	public long calculateMenuUID() {

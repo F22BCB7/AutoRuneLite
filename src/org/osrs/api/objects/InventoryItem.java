@@ -12,6 +12,7 @@ public class InventoryItem extends Interactable implements Graphical{
 	private int id;
 	private int inventoryIndex;
 	private int stacksize;
+	private RSWidget itemWidget;
 	private ItemDefinition definition;
 	public InventoryItem(int id, int stacksize, int index) {
 		methods = ((Client)Data.clientInstance).getMethodContext();
@@ -27,6 +28,9 @@ public class InventoryItem extends Interactable implements Graphical{
 			definition=null;
 		else
 			definition=getDefinition();
+	}
+	public void updateWidget(RSWidget item) {
+		itemWidget = item;
 	}
 	/**
 	 * Returns the Items definition
@@ -145,5 +149,9 @@ public class InventoryItem extends Interactable implements Graphical{
 	public boolean isHovering() {
 		Rectangle bounds = getBounds();
 		return bounds.contains(methods.mouse.getLocation());
+	}
+	public boolean isSelected(){
+		return methods.inventory.hasSelectedItem() &&
+				(itemWidget!=null && itemWidget.borderThickness()==2);
 	}
 }

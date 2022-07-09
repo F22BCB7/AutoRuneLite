@@ -52,8 +52,10 @@ public abstract class Interactable {
 	public boolean click(String action) {
 		if(!isHovering() || !methods.menu.contains(action)){
 			Point pt = getRandomPoint();
-			if(pt.x!=-1 && pt.y!=-1)
+			if(pt.x!=-1 && pt.y!=-1){
 				methods.mouse.move(pt);
+				methods.sleep(methods.calculations.random(500));
+			}
 		}
 		if(isHovering() && methods.menu.contains(action)){
 			return methods.menu.click(action);
@@ -63,8 +65,10 @@ public abstract class Interactable {
 	public boolean click(String action, String option) {
 		if(!isHovering() || !methods.menu.contains(action, option)){
 			Point pt = getRandomPoint();
-			if(pt.x!=-1 && pt.y!=-1)
+			if(pt.x!=-1 && pt.y!=-1){
 				methods.mouse.move(pt);
+				methods.sleep(methods.calculations.random(500));
+			}
 		}
 		if(isHovering() && methods.menu.contains(action, option)){
 			return methods.menu.click(action, option);

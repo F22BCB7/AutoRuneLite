@@ -29,6 +29,8 @@ public class Inventory extends MethodDefinition{
 			if(inventoryItems==null)
 				inventoryItems = new InventoryItem[28];
 			int index=0;
+			RSWidget invWidget = getInventoryItemsWidget();
+			RSWidget[] invItems = invWidget.getChildren();
 			ItemStorage items = getInventoryItemStorage();
 			if(items!=null){
 				int[] ids = items.ids();
@@ -39,6 +41,7 @@ public class Inventory extends MethodDefinition{
 					}
 					else{
 						inventoryItems[index].updateInfo(ids[i], sizes[i]);
+						inventoryItems[index].updateWidget(invItems[index]);
 					} 
 					index++;
 				}
@@ -49,6 +52,7 @@ public class Inventory extends MethodDefinition{
 				}
 				else{
 					inventoryItems[i].updateInfo(-1, 0);
+					inventoryItems[index].updateWidget(null);
 				}
 			}
 		}
@@ -379,7 +383,12 @@ public class Inventory extends MethodDefinition{
 	 */
 	public int getSelectedIndex(){
 		if(hasSelectedItem()){
-			return ((Client)Data.clientInstance).lastSelectedItemIndex();
+			//pre r206
+			//return ((Client)Data.clientInstance).lastSelectedItemIndex();
+			for(InventoryItem item : inventoryItems){
+				if(item!=null && item.isSelected())
+					return item.getIndex();
+			}
 		}
 		return -1;
 	}
@@ -389,7 +398,12 @@ public class Inventory extends MethodDefinition{
 	 */
 	public InventoryItem getSelectedItem(){
 		if(hasSelectedItem()){
-			return getItemAtIndex(((Client)Data.clientInstance).lastSelectedItemIndex());
+			//pre r206
+			//return getItemAtIndex(((Client)Data.clientInstance).lastSelectedItemIndex());
+			for(InventoryItem item : inventoryItems){
+				if(item!=null && item.isSelected())
+					return item;
+			}
 		}
 		return null;
 	}
@@ -398,7 +412,13 @@ public class Inventory extends MethodDefinition{
 	 * @return
 	 */
 	public boolean hasSelectedItem(){
-		return ((Client)Data.clientInstance).itemSelectionState()==1;
+		//pre r206
+		//return ((Client)Data.clientInstance).itemSelectionState()==1;
+		
+		if(methods.game.componentSelected()){
+			return methods.game.selectedComponentType() == 63;
+		}
+		return false;
 	}
 	public RSWidget getInventoryItemsWidget(){
 		if(methods.grandExchange.isGEInventoryOpen()){
@@ -425,13 +445,23 @@ public class Inventory extends MethodDefinition{
 			return inventoryWidget;
 		findInventoryLoop:for(RSInterface i : methods.widgets.getAll()){
 			if(i!=null){
-				for(RSWidget ic : i.getChildren()){
-					if(ic!=null){
-						if(ic.type()==2){
-							inventoryWidget = ic;
+				RSWidget[] children = i.getChildren();
+				if(children!=null && children.length==1){
+					for(RSWidget child : children){
+						boolean inv=false;
+						RSWidget[] items = child.getChildren();
+						if(items!=null && items.length==28){
+							for(RSWidget item : items){
+								inv = (item!=null && item.type()==5);
+								break;
+							}
+						}
+						if(inv){
+							inventoryWidget = child;
 							break findInventoryLoop;
 						}
 					}
+					
 				}
 			}
 		}

@@ -22,7 +22,7 @@ public class InventoryDebug {
 				continue;
 			Rectangle r = item.getBounds();
 			g.drawRect(r.x, r.y, r.width, r.height);
-			g.drawString((methods.game.itemSelectionState()==1?(methods.game.lastSelectedItemIndex()==item.getIndex()?"*":""):"")+item.getID(), r.x, r.y+20);
+			g.drawString((item.isSelected()?"*":"")+item.getID(), r.x, r.y+20);
 		}
 		return g;
 	}

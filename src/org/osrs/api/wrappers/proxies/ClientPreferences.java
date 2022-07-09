@@ -4,6 +4,7 @@ import org.osrs.injection.bytescript.BClass;
 import org.osrs.injection.bytescript.BField;
 import org.osrs.injection.bytescript.BGetter;
 import org.osrs.injection.bytescript.BGetterDetour;
+import org.osrs.injection.bytescript.BSetterDetour;
 
 @BClass
 public class ClientPreferences implements org.osrs.api.wrappers.ClientPreferences{
@@ -16,6 +17,7 @@ public class ClientPreferences implements org.osrs.api.wrappers.ClientPreference
 	public boolean get_disableRoofs(){
 		return true;//TODO implement ClientSettings (org.osrs.util.Settings)
 	}
+	
 	@BField
 	public boolean disableLoadingAudio;
 	@BGetter

@@ -240,7 +240,7 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 			equipmentDebug = new EquipmentDebug(Client.clientInstance.getMethodContext());
 		return equipmentDebug;
 	}
-
+	
 	@BField
 	public static Client clientInstance;
 	@BGetter
@@ -517,6 +517,11 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@BGetter
 	@Override
 	public long[] onCursorUIDs(){return onCursorUIDs;}
+	@BField
+	public static HashTable widgetFlags;
+	@BGetter
+	@Override
+	public org.osrs.api.wrappers.HashTable widgetFlags(){return widgetFlags;}
 	@BFunction
 	@Override
 	public int[] getHoveringPlayerIndexs(){
@@ -740,10 +745,20 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	public org.osrs.api.wrappers.CollisionMap[] collisionMaps(){return collisionMaps;}
 
 	@BField
-	public static boolean spellSelected;
+	public static boolean componentSelected;
 	@BGetter
 	@Override
-	public boolean spellSelected(){return spellSelected;}
+	public boolean componentSelected(){return componentSelected;}
+	@BField
+	public static int selectedComponentType;
+	@BGetter
+	@Override
+	public int selectedComponentType(){return selectedComponentType;}
+	@BField
+	public static String selectedComponentMenuAction;
+	@BGetter
+	@Override
+	public String selectedComponentMenuAction(){return selectedComponentMenuAction;}
 
 	@BField
 	public static Deque animableObjectDeque;
