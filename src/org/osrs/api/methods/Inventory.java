@@ -41,7 +41,7 @@ public class Inventory extends MethodDefinition{
 					}
 					else{
 						inventoryItems[index].updateInfo(ids[i], sizes[i]);
-						inventoryItems[index].updateWidget(invItems[index]);
+						inventoryItems[index].updateWidget(invItems.length>index?invItems[index]:null);
 					} 
 					index++;
 				}

@@ -27,7 +27,7 @@ public class MouseWheel extends MethodDefinition{
 			}
 		}
 	}
-	public Component getTarget(){
-		return (Component)methods.botInstance;
+	private Component getTarget(){
+		return (Component)Data.clientInstance;
 	}
 }
