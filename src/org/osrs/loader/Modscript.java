@@ -58,11 +58,14 @@ public class Modscript {
 
 		/**Hotfix hooks**/
 		for(ClassHook ch : classHooks){
-			if(ch.refactoredName.equals("Widget")){
+			/*if(ch.refactoredName.equals("Widget")){
 				for(FieldHook fh : ch.fieldHooks){
 					if(fh.refactoredName.equals("spriteID"))
 						fh.multiplier = (int)-1629333209;
 				}
+			}*/
+			if(ch.refactoredName.equals("Projectile")){
+				ch.fieldHooks.add(new FieldHook(ch.obfuscatedName, "x", "x", "D", -1));
 			}
 		}
 		/****************/
