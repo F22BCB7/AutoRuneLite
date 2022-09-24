@@ -26,5 +26,5 @@ public interface MouseListener{
 	public void mousePressed(MouseEvent e);
 	public void mouseReleased(MouseEvent e);
 	public void sendEvent(MouseEvent e);
-	public void paint(Graphics g);
+	public void paintMouse(Graphics g);
 }

@@ -72,6 +72,7 @@ public class Compiler {
 					cn.accept(adapter);
 					ClassHook hook = modscriptData.resolver.getObfusctedClassHook(cn.name);
 					if(hook!=null && classMapping.containsKey(hook.refactoredName)){
+						//System.out.println("Adding interface to class : "+hook.obfuscatedName+"("+hook.refactoredName+") : "+"org/osrs/api/wrappers/" + hook.refactoredName);
 						newClass.interfaces.add("org/osrs/api/wrappers/" + hook.refactoredName);
 					}
 					newNodes.add(newClass);
@@ -173,9 +174,10 @@ public class Compiler {
 				ClassHook ch = modscriptData.resolver.getClassHook(sourceName);
 				if(ch!=null){
 					classMapping.put(sourceName, ch);
-					System.out.println("Loaded BClass : "+sourceName);
+					//System.out.println("Loading BClass : "+sourceName);
 					ClassNode clientNode = getClientClassNode(ch.obfuscatedName);
 					if(clientNode!=null){
+						//System.out.println("Loaded BClass : "+sourceName+" : "+ch.obfuscatedName);
 						for(FieldNode fn : cn.fields){
 							if(hasAnnotation(fn, "Lorg/osrs/injection/bytescript/BVar;")){
 								if(fn.desc.contains("org/osrs/api/wrappers/proxies/"))
@@ -227,8 +229,9 @@ public class Compiler {
 							}
 							else if(hasAnnotation(mn, "Lorg/osrs/injection/bytescript/BDetour;")){
 								MethodHook mh = modscriptData.resolver.getMethodHook(sourceName, mn.name, mn.desc, mn.isStatic());
-								if(mh!=null && mh.desc.charAt(mh.desc.indexOf(")")-1)==mn.desc.charAt(mn.desc.indexOf(")")-1)){
+								if(mh!=null && mh.desc.equals(mn.desc)){
 									clientNode.methods.add(mn);
+									System.out.println("Adding detour to list : "+mh.owner+"."+mh.obfuscatedName+mh.desc+" : "+mh.owner+"."+mh.refactoredName+mh.desc);
 									methodDetours.put(mh.owner+"."+mh.obfuscatedName+mh.desc, mn);
 								}
 							}
@@ -286,6 +289,7 @@ public class Compiler {
 											}
 										}
 									}
+									//System.out.println("Injected getter for "+fh2.refactoredName+" : "+clientNode.name+"."+mn.name+mn.desc);
 									clientNode.methods.add(mn);
 								}
 							}
@@ -363,13 +367,14 @@ public class Compiler {
 			}
 			else{//Loading via IDE
 				// Filter .class files.
+				System.out.println("Loading file mods... "+root.toString());
 				File[] files = new File(root.toURI()).listFiles(new FilenameFilter() {
 					public boolean accept(File dir, String name) {
 						return name.endsWith(".class");
 					}
 				});
-				System.out.println("Loaded "+files.length+" file mods...");
-				for (File file : new File(root.getFile()).listFiles(new FilenameFilter(){public boolean accept(File dir, String name){return name.endsWith(".class");}})) {
+				System.out.println("Loaded "+files.length+" file mods... "+root.toString()+" ...");
+				for (File file : new File(root.getFile().replaceAll("%20", " ")).listFiles(new FilenameFilter(){public boolean accept(File dir, String name){return name.endsWith(".class");}})) {
 					try{
 						InputStream in = new FileInputStream(file);
 						ClassNode cn = new ClassNode();

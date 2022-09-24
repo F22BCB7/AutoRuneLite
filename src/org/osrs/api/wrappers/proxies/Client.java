@@ -503,6 +503,11 @@ public class Client extends GameShell implements org.osrs.api.wrappers.Client{
 	@Override
 	public int[] menuTertiaryArgs(){return menuTertiaryArgs;}
 	@BField
+	public static int[] menuQuaternaryArgs;
+	@BGetter
+	@Override
+	public int[] menuQuaternaryArgs(){return menuQuaternaryArgs;}
+	@BField
 	public static boolean[] menuShiftClickActions;
 	@BGetter
 	@Override

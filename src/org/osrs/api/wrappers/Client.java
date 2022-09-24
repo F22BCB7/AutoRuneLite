@@ -111,6 +111,7 @@ public interface Client extends GameShell{
 	public int[] menuPrimaryArgs();
 	public int[] menuSecondaryArgs();
 	public int[] menuTertiaryArgs();
+	public int[] menuQuaternaryArgs();
 	public boolean[] menuShiftClickActions();
 	public int onCursorUIDCount();
 	public long[] onCursorUIDs();

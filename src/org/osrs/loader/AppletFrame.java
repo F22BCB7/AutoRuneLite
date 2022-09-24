@@ -269,10 +269,9 @@ public class AppletFrame extends JFrame implements AppletStub, AppletContext, Co
 		}
 	}
 	public void appletResize(int arg0, int arg1) {
-		if(Data.clientInstance!=null){
-			Canvas canvas = (Canvas) ((GameShell)Data.clientInstance).canvas();
-			if(canvas!=null)
-				canvas.applySize(arg0, arg1);
+		if(Data.clientInstance!=null) {
+			  Canvas canvas = (Canvas) ((GameShell)Data.clientInstance).canvas();
+			  if(canvas!=null) canvas.applySize(arg0, arg1);
 		}
 	}
 	public static Applet getCurrentApplet(){

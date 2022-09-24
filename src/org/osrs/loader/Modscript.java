@@ -64,9 +64,6 @@ public class Modscript {
 						fh.multiplier = (int)-1629333209;
 				}
 			}*/
-			if(ch.refactoredName.equals("Projectile")){
-				ch.fieldHooks.add(new FieldHook(ch.obfuscatedName, "x", "x", "D", -1));
-			}
 		}
 		/****************/
 			

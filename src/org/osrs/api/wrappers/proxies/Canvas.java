@@ -170,7 +170,7 @@ public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Can
 			}
 		}
 		
-		Client.mouseListener.paint(g);
+		Client.mouseListener.paintMouse(g);
 		
 		super.getGraphics().drawImage(gameImage, 0, 0, null);
 		return g;

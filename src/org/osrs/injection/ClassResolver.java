@@ -3,6 +3,7 @@ package org.osrs.injection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.objectweb.asm.Wildcard;
 import org.osrs.loader.Modscript;
 
 public class ClassResolver {
@@ -443,7 +444,7 @@ public class ClassResolver {
     public MethodHook getObfuscatedMethodHook(String obfuscatedOwner, String obfuscatedName, String wildcardDesc, boolean isStatic){
     	if(isStatic){
     		for(MethodHook mh : modscript.staticMethods){
-				if(mh.owner.equals(obfuscatedOwner) && mh.obfuscatedName.equals(obfuscatedName)){
+				if(mh.owner.equals(obfuscatedOwner) && mh.obfuscatedName.equals(obfuscatedName) && new Wildcard(wildcardDesc).matches(mh.desc)){
 					new2old.put(obfuscatedOwner+"."+obfuscatedName+wildcardDesc, mh.obfuscatedName);
 					return mh;
 				}

@@ -9,5 +9,5 @@ public interface AnimableObject {
 	public int startCycle();
 	public int currentFrameIndex();
 	public int currentFrameLength();
-	public boolean isFinished();
+	public boolean finished();
 }

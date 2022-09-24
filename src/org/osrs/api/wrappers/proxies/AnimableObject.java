@@ -62,11 +62,11 @@ public class AnimableObject extends RenderableNode implements org.osrs.api.wrapp
 	}
 
 	@BField
-	public boolean isFinished;
+	public boolean finished;
 	@BGetter
 	@Override
-	public boolean isFinished() {
-		return isFinished;
+	public boolean finished() {
+		return finished;
 	}
 
 }

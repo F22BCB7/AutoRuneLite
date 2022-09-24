@@ -276,7 +276,7 @@ public class MouseListener implements org.osrs.api.wrappers.MouseListener{
 	}
 	@BFunction
 	@Override
-	public void paint(Graphics g){
+	public void paintMouse(Graphics g){
 		if(isPressed())
 			g.setColor(new Color(255, 127, 0, 155));
 		else
