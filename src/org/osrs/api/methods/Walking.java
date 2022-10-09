@@ -263,9 +263,11 @@ public class Walking extends MethodDefinition{
 			RSPlayer pl = methods.players.getLocalPlayer();
 			RSTile lastTile = pl.getLocation();
 			int randomReturn = new Random().nextInt(3)+5;
+			int randomRun = new Random().nextInt(50)+50;
 			this.tile = path[path.length - 1];
 			while (methods.calculations.distanceTo(tile) > distanceTo && !done){
-				if(!methods.walking.isRunEnabled() && methods.walking.getEnergy()>50){
+				if(!methods.walking.isRunEnabled() && methods.walking.getEnergy()>randomRun){
+					System.out.println("[Walker] Turning on run...");
 					methods.walking.setRun(true);
 					for(int i=0;i<20;++i){
 						if(methods.walking.isRunEnabled())
@@ -275,14 +277,20 @@ public class Walking extends MethodDefinition{
 				}
 				if (!pl.isMoving() || !hasDestination() || methods.calculations.distanceTo(methods.walking.getDestination()) < randomReturn) {
 					RSTile nextTile = nextTile(path);
-					if(nextTile.equals(new RSTile(-1, -1)))
-						continue;
-					if (hasDestination() && methods.calculations.distanceBetween(getDestination(), nextTile) <= distanceTo) {
+					if(nextTile.equals(new RSTile(-1, -1))) {
+						System.out.println("[Walker] Invalid next tile...");
 						continue;
 					}
-					walkTile(nextTile);
-					if(nextTile.equals(tile))
+					if (hasDestination() && methods.calculations.distanceBetween(getDestination(), nextTile) <= distanceTo) {
+						System.out.println("[Walker] hasDestination and distanceBetween(dest, next)<=distTo...");
+						continue;
+					}
+					System.out.println("[Walker] Walking next tile...");
+					walkTileOnMap(nextTile);
+					if(nextTile.equals(tile)) {
+						System.out.println("[Walker] Tile walked is final destination of path...");
 						done = true;
+					}
 					if(!waitToMove(new Random().nextInt(400)+800)){
 						System.out.println("[Walker] Failed to walk to tile "+nextTile.toString());
 						return;
@@ -301,6 +309,7 @@ public class Walking extends MethodDefinition{
 				methods.sleep(new Random().nextInt(20)+20);
 			}
 			if (methods.calculations.distanceTo(tile) <= distanceTo) {
+				System.out.println("[Walker] Finished walking...");
 				done = true;
 			}
 		}

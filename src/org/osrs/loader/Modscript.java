@@ -57,13 +57,19 @@ public class Modscript {
 
 
 		/**Hotfix hooks**/
+		for(FieldHook fh : staticFields) {
+			if(fh.refactoredName.equals("widgetVisibleCycle")) {
+				System.out.println("Correcting widgetVisibleCycle multiplier...");
+				fh.multiplier = (int)-1008227777;
+			}
+		}
 		for(ClassHook ch : classHooks){
-			/*if(ch.refactoredName.equals("Widget")){
+			if(ch.refactoredName.equals("Widget")){
 				for(FieldHook fh : ch.fieldHooks){
 					if(fh.refactoredName.equals("spriteID"))
-						fh.multiplier = (int)-1629333209;
+						fh.multiplier = (int)-549762913;
 				}
-			}*/
+			}
 		}
 		/****************/
 			

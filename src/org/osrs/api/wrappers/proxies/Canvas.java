@@ -52,22 +52,24 @@ public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Can
 			gameImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
 		
 		Graphics g = gameImage.getGraphics();
-		g.setColor(Color.ORANGE);
-		g.drawString("AutoRuneLite v0.2", 15, 15);
-
-		int gameCycle = Client.clientInstance.gameCycle();
-		Widget[][] allWidgets = Client.widgets;
-		if(allWidgets!=null){
-			for(Widget[] widgets : allWidgets){
-				if(widgets!=null){
-					for(Widget widget : widgets){
-						if(widget!=null){
-							widget.setDisplayed(widget.displayCycle()>=gameCycle);
-							Widget[] children = widget.children;
-							if(children!=null){
-								for(Widget child : children){
-									if(child!=null){
-										child.setDisplayed(child.displayCycle()>=gameCycle);
+		try {
+			g.setColor(Color.ORANGE);
+			g.drawString("AutoRuneLite v0.2", 15, 15);
+	
+			int gameCycle = Client.clientInstance.gameCycle();
+			Widget[][] allWidgets = Client.widgets;
+			if(allWidgets!=null){
+				for(Widget[] widgets : allWidgets){
+					if(widgets!=null){
+						for(Widget widget : widgets){
+							if(widget!=null){
+								widget.setDisplayed(widget.displayCycle()>=gameCycle);
+								Widget[] children = widget.children;
+								if(children!=null){
+									for(Widget child : children){
+										if(child!=null){
+											child.setDisplayed(child.displayCycle()>=gameCycle);
+										}
 									}
 								}
 							}
@@ -75,104 +77,107 @@ public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Can
 					}
 				}
 			}
+			if(Client.clientInstance.getMethodContext()!=null){
+				WidgetDebug widgets = Client.clientInstance.getWidgetDebug();
+				if(widgets!=null){
+					if(widgets.debugger.isVisible())
+						widgets.paint(g);
+				}
+	
+				g.setColor(Color.ORANGE);
+				InventoryDebug inventory = Client.clientInstance.getInventoryDebug();
+				if(inventory!=null){
+					inventory.paint(g);
+				}
+	
+				PathDebug paths = Client.clientInstance.getPathDebug();
+				if(paths!=null){
+					paths.paint(g);
+				}
+	
+				TileDebug tile = Client.clientInstance.getTileDebug();
+				if(tile!=null){
+					tile.paint(g);
+				}
+				
+				CameraDebug camera = Client.clientInstance.getCameraDebug();
+				if(camera!=null){
+					camera.paint(g);
+				}
+				
+				LocationDebug location = Client.clientInstance.getLocationDebug();
+				if(location!=null){
+					location.paint(g);
+				}
+	
+				MouseDebug mouse = Client.clientInstance.getMouseDebug();
+				if(mouse!=null){
+					mouse.paint(g);
+				}
+				
+				MenuDebug menu = Client.clientInstance.getMenuDebug();
+				if(menu!=null){
+					menu.paint(g);
+				}
+				
+				NPCDebug npcs = Client.clientInstance.getNPCDebug();
+				if(npcs!=null){
+					npcs.paint(g);
+				}
+	
+				PlayerDebug players = Client.clientInstance.getPlayerDebug();
+				if(players!=null){
+					players.paint(g);
+				}
+				
+				BoundaryObjDebug boundary = Client.clientInstance.getBoundaryObjDebug();
+				if(boundary!=null){
+					boundary.paint(g);
+				}
+				
+				FloorDecDebug floor = Client.clientInstance.getFloorDecDebug();
+				if(floor!=null){
+					floor.paint(g);
+				}
+				
+				InteractableObjDebug interactable = Client.clientInstance.getInteractableObjDebug();
+				if(interactable!=null){
+					interactable.paint(g);
+				}
+				
+				WallDecDebug wall = Client.clientInstance.getWallDecDebug();
+				if(wall!=null){
+					wall.paint(g);
+				}
+	
+				GroundItemDebug groundItems = Client.clientInstance.getGroundItemDebug();
+				if(groundItems!=null){
+					groundItems.paint(g);
+				}
+	
+				BankDebug bank = Client.clientInstance.getBankDebug();
+				if(bank!=null){
+					bank.paint(g);
+				}
+	
+				EquipmentDebug equip = Client.clientInstance.getEquipmentDebug();
+				if(equip!=null){
+					equip.paint(g);
+				}
+			}
+			if(Data.currentScript!=null){
+				if(Data.currentScript instanceof org.osrs.script.listeners.PaintListener){
+					((org.osrs.script.listeners.PaintListener)Data.currentScript).paint(g);
+				}
+			}
+			
+			Client.mouseListener.paintMouse(g);
+			
+			super.getGraphics().drawImage(gameImage, 0, 0, null);
 		}
-		if(Client.clientInstance.getMethodContext()!=null){
-			WidgetDebug widgets = Client.clientInstance.getWidgetDebug();
-			if(widgets!=null){
-				if(widgets.debugger.isVisible())
-					widgets.paint(g);
-			}
-
-			g.setColor(Color.ORANGE);
-			InventoryDebug inventory = Client.clientInstance.getInventoryDebug();
-			if(inventory!=null){
-				inventory.paint(g);
-			}
-
-			PathDebug paths = Client.clientInstance.getPathDebug();
-			if(paths!=null){
-				paths.paint(g);
-			}
-
-			TileDebug tile = Client.clientInstance.getTileDebug();
-			if(tile!=null){
-				tile.paint(g);
-			}
-			
-			CameraDebug camera = Client.clientInstance.getCameraDebug();
-			if(camera!=null){
-				camera.paint(g);
-			}
-			
-			LocationDebug location = Client.clientInstance.getLocationDebug();
-			if(location!=null){
-				location.paint(g);
-			}
-
-			MouseDebug mouse = Client.clientInstance.getMouseDebug();
-			if(mouse!=null){
-				mouse.paint(g);
-			}
-			
-			MenuDebug menu = Client.clientInstance.getMenuDebug();
-			if(menu!=null){
-				menu.paint(g);
-			}
-			
-			NPCDebug npcs = Client.clientInstance.getNPCDebug();
-			if(npcs!=null){
-				npcs.paint(g);
-			}
-
-			PlayerDebug players = Client.clientInstance.getPlayerDebug();
-			if(players!=null){
-				players.paint(g);
-			}
-			
-			BoundaryObjDebug boundary = Client.clientInstance.getBoundaryObjDebug();
-			if(boundary!=null){
-				boundary.paint(g);
-			}
-			
-			FloorDecDebug floor = Client.clientInstance.getFloorDecDebug();
-			if(floor!=null){
-				floor.paint(g);
-			}
-			
-			InteractableObjDebug interactable = Client.clientInstance.getInteractableObjDebug();
-			if(interactable!=null){
-				interactable.paint(g);
-			}
-			
-			WallDecDebug wall = Client.clientInstance.getWallDecDebug();
-			if(wall!=null){
-				wall.paint(g);
-			}
-
-			GroundItemDebug groundItems = Client.clientInstance.getGroundItemDebug();
-			if(groundItems!=null){
-				groundItems.paint(g);
-			}
-
-			BankDebug bank = Client.clientInstance.getBankDebug();
-			if(bank!=null){
-				bank.paint(g);
-			}
-
-			EquipmentDebug equip = Client.clientInstance.getEquipmentDebug();
-			if(equip!=null){
-				equip.paint(g);
-			}
+		catch(Exception e) {
+			e.printStackTrace();
 		}
-		if(Data.currentScript!=null){
-			if(Data.currentScript instanceof org.osrs.script.listeners.PaintListener){
-				((org.osrs.script.listeners.PaintListener)Data.currentScript).paint(g);
-			}
-		}
-		
-		Client.mouseListener.paintMouse(g);
-		
-		super.getGraphics().drawImage(gameImage, 0, 0, null);
 		return g;
 	}
 }

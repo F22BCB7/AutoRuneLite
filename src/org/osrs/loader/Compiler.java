@@ -208,10 +208,12 @@ public class Compiler {
 							}
 							String oldReturnType = desc.substring(desc.indexOf(")")+1, desc.length());
 							String newReturnType = modscriptData.resolver.getObfuscatedType(oldReturnType);
+							//System.out.println(oldReturnType+" -> "+newReturnType);
 							String newDesc = "(";
 							for(String s : newParams)
 								newDesc+=s;
 							newDesc+=")"+newReturnType;
+							//System.out.println(mn.desc+" -> "+newDesc);
 							mn.desc = newDesc;
 							
 							if(hasAnnotation(mn, "Lorg/osrs/injection/bytescript/BFunction;")){
@@ -223,16 +225,19 @@ public class Compiler {
 								if(mh!=null && mh.desc.charAt(mh.desc.indexOf(")")-1)==mn.desc.charAt(mn.desc.indexOf(")")-1)){
 									methodMapping.put(sourceName+"."+mh.refactoredName+mh.desc, mh);
 								}
-								else{
+								else if(mh==null){
 									System.out.println("Failed to load MethodHook : "+sourceName+"."+mn.name.replace("_", "")+mn.desc+" : "+(mn.isStatic()?"static":"nonstatic"));
 								}
 							}
 							else if(hasAnnotation(mn, "Lorg/osrs/injection/bytescript/BDetour;")){
 								MethodHook mh = modscriptData.resolver.getMethodHook(sourceName, mn.name, mn.desc, mn.isStatic());
-								if(mh!=null && mh.desc.equals(mn.desc)){
+								if(mh!=null && mh.desc.charAt(mh.desc.indexOf(")")-1)==mn.desc.charAt(mn.desc.indexOf(")")-1)){
 									clientNode.methods.add(mn);
-									System.out.println("Adding detour to list : "+mh.owner+"."+mh.obfuscatedName+mh.desc+" : "+mh.owner+"."+mh.refactoredName+mh.desc);
+									//System.out.println("Adding detour to list : "+mh.owner+"."+mh.obfuscatedName+mh.desc+" : "+mh.owner+"."+mh.refactoredName+mh.desc);
 									methodDetours.put(mh.owner+"."+mh.obfuscatedName+mh.desc, mn);
+								}
+								else if(mh==null){
+									System.out.println("Failed to load MethodHook Detour : "+sourceName+"."+mn.name+mn.desc+" : "+(mn.isStatic()?"static":"nonstatic"));
 								}
 							}
 							else if(hasAnnotation(mn, "Lorg/osrs/injection/bytescript/BGetter;")){

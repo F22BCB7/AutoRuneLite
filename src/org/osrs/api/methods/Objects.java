@@ -23,7 +23,7 @@ public class Objects extends MethodDefinition{
 	public GameObject[] getAllObjects(){
 		ArrayList<GameObject> objects = new ArrayList<GameObject>();
 		int plane=0, x=0, y=0;
-		Region region = ((Client)methods.botInstance).region();
+		Region region = methods.game.region();
 		for(Tile[][] map : region.tiles()){
 			for(Tile[] row : map){
 				for(Tile tile : row){
@@ -69,15 +69,15 @@ public class Objects extends MethodDefinition{
 		return getAllAt(t.getX(), t.getY(), t.getPlane());
 	}
 	public GameObject[] getAllAt(int x, int y){
-		return getAllAt(x, y, ((Client)methods.botInstance).currentPlane());
+		return getAllAt(x, y, methods.game.currentPlane());
 	}
 	public GameObject[] getAllAt(int x, int y, int plane){
         ArrayList<GameObject> objects = new ArrayList<GameObject>();
-    	int localX = x -((Client)methods.botInstance).mapBaseX();
-    	int localY = y -((Client)methods.botInstance).mapBaseY();
+    	int localX = x -methods.game.mapBaseX();
+    	int localY = y -methods.game.mapBaseY();
     	if(localX<0 || localX>=104 || localY<0 || localY>=104)
     		return new GameObject[]{};
-    	Region region =((Client)methods.botInstance).region();
+    	Region region =methods.game.region();
     	if(region!=null){
     		Tile tile = region.tiles()[plane][localX][localY];
     		if(tile!=null){
@@ -115,7 +115,7 @@ public class Objects extends MethodDefinition{
 		int plane = t.getPlane();
 		int localX = t.getLocalX();
 		int localY = t.getLocalY();
-    	Region region =((Client)methods.botInstance).region();
+    	Region region =methods.game.region();
 		Tile tile = region.tiles()[plane][localX][localY];
 		if (tile == null) return null;
 		for (InteractableObject io : tile.objects()) {
@@ -135,12 +135,12 @@ public class Objects extends MethodDefinition{
 		return getObjectAt(t.getX(), t.getY(), t.getPlane());
 	}
 	public GameObject getObjectAt(int x, int y){
-		return getObjectAt(x, y,((Client)methods.botInstance).currentPlane());
+		return getObjectAt(x, y,methods.game.currentPlane());
 	}
 	public GameObject getObjectAt(int x, int y, int plane){
-    	int localX = x -((Client)methods.botInstance).mapBaseX();
-    	int localY = y -((Client)methods.botInstance).mapBaseY();
-    	Region region =((Client)methods.botInstance).region();
+    	int localX = x -methods.game.mapBaseX();
+    	int localY = y -methods.game.mapBaseY();
+    	Region region =methods.game.region();
     	if(region!=null && localX<104 && localY<104 && localX>=0 && localY>=0){
     		Tile tile = region.tiles()[plane][localX][localY];
     		if(tile!=null){
@@ -175,31 +175,31 @@ public class Objects extends MethodDefinition{
 	public GameObject[] getObjectsByID(long id){
 		ArrayList<GameObject> objects = new ArrayList<GameObject>();
 		int plane=0, x=0, y=0;
-		Region region = ((Client)methods.botInstance).region();
+		Region region = methods.game.region();
 		for(Tile[][] map : region.tiles()){
 			for(Tile[] row : map){
 				for(Tile tile : row){
 					if(tile!=null){
 						for(InteractableObject io : tile.objects()){
-							GameObject go = new GameObject(io, new RSTile(x+((Client)methods.botInstance).mapBaseX(), y+((Client)methods.botInstance).mapBaseY(), plane));
+							GameObject go = new GameObject(io, new RSTile(x+methods.game.mapBaseX(), y+methods.game.mapBaseY(), plane));
 							if(id==go.getID())
 								objects.add(go);
 						}
 						BoundaryObject bo = tile.boundary();
 						if(bo!=null){
-							GameObject go = new GameObject(bo, new RSTile(x+((Client)methods.botInstance).mapBaseX(), y+((Client)methods.botInstance).mapBaseY(), plane));
+							GameObject go = new GameObject(bo, new RSTile(x+methods.game.mapBaseX(), y+methods.game.mapBaseY(), plane));
 							if(id==go.getID())
 								objects.add(go);
 						}
 						FloorDecoration fo = tile.floor();
 						if(fo!=null){
-							GameObject go = new GameObject(fo, new RSTile(x+((Client)methods.botInstance).mapBaseX(), y+((Client)methods.botInstance).mapBaseY(), plane));
+							GameObject go = new GameObject(fo, new RSTile(x+methods.game.mapBaseX(), y+methods.game.mapBaseY(), plane));
 							if(id==go.getID())
 								objects.add(go);
 						}
 						WallDecoration wo = tile.wall();
 						if(wo!=null){
-							GameObject go = new GameObject(wo, new RSTile(x+((Client)methods.botInstance).mapBaseX(), y+((Client)methods.botInstance).mapBaseY(), plane));
+							GameObject go = new GameObject(wo, new RSTile(x+methods.game.mapBaseX(), y+methods.game.mapBaseY(), plane));
 							if(id==go.getID())
 								objects.add(go);
 						}
@@ -228,13 +228,13 @@ public class Objects extends MethodDefinition{
 	public GameObject[] getObjectsByID(long...ids){
 		ArrayList<GameObject> objects = new ArrayList<GameObject>();
 		int plane=0, x=0, y=0;
-		Region region = ((Client)methods.botInstance).region();
+		Region region = methods.game.region();
 		for(Tile[][] map : region.tiles()){
 			for(Tile[] row : map){
 				for(Tile tile : row){
 					if(tile!=null){
 						for(InteractableObject io : tile.objects()){
-							GameObject go = new GameObject(io, new RSTile(x+((Client)methods.botInstance).mapBaseX(), y+((Client)methods.botInstance).mapBaseY(), plane));
+							GameObject go = new GameObject(io, new RSTile(x+methods.game.mapBaseX(), y+methods.game.mapBaseY(), plane));
 							for(long id : ids){
 								if(id==go.getID()){
 									objects.add(go);
@@ -244,7 +244,7 @@ public class Objects extends MethodDefinition{
 						}
 						BoundaryObject bo = tile.boundary();
 						if(bo!=null){
-							GameObject go = new GameObject(bo, new RSTile(x+((Client)methods.botInstance).mapBaseX(), y+((Client)methods.botInstance).mapBaseY(), plane));
+							GameObject go = new GameObject(bo, new RSTile(x+methods.game.mapBaseX(), y+methods.game.mapBaseY(), plane));
 							for(long id : ids){
 								if(id==go.getID()){
 									objects.add(go);
@@ -254,7 +254,7 @@ public class Objects extends MethodDefinition{
 						}
 						FloorDecoration fo = tile.floor();
 						if(fo!=null){
-							GameObject go = new GameObject(fo, new RSTile(x+((Client)methods.botInstance).mapBaseX(), y+((Client)methods.botInstance).mapBaseY(), plane));
+							GameObject go = new GameObject(fo, new RSTile(x+methods.game.mapBaseX(), y+methods.game.mapBaseY(), plane));
 							for(long id : ids){
 								if(id==go.getID()){
 									objects.add(go);
@@ -264,7 +264,7 @@ public class Objects extends MethodDefinition{
 						}
 						WallDecoration wo = tile.wall();
 						if(wo!=null){
-							GameObject go = new GameObject(wo, new RSTile(x+((Client)methods.botInstance).mapBaseX(), y+((Client)methods.botInstance).mapBaseY(), plane));
+							GameObject go = new GameObject(wo, new RSTile(x+methods.game.mapBaseX(), y+methods.game.mapBaseY(), plane));
 							for(long id : ids){
 								if(id==go.getID()){
 									objects.add(go);
@@ -302,8 +302,8 @@ public class Objects extends MethodDefinition{
 		GameObject closestObj = null;
 		double closestDistance = 999;
 		RSTile closestTile = null;
-		int baseX=((Client)methods.botInstance).mapBaseX(), baseY=((Client)methods.botInstance).mapBaseY();
-		int plane =((Client)methods.botInstance).currentPlane();
+		int baseX=methods.game.mapBaseX(), baseY=methods.game.mapBaseY();
+		int plane =methods.game.currentPlane();
 		for(int localX=0;localX<104;++localX){
 			for(int localY=0;localY<104;++localY){
 				int x = localX+baseX;
@@ -350,8 +350,8 @@ public class Objects extends MethodDefinition{
 		GameObject closestObj = null;
 		double closestDistance = 999;
 		RSTile closestTile = null;
-		int baseX=((Client)methods.botInstance).mapBaseX(), baseY=((Client)methods.botInstance).mapBaseY();
-		int plane =((Client)methods.botInstance).currentPlane();
+		int baseX=methods.game.mapBaseX(), baseY=methods.game.mapBaseY();
+		int plane =methods.game.currentPlane();
 		for(int localX=0;localX<104;++localX){
 			for(int localY=0;localY<104;++localY){
 				int x = localX+baseX;
@@ -403,12 +403,12 @@ public class Objects extends MethodDefinition{
 	public GameObject getNextNearestByID(RSTile ignore, long id){
 		GameObject closest = null;
 		int plane=0, x=0, y=0;
-		Region region = ((Client)methods.botInstance).region();
+		Region region = methods.game.region();
 		for(Tile[][] map : region.tiles()){
 			for(Tile[] row : map){
 				for(Tile tile : row){
 					if(tile!=null){
-						RSTile rstile = new RSTile(x+((Client)methods.botInstance).mapBaseX(), y+((Client)methods.botInstance).mapBaseY(), plane);
+						RSTile rstile = new RSTile(x+methods.game.mapBaseX(), y+methods.game.mapBaseY(), plane);
 						if(rstile.equals(ignore))
 							continue;
 						for(InteractableObject io : tile.objects()){
@@ -479,12 +479,12 @@ public class Objects extends MethodDefinition{
 	public GameObject getNextNearestByID(RSTile ignore, long...ids){
 		GameObject closest = null;
 		int plane=0, x=0, y=0;
-		Region region = ((Client)methods.botInstance).region();
+		Region region = methods.game.region();
 		for(Tile[][] map : region.tiles()){
 			for(Tile[] row : map){
 				for(Tile tile : row){
 					if(tile!=null){
-						RSTile rstile = new RSTile(x+((Client)methods.botInstance).mapBaseX(), y+((Client)methods.botInstance).mapBaseY(), plane);
+						RSTile rstile = new RSTile(x+methods.game.mapBaseX(), y+methods.game.mapBaseY(), plane);
 						if(rstile.equals(ignore))
 							continue;
 						for(InteractableObject io : tile.objects()){
@@ -572,7 +572,7 @@ public class Objects extends MethodDefinition{
     	int localY = tile.getLocalY();
     	if(localX<0 || localX>104 || localY<0 || localY>104)
     		return false;
-    	Region region =((Client)methods.botInstance).region();
+    	Region region =methods.game.region();
     	if(region!=null){
     		Tile t = region.tiles()[tile.getPlane()][localX][localY];
     		if(t!=null){
@@ -621,7 +621,7 @@ public class Objects extends MethodDefinition{
     	int localY = tile.getLocalY();
     	if(localX<0 || localX>104 || localY<0 || localY>104)
     		return false;
-    	Region region =((Client)methods.botInstance).region();
+    	Region region =methods.game.region();
     	if(region!=null){
     		Tile t = region.tiles()[tile.getPlane()][localX][localY];
     		if(t!=null){
