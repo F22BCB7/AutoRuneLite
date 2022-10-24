@@ -81,20 +81,25 @@ public class Objects extends MethodDefinition{
     	if(region!=null){
     		Tile tile = region.tiles()[plane][localX][localY];
     		if(tile!=null){
-    			for(InteractableObject io : tile.objects()){
-					if(io==null)
-						continue;
-    				objects.add(new GameObject(io, new RSTile(x, y, plane)));
+    			try {
+	    			for(InteractableObject io : tile.objects()){
+						if(io==null)
+							continue;
+	    				objects.add(new GameObject(io, new RSTile(x, y, plane)));
+	    			}
+	    			BoundaryObject bo = tile.boundary();
+	    			if(bo!=null)
+	    				objects.add(new GameObject(bo, new RSTile(x, y, plane)));
+	    			FloorDecoration fo = tile.floor();
+	    			if(fo!=null)
+	    				objects.add(new GameObject(fo, new RSTile(x, y, plane)));
+	    			WallDecoration wo = tile.wall();
+	    			if(wo!=null)
+	    				objects.add(new GameObject(wo, new RSTile(x, y, plane)));
     			}
-    			BoundaryObject bo = tile.boundary();
-    			if(bo!=null)
-    				objects.add(new GameObject(bo, new RSTile(x, y, plane)));
-    			FloorDecoration fo = tile.floor();
-    			if(fo!=null)
-    				objects.add(new GameObject(fo, new RSTile(x, y, plane)));
-    			WallDecoration wo = tile.wall();
-    			if(wo!=null)
-    				objects.add(new GameObject(wo, new RSTile(x, y, plane)));
+    			catch(Exception e) {
+    				e.printStackTrace();
+    			}
     		}
     	}
 		Deque animableObjects = methods.game.animableObjectDeque();

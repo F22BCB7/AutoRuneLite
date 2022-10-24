@@ -29,29 +29,34 @@ public class RSModel{
 	public RSModel(Object object){
 		methods = ((Client)Data.clientInstance).getMethodContext();
 		if(object instanceof Model){
-			Model model = (Model)object;
-			accessor=model;
-			if(model!=null){
-				verticesX = model.verticesX().clone();
-				verticesY = model.verticesY().clone();
-				verticesZ = model.verticesZ().clone(); 
-				trianglesX = model.indicesX().clone();
-				trianglesY = model.indicesY().clone();
-				trianglesZ = model.indicesZ().clone();
-
-		        int vertexX = 0;
-				int vertexY = 0;
-				int vertexZ = 0;
-				for(int i : verticesX){
-					vertexX=(vertexX+i)/2;
+			try {
+				Model model = (Model)object;
+				accessor=model;
+				if(model!=null){
+					verticesX = model.verticesX().clone();
+					verticesY = model.verticesY().clone();
+					verticesZ = model.verticesZ().clone(); 
+					trianglesX = model.indicesX().clone();
+					trianglesY = model.indicesY().clone();
+					trianglesZ = model.indicesZ().clone();
+	
+			        int vertexX = 0;
+					int vertexY = 0;
+					int vertexZ = 0;
+					for(int i : verticesX){
+						vertexX=(vertexX+i)/2;
+					}
+					for(int i : verticesY){
+						vertexY=(vertexY+i)/2;
+					}
+					for(int i : verticesZ){
+						vertexZ=(vertexZ+i)/2;
+					}
+			        centerPoint = new int[]{vertexX, vertexY, vertexZ};
 				}
-				for(int i : verticesY){
-					vertexY=(vertexY+i)/2;
-				}
-				for(int i : verticesZ){
-					vertexZ=(vertexZ+i)/2;
-				}
-		        centerPoint = new int[]{vertexX, vertexY, vertexZ};
+			}
+			catch(Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}

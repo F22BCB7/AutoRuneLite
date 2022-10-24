@@ -421,24 +421,29 @@ public class ClassResolver {
     	return null;
     }
     public MethodHook getMethodHook(String refactoredOwner, String refactoredName, String wildcardDesc, boolean isStatic){
-    	if(isStatic){
-    		for(MethodHook mh : modscript.staticMethods){
-				if(mh.refactoredName.equals(refactoredName)){
-					new2old.put(refactoredOwner+"."+refactoredName+wildcardDesc, mh.obfuscatedName);
-					return mh;
+    	try {
+	    	if(isStatic){
+	    		for(MethodHook mh : modscript.staticMethods){
+					if(mh.refactoredName.equals(refactoredName)){
+						new2old.put(refactoredOwner+"."+refactoredName+wildcardDesc, mh.obfuscatedName);
+						return mh;
+					}
 				}
+	    	}
+			for(ClassHook ch : modscript.classHooks){
+	    		if(!isStatic && ch.refactoredName.equals(refactoredOwner)){
+	    			for(MethodHook mh : ch.methodHooks){
+	    				if(mh.refactoredName.equals(refactoredName)){
+	    					new2old.put(refactoredOwner+"."+refactoredName+wildcardDesc, mh.obfuscatedName);
+	    					return mh;
+	    				}
+	    			}
+	    		}
 			}
     	}
-		for(ClassHook ch : modscript.classHooks){
-    		if(!isStatic && ch.refactoredName.equals(refactoredOwner)){
-    			for(MethodHook mh : ch.methodHooks){
-    				if(mh.refactoredName.equals(refactoredName)){
-    					new2old.put(refactoredOwner+"."+refactoredName+wildcardDesc, mh.obfuscatedName);
-    					return mh;
-    				}
-    			}
-    		}
-		}
+    	catch(Exception e) {
+    		e.printStackTrace();
+    	}
     	return null;
     }
     public MethodHook getObfuscatedMethodHook(String obfuscatedOwner, String obfuscatedName, String wildcardDesc, boolean isStatic){
