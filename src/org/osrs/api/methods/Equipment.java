@@ -79,6 +79,7 @@ public class Equipment extends MethodDefinition{
 			//Can be thrown even with null checks; 
 			//e.g. widget changes (opening bank/g.e) mid-processing (like painting EquipmentDebug)
 			//Nothing IS wrong, so we ignore it, and it updates next cycle. Fuck you try-catch haters :)
+			e.printStackTrace();
 		}
 	}
 	public EquipmentItem getHelmet(){
@@ -386,7 +387,7 @@ public class Equipment extends MethodDefinition{
 			for(RSWidget w : equipmentParent.getChildren()){
 				if(w!=null){
 					if(w.isVisible()){
-						if(w.clickMask()==2046)
+						if(w.getChildCount()==3)
 							equipmentItems[equipmentIndices[index++]].updateWidget(w);
 						else if(w.containsAction("View equipment stats"))
 							equipmentStatsButton = w;

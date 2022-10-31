@@ -18,7 +18,11 @@ public class PlayerDebug {
 		if(Data.clientFrame.playerDebugOption.getState()){
 			g.drawString("NAME : COMBAT LEVEL : LOCATION  : ANIMATION ID : ORIENTATION: INTERACTING ID : HP : HEIGHT", x, y);
 			y+=15;
-			for(RSPlayer pl : methods.game.getHoveringPlayers()){
+			for(RSPlayer pl : methods.players.getAllPlayers()){
+				if(!pl.isVisible())
+					continue;
+				if(!pl.isHovering())
+					continue;
 				for(Polygon p : pl.getWireframe()){
 					g.drawPolygon(p);
 				}

@@ -18,7 +18,11 @@ public class NPCDebug {
 		if(Data.clientFrame.npcDebugOption.getState()){
 			g.drawString("ID : NAME : COMBAT LEVEL : ANIMATION ID : ORIENTATION : LOCATION : INTERACTING ID : HP : HEIGHT", x, y);
 			y+=15;
-			for(RSNpc npc : methods.game.getHoveringNPCs()){
+			for(RSNpc npc : methods.npcs.getAll()){
+				if(!npc.isVisible())
+					continue;
+				if(!npc.isHovering())
+					continue;
 				for(Polygon p : npc.getWireframe()){
 					g.drawPolygon(p);
 				}

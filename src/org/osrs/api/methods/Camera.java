@@ -1,6 +1,9 @@
 package org.osrs.api.methods;
 
 import org.osrs.util.Data;
+
+import java.awt.event.KeyEvent;
+
 import org.osrs.api.objects.GameObject;
 import org.osrs.api.objects.GroundItem;
 import org.osrs.api.objects.RSActor;
@@ -53,7 +56,8 @@ public class Camera extends MethodDefinition{
 			pitch=150;
 		int curr = getPitch();
 		boolean up = pitch>curr;
-		methods.game.client().pressedKeys()[up?98:99]=true;
+		//methods.game.keyboardListener().keysPressed()[up?98:99]=true;
+		methods.keyboard.pressArrow(up?KeyEvent.VK_UP:KeyEvent.VK_DOWN);
 		int last=-1;
 		for(int i=0;i<20;){
 			curr=getPitch();
@@ -74,7 +78,8 @@ public class Camera extends MethodDefinition{
 				break;
 			sleep(100, 200);
 		}
-		methods.game.client().pressedKeys()[up?98:99]=false;
+		//methods.game.keyboardListener().keysPressed()[up?98:99]=false;
+		methods.keyboard.releaseArrow(up?KeyEvent.VK_UP:KeyEvent.VK_DOWN);
 		return up?(curr>=pitch):(curr<=pitch);
 	}	
 	public int getAngleTo(int degrees) {
@@ -91,7 +96,8 @@ public class Camera extends MethodDefinition{
 	public boolean setAngle(int degrees) {
 		long start = System.currentTimeMillis();
 		boolean ccw = getAngleTo(degrees)<0;
-		methods.game.client().pressedKeys()[ccw?97:96]=true;
+		//methods.game.keyboardListener().keysPressed()[ccw?97:96]=true;
+		methods.keyboard.pressArrow(ccw?KeyEvent.VK_RIGHT:KeyEvent.VK_LEFT);
 		int last=-1;
 		for(int i=0;i<20;){
 			int curr = Math.abs(getAngleTo(degrees));
@@ -111,7 +117,8 @@ public class Camera extends MethodDefinition{
 			} catch (InterruptedException e) {
 			}
 		}
-		methods.game.client().pressedKeys()[ccw?97:96]=false;
+		//methods.game.keyboardListener().keysPressed()[ccw?97:96]=false;
+		methods.keyboard.releaseArrow(ccw?KeyEvent.VK_RIGHT:KeyEvent.VK_LEFT);
 		return Math.abs(getAngleTo(degrees))<5;
 	}
 	public void setCompass(final char direction) {

@@ -17,6 +17,16 @@ public class Keyboard extends MethodDefinition{
 		}
 		return KeyEvent.KEY_LOCATION_STANDARD;
 	}
+	public void pressArrow(int vk_code) {
+		Component keyboardTarget = getTarget();
+		KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, vk_code, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
+		Data.inputManager.getKeyboardListener().keyPressed(event);
+	}
+	public void releaseArrow(int vk_code) {
+		Component keyboardTarget = getTarget();
+		KeyEvent event = new KeyEvent(keyboardTarget, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, vk_code, (char)KeyEvent.VK_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD);
+		Data.inputManager.getKeyboardListener().keyReleased(event);
+	}
 	public void pressKey(char s){
 		int code = s;
 		if (s >= 'a' && s <= 'z') {

@@ -55,6 +55,7 @@ public interface Client extends GameShell{
 	
 	public MouseListener mouseListener();
 	public KeyboardListener keyboardListener();
+	public KeyInputHandler keyInputHandler();
 	public boolean[] pressedKeys();
 	
 	public boolean resizeMode();

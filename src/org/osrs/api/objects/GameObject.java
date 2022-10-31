@@ -117,16 +117,16 @@ public class GameObject extends Interactable implements Modelled{
 	public ObjectDefinition getDefinition() {
 		if(definition!=null)
 			return definition;
-		definition = ((Client)Data.clientInstance).invoke_getObjectDefinition((int)definitionHash);
-		if(definition!=null){
-			if(definition.childrenIDs()!=null) {
-				try {
+		try {
+			definition = ((Client)Data.clientInstance).invoke_getObjectDefinition((int)definitionHash);
+			if(definition!=null){
+				if(definition.childrenIDs()!=null) {
 					definition = definition.invoke_getChildDefinition();
 				}
-				catch(Exception e) {
-					e.printStackTrace();
-				}
 			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
 		}
 		return definition;
 	}

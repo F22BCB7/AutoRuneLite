@@ -1,7 +1,9 @@
 package org.osrs.api.wrappers.proxies;
 
 import org.osrs.injection.bytescript.BClass;
+import org.osrs.injection.bytescript.BField;
 import org.osrs.injection.bytescript.BFunction;
+import org.osrs.injection.bytescript.BGetter;
 import org.osrs.injection.bytescript.BMethod;
 import org.osrs.injection.bytescript.BVar;
 
@@ -12,6 +14,17 @@ public class KeyboardListener implements org.osrs.api.wrappers.KeyboardListener{
 	@BVar
 	public boolean isShiftPressed;
 
+	@BField
+	public org.osrs.api.wrappers.KeyInputData[] keyInputData;
+	@BGetter
+	@Override
+	public org.osrs.api.wrappers.KeyInputData[] keyInputData(){return keyInputData;}
+	@BField
+	public boolean[] keysPressed;
+	@BGetter
+	@Override
+	public boolean[] keysPressed(){return keysPressed;}
+	
 	@BMethod(name="keyPressed0")
 	public void keyPressed0(KeyEvent e){}
 	@BFunction

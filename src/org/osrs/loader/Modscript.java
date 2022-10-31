@@ -60,14 +60,14 @@ public class Modscript {
 		for(FieldHook fh : staticFields) {
 			if(fh.refactoredName.equals("widgetVisibleCycle")) {
 				System.out.println("Correcting widgetVisibleCycle multiplier...");
-				fh.multiplier = (int)-1008227777;
+				fh.multiplier = (int)-2025160333;
 			}
 		}
 		for(ClassHook ch : classHooks){
 			if(ch.refactoredName.equals("Widget")){
 				for(FieldHook fh : ch.fieldHooks){
-					if(fh.refactoredName.equals("spriteID"))
-						fh.multiplier = (int)-549762913;
+					//if(fh.refactoredName.equals("spriteID"))
+					//	fh.multiplier = (int)-549762913;
 				}
 			}
 		}

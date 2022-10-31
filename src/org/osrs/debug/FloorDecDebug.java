@@ -5,6 +5,7 @@ import java.awt.Polygon;
 
 import org.osrs.api.methods.MethodContext;
 import org.osrs.api.objects.GameObject;
+import org.osrs.api.wrappers.BoundaryObject;
 import org.osrs.api.wrappers.FloorDecoration;
 import org.osrs.util.Data;
 
@@ -19,8 +20,12 @@ public class FloorDecDebug {
 		if(Data.clientFrame.floorDecDebugOption.getState()){
 			g.drawString("ID : NAME : ORIENTATION : LOCATION", x, y);
 			y+=15;
-			for(GameObject go : methods.game.getHoveringObjects()){
+			for(GameObject go : methods.objects.getAllObjects()){
 				if(go.getAccessor() instanceof FloorDecoration){
+					if(!go.isVisible())
+						continue;
+					if(!go.isHovering())
+						continue;
 					for(Polygon p : go.getWireframe()){
 						g.drawPolygon(p);
 					}

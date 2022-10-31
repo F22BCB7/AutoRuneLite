@@ -122,11 +122,6 @@ public class GroundItem extends Interactable implements Modelled{
 	}
 	@Override
 	public boolean isHovering() {
-		long uid = calculateMenuUID();
-		long[] uids = methods.game.onCursorUIDs();
-		for(int i=0;i<methods.game.onCursorUIDCount();++i)
-			if(uids[i]==uid)
-				return true;
 		RSModel model = getModel();
 		if(model!=null)
 			return model.containsPoint(methods.mouse.getLocation(), location);
