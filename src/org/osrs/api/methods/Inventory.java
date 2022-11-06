@@ -9,6 +9,7 @@ import org.osrs.api.objects.RSWidget;
 import org.osrs.api.objects.WidgetItem;
 import org.osrs.api.wrappers.Client;
 import org.osrs.api.wrappers.ItemStorage;
+import org.osrs.script.events.InventoryEvent;
 import org.osrs.util.Data;
 
 public class Inventory extends MethodDefinition{
@@ -38,10 +39,32 @@ public class Inventory extends MethodDefinition{
 				for(int i=0;i<Math.min(ids.length, sizes.length);i++){
 					if(inventoryItems[index]==null){
 						inventoryItems[index] = new InventoryItem(ids[i], sizes[i], index);
+						if(Data.currentScript!=null){
+							if(Data.currentScript instanceof org.osrs.script.listeners.InventoryListener){
+								((org.osrs.script.listeners.InventoryListener)Data.currentScript).updateInventory(new InventoryEvent(InventoryEvent.ADD_ITEM, ids[i], sizes[i], index));
+							}
+						}
 					}
 					else{
+						int oldID = inventoryItems[index].getID();
+						int oldSize = inventoryItems[index].getStackSize();
 						inventoryItems[index].updateInfo(ids[i], sizes[i]);
 						inventoryItems[index].updateWidget(invItems.length>index?invItems[index]:null);
+						if(Data.currentScript!=null){
+							if(Data.currentScript instanceof org.osrs.script.listeners.InventoryListener){
+								InventoryEvent event = null;
+								if(oldID==-1 && oldSize==0 && ids[i]!=-1)
+									event = new InventoryEvent(InventoryEvent.ADD_ITEM, ids[i], sizes[i], index);
+								else if(oldID!=-1) {
+									if(ids[i]==-1)
+										event = new InventoryEvent(InventoryEvent.REMOVE_ITEM, oldID, oldSize, index);
+									else if(ids[i]!=-1 && oldSize!=sizes[i])
+										event = new InventoryEvent(InventoryEvent.UPDATE_ITEM_STACK, ids[i], sizes[i]-oldSize, index);
+								}
+								if(event!=null)
+									((org.osrs.script.listeners.InventoryListener)Data.currentScript).updateInventory(event);
+							}
+						}
 					} 
 					index++;
 				}

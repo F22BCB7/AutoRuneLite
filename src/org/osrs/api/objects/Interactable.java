@@ -45,7 +45,13 @@ public abstract class Interactable {
 		}
 		if(isHovering()){
 			methods.mouse.click();
-			return true;
+			for(int i=0;i<6;++i) {
+				methods.sleep(10);
+				if(methods.game.mouseCrosshairState()==2)
+					return true;
+				else if(methods.game.mouseCrosshairState()==1)
+					return false;
+			}
 		}
 		return false;
 	}
@@ -58,7 +64,15 @@ public abstract class Interactable {
 			}
 		}
 		if(isHovering() && methods.menu.contains(action)){
-			return methods.menu.click(action);
+			if(methods.menu.click(action)) {
+				for(int i=0;i<6;++i) {
+					methods.sleep(10);
+					if(methods.game.mouseCrosshairState()==2)
+						return true;
+					else if(methods.game.mouseCrosshairState()==1)
+						return false;
+				}
+			}
 		}
 		return false;
 	}
@@ -71,7 +85,15 @@ public abstract class Interactable {
 			}
 		}
 		if(isHovering() && methods.menu.contains(action, option)){
-			return methods.menu.click(action, option);
+			if(methods.menu.click(action, option)) {
+				for(int i=0;i<6;++i) {
+					methods.sleep(10);
+					if(methods.game.mouseCrosshairState()==2)
+						return true;
+					else if(methods.game.mouseCrosshairState()==1)
+						return false;
+				}
+			}
 		}
 		return false;
 	}

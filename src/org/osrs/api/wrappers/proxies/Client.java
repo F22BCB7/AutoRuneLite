@@ -1,6 +1,7 @@
 package org.osrs.api.wrappers.proxies;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 import org.osrs.api.methods.MethodContext;
 import org.osrs.api.objects.GameObject;

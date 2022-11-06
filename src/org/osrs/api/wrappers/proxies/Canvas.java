@@ -48,11 +48,11 @@ public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Can
 	@BFunction
 	@Override
 	public Graphics getGraphics(){
-		if(gameImage==null || gameImage.getWidth()!=getWidth() || gameImage.getHeight()!=getHeight())
-			gameImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
-		
-		Graphics g = gameImage.getGraphics();
 		try {
+			if(gameImage==null || gameImage.getWidth()!=getWidth() || gameImage.getHeight()!=getHeight())
+				gameImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+			
+			Graphics g = gameImage.getGraphics();
 			g.setColor(Color.ORANGE);
 			g.drawString("AutoRuneLite v0.2", 15, 15);
 	
@@ -174,10 +174,11 @@ public class Canvas extends java.awt.Canvas implements org.osrs.api.wrappers.Can
 			Client.mouseListener.paintMouse(g);
 			
 			super.getGraphics().drawImage(gameImage, 0, 0, null);
+			return g;
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-		return g;
+		return null;
 	}
 }

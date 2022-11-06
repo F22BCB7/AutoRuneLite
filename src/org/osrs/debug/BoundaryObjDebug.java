@@ -19,12 +19,13 @@ public class BoundaryObjDebug {
 		if(Data.clientFrame.boundaryObjDebugOption.getState()){
 			g.drawString("ID : NAME : ORIENTATION : LOCATION", x, y);
 			y+=15;
-			for(GameObject go : methods.objects.getAllObjects()){
+			//for(GameObject go : methods.objects.getAllObjects()){
+			//	if(!go.isVisible())
+			//		continue;
+			//	if(!go.isHovering())
+			//		continue;
+			for(GameObject go : methods.game.getHoveringObjects()){
 				if(go.getAccessor() instanceof BoundaryObject){
-					if(!go.isVisible())
-						continue;
-					if(!go.isHovering())
-						continue;
 					for(Polygon p : go.getWireframe()){
 						g.drawPolygon(p);
 					}

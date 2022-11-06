@@ -77,6 +77,7 @@ public class MethodContext {
 			Thread.sleep(timeout);
 		}
 		catch(Exception e){
+			e.printStackTrace();
 		}
 	}
 }

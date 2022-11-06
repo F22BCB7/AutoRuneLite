@@ -18,11 +18,12 @@ public class GroundItemDebug {
 		if(Data.clientFrame.groundItemDebugOption.getState()){
 			g.drawString("ID : STACKSIZE : NAME", x, y);
 			y+=15;
-			for(GroundItem gi : methods.groundItems.getAllItems()){
-				if(!gi.isVisible())
-					continue;
-				if(!gi.isHovering())
-					continue;
+			//for(GroundItem gi : methods.groundItems.getAllItems()){
+			//	if(!gi.isVisible())
+			//		continue;
+			//	if(!gi.isHovering())
+			//		continue;
+			for(GroundItem gi : methods.game.getHoveringGroundItems()){
 				for(Polygon p : gi.getWireframe()){
 					g.drawPolygon(p);
 				}

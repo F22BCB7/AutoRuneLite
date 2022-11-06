@@ -31,6 +31,35 @@ public class GameShell extends Applet implements org.osrs.api.wrappers.GameShell
 		return mouseWheelListener;
 	}
 
+	@BMethod(name="requestShutdown")
+	public void _requestShutdown(String s, int a){}
+	@BMethod(name="requestShutdown")
+	public void _requestShutdown(String s, byte a){}
+	@BMethod(name="requestShutdown")
+	public void _requestShutdown(String s, short a){}
+	@BDetour
+	public void requestShutdown(String s, int a){invoke_requestShutdown(s);}
+	@BDetour
+	public void requestShutdown(String s, byte a){invoke_requestShutdown(s);}
+	@BDetour
+	public void requestShutdown(String s, short a){invoke_requestShutdown(s);}
+	@BFunction
+	public void invoke_requestShutdown(String s){
+		try{
+			System.out.println("[GameShell.requestShutdown] Shutdown requested : "+s);
+			Object predicate = Client.clientInstance.getMethodPredicate("GameShell", "requestShutdown", "(Ljava/lang/String;?)V", false);
+			if(predicate instanceof Integer)
+				_requestShutdown(s, (int)predicate);
+			if(predicate instanceof Byte)
+				_requestShutdown(s, (byte)predicate);
+			if(predicate instanceof Short)
+				_requestShutdown(s, (short)predicate);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 	@BMethod(name="processEngine")
 	public void _processEngine(int a){}
 	@BMethod(name="processEngine")
@@ -109,6 +138,61 @@ public class GameShell extends Applet implements org.osrs.api.wrappers.GameShell
 					((org.osrs.script.listeners.CycleListener)Data.currentScript).gameCycle();
 				}
 			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	@BMethod(name="doCycle")
+	public void _doCycle(int a){}
+	@BMethod(name="doCycle")
+	public void _doCycle(byte a){}
+	@BMethod(name="doCycle")
+	public void _doCycle(short a){}
+	@BDetour
+	public void doCycle(int a){invoke_doCycle();}
+	@BDetour
+	public void doCycle(byte a){invoke_doCycle();}
+	@BDetour
+	public void doCycle(short a){invoke_doCycle();}
+	@BFunction
+	public void invoke_doCycle(){
+		try{
+			Object predicate = Client.clientInstance.getMethodPredicate("GameShell", "doCycle", "(?)V", false);
+			if(predicate instanceof Integer)
+				_doCycle((int)predicate);
+			if(predicate instanceof Byte)
+				_doCycle((byte)predicate);
+			if(predicate instanceof Short)
+				_doCycle((short)predicate);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	@BMethod(name="addCanvas")
+	public void _addCanvas(int a){}
+	@BMethod(name="addCanvas")
+	public void _addCanvas(byte a){}
+	@BMethod(name="addCanvas")
+	public void _addCanvas(short a){}
+	@BDetour
+	public void addCanvas(int a){invoke_addCanvas();}
+	@BDetour
+	public void addCanvas(byte a){invoke_addCanvas();}
+	@BDetour
+	public void addCanvas(short a){invoke_addCanvas();}
+	@BFunction
+	public void invoke_addCanvas(){
+		try{
+			System.out.println("[GameShell.addCanvas] We're swapping canvas instances!");
+			Object predicate = Client.clientInstance.getMethodPredicate("GameShell", "addCanvas", "(?)V", false);
+			if(predicate instanceof Integer)
+				_addCanvas((int)predicate);
+			if(predicate instanceof Byte)
+				_addCanvas((byte)predicate);
+			if(predicate instanceof Short)
+				_addCanvas((short)predicate);
 		}
 		catch(Exception e){
 			e.printStackTrace();

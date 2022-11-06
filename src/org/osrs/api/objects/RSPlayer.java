@@ -68,6 +68,15 @@ public class RSPlayer extends RSActor{
 			return new RSTile((((Client)Data.clientInstance).mapBaseX()+(p.x()>>7)), (((Client)Data.clientInstance).mapBaseY()+(p.y()>>7)), p.plane());
 		}
 		return new RSTile(-1, -1, -1);
+	}	
+	@Override
+	public boolean isHovering(){
+		long uid = calculateMenuUID();
+		long[] uids = methods.game.onCursorUIDs();
+		for(int i=0;i<methods.game.onCursorUIDCount();++i)
+			if(uids[i]==uid)
+				return true;
+		return super.isHovering();
 	}
 	public long calculateMenuUID() {
 		return (0 & 127) << 0 | (0 & 127) << 7 | (0 & 3) << 14 | (indice & 4294967295L) << 17;
