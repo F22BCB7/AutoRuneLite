@@ -1,7 +1,7 @@
 # Join our discord! https://discord.gg/ZD3DGwh7tD
 #
-# AutoRuneLite
- Free & open source OSRS bot. Uses NaturalMouse. Detouring bytecode manipulation.
+# AutoRuneLite (Auto-Runescape-Lite)
+ Free & open source OSRS bot; not RuneLite dependant. Uses NaturalMouse. Detouring bytecode manipulation.
 # To start scripting... 
 #  1. Download and compile project/export to runnable jar.
 #  2. Import AutoRuneLite jar into Scripts project (Configure Build Path for Eclipse).
