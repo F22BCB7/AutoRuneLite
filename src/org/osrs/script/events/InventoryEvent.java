@@ -1,17 +1,41 @@
 package org.osrs.script.events;
 
 public class InventoryEvent {
-	public static final int ADD_ITEM = 1;
-	public static final int UPDATE_ITEM_STACK = 2;
-	public static final int REMOVE_ITEM = 3;
-	public int eventType = -1;
-	public int itemID = -1;
-	public int stackChange = 0;//can be negative (partial deposit)
-	public int inventoryIndex = -1;
-	public InventoryEvent(int type, int id, int count, int index) {
-		eventType = type;
-		itemID = id;
-		stackChange = count;
-		inventoryIndex = index;
-	}
+    public enum EventType {
+        ADD_ITEM, UPDATE_ITEM_STACK, REMOVE_ITEM
+    }
+    
+    private EventType eventType;
+    private int itemID;
+    private int stackChange; // can be negative (partial deposit)
+    private int inventoryIndex;
+    
+    public InventoryEvent(EventType type, int id, int count, int index) {
+        this.eventType = type;
+        this.itemID = id;
+        this.stackChange = count;
+        this.inventoryIndex = index;
+    }
+    
+    public EventType getEventType() {
+        return eventType;
+    }
+
+    public int getItemID() {
+        return itemID;
+    }
+
+    public int getStackChange() {
+        return stackChange;
+    }
+
+    public int getInventoryIndex() {
+        return inventoryIndex;
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("InventoryEvent[type=%s, itemID=%d, stackChange=%d, inventoryIndex=%d]",
+                             eventType, itemID, stackChange, inventoryIndex);
+    }
 }
